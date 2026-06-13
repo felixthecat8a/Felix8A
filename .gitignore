@@ -1,3 +1,4 @@
+# Ignore main sketch file used for development
 Felix8A.ino
 
 # Arduino ignore files
@@ -13,7 +14,7 @@ sketch.json
 .DS_Store
 Thumbs.db
 
-# VS Code 
+# VS Code
 .vscode/
 
 
