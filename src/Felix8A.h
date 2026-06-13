@@ -13,18 +13,27 @@ namespace Felix8A {
 
   class Gradient {
     public:
-      Gradient(const Palette& palette, uint8_t step = 0)
-        : _palette(palette), _step(step) {}
+      Gradient(const Palette& palette, uint8_t step = 0, uint8_t speed = 1)
+        : _palette(palette), _step(step), _speed(speed) {}
 
       uint32_t next() {
         uint32_t color = _palette.lerp(_step);
-        _step++;
+        _step += _speed;
         return color;
+      }
+
+      void setSpeed(uint8_t speed) {
+        _speed = speed;
+      }
+
+      void reset() {
+        _step = 0;
       }
 
     private:
       const Palette& _palette;
       uint8_t _step;
+      uint8_t _speed;
   };
 
   namespace Palettes {
