@@ -37,11 +37,12 @@ constexpr Felix8A::Palette colorPalette(ledColor);
 constexpr int numColors = colorPalette.size();
 
 /***** Initial Variables *****/
-constexpr int numModes = 7;
+constexpr int numModes = 5;
 int currentMode = 0;
 int currentColor = 0;
 bool settingsUpdated = true;
 int chaseStep = 0;
+bool isAnimated = false;
 const unsigned long chaseInterval = 125;
 unsigned long lastUpdate = 0;
 ```
@@ -125,7 +126,7 @@ void setColorWhiteGradient(int step) {
   lightString->show();
 }
 
-void colorGradient(bool isAnimated) {
+void colorGradient() {
   if (isAnimated) {
     if (settingsUpdated) chaseStep = 0;
 
@@ -151,7 +152,7 @@ void setMultiColor(int step) {
   lightString->show();
 }
 
-void multiColor(bool isAnimated) {
+void multiColor() {
   if (isAnimated) {
     if (settingsUpdated) chaseStep = 0;
 
@@ -237,12 +238,10 @@ void twinkleLights() {
 void updateMode() {
   switch (currentMode) {
     case 0: solidColor(); break;
-    case 1: colorGradient(false); break;
-    case 2: colorGradient(true); break;
-    case 3: multiColor(false); break;
-    case 4: multiColor(true); break;
-    case 5: twinkleLights(); break;
-    case 6: fireflyLights(); break;
+    case 1: colorGradient(); break;
+    case 2: multiColor(); break;
+    case 3: twinkleLights(); break;
+    case 4: fireflyLights(); break;
     default: lightsOff(); break;
   }
 }
@@ -282,8 +281,7 @@ void loop() {
   }
 
   if (button.wasTripleClicked()) {
-    currentMode = 0; currentColor = 0;
-    saveSettings();
+    isAnimated = !isAnimated;
   }
 
   if (button.wasHeld()) {
