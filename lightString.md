@@ -2,7 +2,7 @@
 
 An Arduino sketch for controlling colors and animations on a WS2812 LED string using the `Felix8A` and `FelixTheCatLED` libraries.
 
-Note: Some helpers are under constructon.
+Note: Math and Time helpers are in development
 
 ## Sketch Setup using `FelixTheCatLED::Button`
 
@@ -46,7 +46,7 @@ const unsigned long chaseInterval = 125;
 unsigned long lastUpdate = 0;
 ```
 
-### EEPROM Setup using `Felix8A_Math::wrap` (under construction)
+### EEPROM Setup using `Felix8A::Math::wrap`
 
 ```cpp
 /***** EEPROM  Setup *****/
@@ -61,8 +61,8 @@ void loadSettings() {
 }
 
 void saveSettings() {
-  currentMode = Felix8A_Math::wrap(currentMode, 0, numModes);
-  currentColor = Felix8A_Math::wrap(currentColor, 0, numColors);
+  currentMode = Felix8A::Math::wrap(currentMode, 0, numModes);
+  currentColor = Felix8A::Math::wrap(currentColor, 0, numColors);
   EEPROM.update(EEPROM_MODE_ADDR, currentMode);
   EEPROM.update(EEPROM_COLOR_ADDR, currentColor);
   settingsUpdated = true;
@@ -135,7 +135,53 @@ void setMultiColor(int step) {
 }
 ```
 
-### Animation Setting Functions using `Felix8A::Time` (under construction)
+### Implementing `Felix8A::Time`
+
+```cpp
+#include <Felix8A.h>
+
+unsigned long lastUpdate = 0;
+const unsigned long timeInterval = 1000;
+
+void setup() {
+  // setup code here
+}
+
+void loop() {
+  if (Felix8A::Time::every(timeInterval, lastUpdate)) {
+    // loop code here
+  }
+
+  /* similiar behavior */
+  // if (Felix8A::Time::after(timeInterval, lastUpdate)) {
+  //   // loop code here
+  //   Felix8A::Time::reset(lastUpdate); // reset the timer
+  // }
+}
+```
+
+As a one-shot timer:
+
+```cpp
+#include <Felix8A.h>
+
+unsigned long startTime = 0;
+bool done = false;
+
+void setup() {
+  Serial.begin(115200);
+  Felix8A::Time::reset(startTime);
+}
+
+void loop) {
+  if (!done && Felix8A::Time::after(3000, startTime)) {
+    done = true;
+    Serial.println("3 seconds passed!");
+  }
+}
+```
+
+### Animation Setting Functions using `Felix8A::Time`
 
 ```cpp
 void colorGradient(bool isAnimated) {

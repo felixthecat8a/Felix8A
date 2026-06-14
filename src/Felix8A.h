@@ -5,6 +5,8 @@
 
 #include "util/Color32.h"
 #include "util/Palette.h"
+#include "util/Math.h"
+#include "util/Time.h"
 
 #define FELIX8A_COLOR_ARRAY_SIZE(x) (sizeof(x) / sizeof(x[0]))
 
@@ -18,6 +20,7 @@ namespace Felix8A {
       Color::ORANGE,
       Color::GREEN,
       Color::BLUE,
+      Color::DIM_WHITE,
     };
 
     static const Palette ChristmasTree(
@@ -115,7 +118,7 @@ namespace Felix8A {
       FELIX8A_COLOR_ARRAY_SIZE(FullColorSet)
     );
 
-  }
+  } // namespace Palettes
 
 } // namespace Felix8A
 
