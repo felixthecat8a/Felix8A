@@ -135,52 +135,6 @@ void setMultiColor(int step) {
 }
 ```
 
-### Implementing `Felix8A::Time`
-
-```cpp
-#include <Felix8A.h>
-
-unsigned long lastUpdate = 0;
-const unsigned long timeInterval = 1000;
-
-void setup() {
-  // setup code here
-}
-
-void loop() {
-  if (Felix8A::Time::every(timeInterval, lastUpdate)) {
-    // loop code here
-  }
-
-  /* similiar behavior */
-  // if (Felix8A::Time::after(timeInterval, lastUpdate)) {
-  //   // loop code here
-  //   Felix8A::Time::reset(lastUpdate); // reset the timer
-  // }
-}
-```
-
-As a one-shot timer:
-
-```cpp
-#include <Felix8A.h>
-
-unsigned long startTime = 0;
-bool done = false;
-
-void setup() {
-  Serial.begin(115200);
-  Felix8A::Time::reset(startTime);
-}
-
-void loop) {
-  if (!done && Felix8A::Time::after(3000, startTime)) {
-    done = true;
-    Serial.println("3 seconds passed!");
-  }
-}
-```
-
 ### Animation Setting Functions using `Felix8A::Time`
 
 ```cpp
