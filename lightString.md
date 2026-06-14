@@ -205,7 +205,6 @@ void twinkleLights() {
 
   if (Felix8A::Time::every(100, lastTwinkle)) {
     int count = lightString->numPixels();
-
     for (int i = 0; i < count; i++) {
       uint32_t c = lightString->getPixelColor(i);
       uint8_t r = ((c >> 16) & 0xFF) * 220 / 255;
@@ -214,18 +213,11 @@ void twinkleLights() {
       lightString->setPixelColor(i, lightString->Color(r, g, b));
     }
 
-    int newTwinkles = random(1, 3);
-
-    for (int i = 0; i < newTwinkles; i++) {
+    int newPixels = random(1, 4);
+    for (int i = 0; i < newPixels; i++) {
       int pixel = random(count);
       // lightString->setPixelColor(pixel, ledColor[random(numColors)]);
       lightString->setPixelColor(pixel, colorPalette[random(numColors)]);
-    }
-
-    if (random(9) == 0) {
-      uint32_t ledWhite = Felix8A::Color::hex(150, 150, 150);
-      int pixel = random(count);
-      lightString->setPixelColor(pixel, ledWhite);
     }
 
     lightString->show();

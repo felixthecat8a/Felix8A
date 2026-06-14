@@ -29,12 +29,9 @@ namespace Felix8A {
     );
 
     static const uint32_t SunsetColorSet[] = {
-      Color::RED,
-      Color::VERMILION,
-      Color::ORANGE,
-      Color::AMBER,
-      Color::YELLOW,
-      Color::WARM_WHITE,
+      Color::MAROON,    Color::RED,         Color::VERMILION,
+      Color::CHOCOLATE  Color::ORANGE,      Color::AMBER,
+      Color::YELLOW,    Color::WARM_WHITE,  Color::MOCHA
     };
 
     static const Palette Sunset(

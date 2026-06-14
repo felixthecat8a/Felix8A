@@ -56,6 +56,7 @@ namespace Felix8A {
       static constexpr uint32_t HONEYDEW        = 0xC0FFC0;
       static constexpr uint32_t SNOW            = 0xFFC0D2;
       static constexpr uint32_t IVORY           = 0xFFFFC0;
+      static constexpr uint32_t CELESTE         = 0xC0FFFF;
 
       // Color Spectrum
       static constexpr uint32_t RED             = 0xFF0000;
@@ -92,6 +93,8 @@ namespace Felix8A {
       static constexpr uint32_t AQUAMARINE      = 0x7FFFD4;
       static constexpr uint32_t LILAC           = 0xC8A2C8;
       static constexpr uint32_t LAVENDER        = 0xE6E6FA;
+      static constexpr uint32_t CHOCOLATE       = 0xD2691E;
+      static constexpr uint32_t MOCHA           = 0xBEA493;
 
       // Darker Colors
       static constexpr uint32_t MAROON          = 0x800000;
