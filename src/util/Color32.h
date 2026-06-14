@@ -53,7 +53,7 @@ namespace Felix8A {
       static constexpr uint32_t WHITE           = 0xFFFFFF;
       static constexpr uint32_t COOL_WHITE      = 0xE0F1FF;
       static constexpr uint32_t WARM_WHITE      = 0xFFD6C7;
-      static constexpr uint32_t SNOW            = 0xFFD1D1;
+      static constexpr uint32_t SNOW            = 0xFFC1D1;
       static constexpr uint32_t HONEYDEW        = 0xB2FFB2;
 
       // Color Spectrum
