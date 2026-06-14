@@ -42,7 +42,7 @@ int currentColor = 0;
 bool settingsUpdated = true;
 int chaseStep = 0;
 bool isAnimated = false;
-const unsigned long chaseInterval = 125;
+const unsigned long chaseInterval = 175;
 unsigned long lastUpdate = 0;
 ```
 
