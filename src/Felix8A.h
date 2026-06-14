@@ -50,6 +50,7 @@ namespace Felix8A {
       Color::MINT,
       Color::SPRING_GREEN,
       Color::TURQUOISE,
+      Color::DIM_WHITE,
     };
 
     static const Palette Forest(
