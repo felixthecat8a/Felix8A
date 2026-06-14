@@ -51,10 +51,11 @@ namespace Felix8A {
       static constexpr uint32_t BLACK           = 0x000000;
       static constexpr uint32_t DIM_WHITE       = 0x999999;
       static constexpr uint32_t WHITE           = 0xFFFFFF;
-      static constexpr uint32_t COOL_WHITE      = 0xE0F1FF;
-      static constexpr uint32_t WARM_WHITE      = 0xFFD6C7;
-      static constexpr uint32_t SNOW            = 0xFFC1D1;
-      static constexpr uint32_t HONEYDEW        = 0xB2FFB2;
+      static constexpr uint32_t WARM_WHITE      = 0xFFC0C0;
+      static constexpr uint32_t COOL_WHITE      = 0xC0C0FF;
+      static constexpr uint32_t HONEYDEW        = 0xC0FFC0;
+      static constexpr uint32_t SNOW            = 0xFFC0D2;
+      static constexpr uint32_t IVORY           = 0xFFFFC0;
 
       // Color Spectrum
       static constexpr uint32_t RED             = 0xFF0000;
@@ -85,6 +86,13 @@ namespace Felix8A {
       // Arduino Teal
       static constexpr uint32_t ARDUINO_TEAL    = 0x00878F;
 
+      // Other Colors
+      static constexpr uint32_t CERULEAN        = 0x007BA7;
+      static constexpr uint32_t SEA_GREEN       = 0x2E8B57;
+      static constexpr uint32_t AQUAMARINE      = 0x7FFFD4;
+      static constexpr uint32_t LILAC           = 0xC8A2C8;
+      static constexpr uint32_t LAVENDER        = 0xE6E6FA;
+
       // Darker Colors
       static constexpr uint32_t MAROON          = 0x800000;
       static constexpr uint32_t OLIVE           = 0x808000;
@@ -96,8 +104,9 @@ namespace Felix8A {
 
       static constexpr uint32_t GREY = GRAY; // Alternative spelling
 
-      static constexpr uint32_t OFF = BLACK;
+      static constexpr uint32_t OFF = BLACK; // Alias for off state
 
+      // Hue, Saturation, Value (HSV) to RGB conversion
       inline uint32_t hsv(uint16_t h, uint8_t s, uint8_t v) {
         if (s == 0) {
           return hex(v, v, v); // Grayscale
