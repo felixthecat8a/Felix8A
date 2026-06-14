@@ -26,7 +26,6 @@ Adafruit_NeoPixel* lightString = nullptr;
 
 ```cpp
 /***** Classic Christmas Tree Light Color Palette *****/
-constexpr uint32_t ledWhite = Felix8A::Color::hex(150, 150, 150);
 constexpr uint32_t ledRed = Felix8A::Color::RED;
 constexpr uint32_t ledAmber = Felix8A::Color::ORANGE;
 constexpr uint32_t ledGreen = Felix8A::Color::GREEN;
@@ -224,6 +223,7 @@ void twinkleLights() {
     }
 
     if (random(9) == 0) {
+      uint32_t ledWhite = Felix8A::Color::hex(150, 150, 150);
       int pixel = random(count);
       lightString->setPixelColor(pixel, ledWhite);
     }

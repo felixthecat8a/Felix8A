@@ -77,7 +77,7 @@ namespace Felix8A {
       static constexpr uint32_t BLUE            = 0x0000FF;
       static constexpr uint32_t INDIGO          = 0x4000FF;
       static constexpr uint32_t VIOLET          = 0x8000FF;
-      static constexpr uint32_t ELECTRIC_PURPLE = 0xBF00FF;
+      static constexpr uint32_t E_PURPLE        = 0xBF00FF;
       static constexpr uint32_t MAGENTA         = 0xFF00FF;
       static constexpr uint32_t HOT_PINK        = 0xFF00BF;
       static constexpr uint32_t ROSE            = 0xFF0080;
