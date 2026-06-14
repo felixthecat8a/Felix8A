@@ -4,7 +4,7 @@ An Arduino sketch for controlling colors and animations on a WS2812 LED string u
 
 Note: Math and Time helpers are in development
 
-## Sketch Setup using `FelixTheCatLED::Button`
+## Sketch & Hardware Setup using `FelixTheCatLED::Button`
 
 ```cpp
 #include <EEPROM.h>
@@ -71,7 +71,7 @@ void saveSettings() {
 
 ## Color Setting Functions
 
-### Single Color Setting Functions
+### Solid Color Setting Functions
 
 ```cpp
 void lightsOff() {
@@ -80,7 +80,7 @@ void lightsOff() {
   }
 }
 
-void setOneColor() {
+void solidColor() {
   if (settingsUpdated) {
     // lightString->fill(ledColor[currentColor]); lightString->show();
     lightString->fill(colorPalette[currentColor]); lightString->show();
@@ -88,7 +88,7 @@ void setOneColor() {
 }
 ```
 
-### Multiple Color Setting Functions
+### Color to White Gradient Setting Functions using `Felix8A::Time`
 
 ```cpp
 void setColorWhiteGradient(int step) {
@@ -125,19 +125,6 @@ void setColorWhiteGradient(int step) {
   lightString->show();
 }
 
-void setMultiColor(int step) {
-  for (int i = 0; i < lightString->numPixels(); i++) {
-    // lightString->setPixelColor(i, ledColor[(i + step) % numColors]);
-    lightString->setPixelColor(i, colorPalette.reversed(i + step));
-  }
-
-  lightString->show();
-}
-```
-
-### Animation Setting Functions using `Felix8A::Time`
-
-```cpp
 void colorGradient(bool isAnimated) {
   if (isAnimated) {
     if (settingsUpdated) chaseStep = 0;
@@ -149,6 +136,19 @@ void colorGradient(bool isAnimated) {
   } else if (settingsUpdated) {
     setColorWhiteGradient(0);
   }
+}
+```
+
+### Multiple Color Setting Functions using `Felix8A::Time`
+
+```cpp
+void setMultiColor(int step) {
+  for (int i = 0; i < lightString->numPixels(); i++) {
+    // lightString->setPixelColor(i, ledColor[(i + step) % numColors]);
+    lightString->setPixelColor(i, colorPalette.reversed(i + step));
+  }
+
+  lightString->show();
 }
 
 void multiColor(bool isAnimated) {
@@ -236,7 +236,7 @@ void twinkleLights() {
 ```cpp
 void updateMode() {
   switch (currentMode) {
-    case 0: setOneColor(); break;
+    case 0: solidColor(); break;
     case 1: colorGradient(false); break;
     case 2: colorGradient(true); break;
     case 3: multiColor(false); break;
