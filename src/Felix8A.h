@@ -75,7 +75,7 @@ namespace Felix8A {
     static const uint32_t BlushColorSet[] = {
       Color::INDIGO,
       Color::VIOLET,
-      Color::PURPLE,
+      Color::ELECTRIC_PURPLE,
       Color::MAGENTA,
       Color::HOT_PINK,
       Color::ROSE,
@@ -107,7 +107,7 @@ namespace Felix8A {
       Color::BLUE,
       Color::INDIGO,
       Color::VIOLET,
-      Color::PURPLE,
+      Color::ELECTRIC_PURPLE,
       Color::MAGENTA,
       Color::HOT_PINK,
       Color::ROSE,

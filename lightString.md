@@ -95,9 +95,10 @@ void solidColor() {
 void setColorWhiteGradient(int step) {
   // uint32_t color = ledColor[currentColor];
   uint32_t color = colorPalette[currentColor];
-  uint32_t blend1 = Felix8A::Color::blend(color, ledWhite, 64);
-  uint32_t blend2 = Felix8A::Color::blend(color, ledWhite, 128);
-  uint32_t blend3 = Felix8A::Color::blend(color, ledWhite, 192);
+  uint32_t white = Felix8A::Color::DIM_WHITE;
+  uint32_t blend1 = Felix8A::Color::blend(color, white, 64);
+  uint32_t blend2 = Felix8A::Color::blend(color, white, 128);
+  uint32_t blend3 = Felix8A::Color::blend(color, white, 192);
 
   for (int i = 0; i < lightString->numPixels(); i++) {
     uint8_t phase = (i + step) % 5;
@@ -111,7 +112,7 @@ void setColorWhiteGradient(int step) {
     // } else if (phase == 3) {
     //   lightString->setPixelColor(i, blend3);
     // } else {
-    //   lightString->setPixelColor(i, ledWhite);
+    //   lightString->setPixelColor(i, white);
     // }
 
     switch (phase) {
@@ -119,7 +120,7 @@ void setColorWhiteGradient(int step) {
       case 1: lightString->setPixelColor(i, blend1); break;
       case 2: lightString->setPixelColor(i, blend2); break;
       case 3: lightString->setPixelColor(i, blend3); break;
-      default: lightString->setPixelColor(i, ledWhite); break;
+      default: lightString->setPixelColor(i, white); break;
     }
   }
 
