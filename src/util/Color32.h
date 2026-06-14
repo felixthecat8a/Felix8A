@@ -48,66 +48,66 @@ namespace Felix8A {
       }
 
       // Shades of White
-      static constexpr uint32_t BLACK           = 0x000000;
-      static constexpr uint32_t DIM_WHITE       = 0x999999;
-      static constexpr uint32_t WHITE           = 0xFFFFFF;
-      static constexpr uint32_t WARM_WHITE      = 0xFFC0C0;
-      static constexpr uint32_t COOL_WHITE      = 0xC0C0FF;
-      static constexpr uint32_t HONEYDEW        = 0xC0FFC0;
-      static constexpr uint32_t SNOW            = 0xFFC0D2;
-      static constexpr uint32_t IVORY           = 0xFFFFC0;
-      static constexpr uint32_t CELESTE         = 0xC0FFFF;
+      static constexpr uint32_t BLACK         = 0x000000;
+      static constexpr uint32_t DIM_WHITE     = 0x999999;
+      static constexpr uint32_t WHITE         = 0xFFFFFF;
+      static constexpr uint32_t WARM_WHITE    = 0xFFC0C0;
+      static constexpr uint32_t COOL_WHITE    = 0xC0C0FF;
+      static constexpr uint32_t HONEYDEW      = 0xC0FFC0;
+      static constexpr uint32_t SNOW          = 0xFFC0D2;
+      static constexpr uint32_t IVORY         = 0xFFFFC0;
+      static constexpr uint32_t CELESTE       = 0xC0FFFF;
 
-      // Color Spectrum
-      static constexpr uint32_t RED             = 0xFF0000;
-      static constexpr uint32_t VERMILION       = 0xFF4000;
-      static constexpr uint32_t ORANGE          = 0xFF8000;
-      static constexpr uint32_t AMBER           = 0xFFBF00;
-      static constexpr uint32_t YELLOW          = 0xFFFF00;
-      static constexpr uint32_t LIME            = 0xBFFF00;
-      static constexpr uint32_t CHARTREUSE      = 0x80FF00;
-      static constexpr uint32_t HARLEQUIN       = 0x40FF00;
-      static constexpr uint32_t GREEN           = 0x00FF00;
-      static constexpr uint32_t MINT            = 0x00FF40;
-      static constexpr uint32_t SPRING_GREEN    = 0x00FF80;
-      static constexpr uint32_t TURQUOISE       = 0x00FFBF;
-      static constexpr uint32_t CYAN            = 0x00FFFF;
-      static constexpr uint32_t SKY_BLUE        = 0x00BFFF;
-      static constexpr uint32_t AZURE           = 0x0080FF;
-      static constexpr uint32_t SAPPHIRE        = 0x0040FF;
-      static constexpr uint32_t BLUE            = 0x0000FF;
-      static constexpr uint32_t INDIGO          = 0x4000FF;
-      static constexpr uint32_t VIOLET          = 0x8000FF;
-      static constexpr uint32_t E_PURPLE        = 0xBF00FF;
-      static constexpr uint32_t MAGENTA         = 0xFF00FF;
-      static constexpr uint32_t HOT_PINK        = 0xFF00BF;
-      static constexpr uint32_t ROSE            = 0xFF0080;
-      static constexpr uint32_t CRIMSON         = 0xFF0040;
+      // Full Color Spectrum
+      static constexpr uint32_t RED           = 0xFF0000;
+      static constexpr uint32_t VERMILION     = 0xFF4000;
+      static constexpr uint32_t ORANGE        = 0xFF8000;
+      static constexpr uint32_t AMBER         = 0xFFBF00;
+      static constexpr uint32_t YELLOW        = 0xFFFF00;
+      static constexpr uint32_t LIME          = 0xBFFF00;
+      static constexpr uint32_t CHARTREUSE    = 0x80FF00;
+      static constexpr uint32_t HARLEQUIN     = 0x40FF00;
+      static constexpr uint32_t GREEN         = 0x00FF00;
+      static constexpr uint32_t MINT          = 0x00FF40;
+      static constexpr uint32_t SPRING_GREEN  = 0x00FF80;
+      static constexpr uint32_t TURQUOISE     = 0x00FFBF;
+      static constexpr uint32_t CYAN          = 0x00FFFF;
+      static constexpr uint32_t SKY_BLUE      = 0x00BFFF;
+      static constexpr uint32_t AZURE         = 0x0080FF;
+      static constexpr uint32_t SAPPHIRE      = 0x0040FF;
+      static constexpr uint32_t BLUE          = 0x0000FF;
+      static constexpr uint32_t INDIGO        = 0x4000FF;
+      static constexpr uint32_t VIOLET        = 0x8000FF;
+      static constexpr uint32_t E_PURPLE      = 0xBF00FF;
+      static constexpr uint32_t MAGENTA       = 0xFF00FF;
+      static constexpr uint32_t HOT_PINK      = 0xFF00BF;
+      static constexpr uint32_t ROSE          = 0xFF0080;
+      static constexpr uint32_t CRIMSON       = 0xFF0040;
 
       // Arduino Teal
-      static constexpr uint32_t ARDUINO_TEAL    = 0x00878F;
+      static constexpr uint32_t ARDUINO_TEAL  = 0x00878F;
 
       // Other Colors
-      static constexpr uint32_t CERULEAN        = 0x007BA7;
-      static constexpr uint32_t SEA_GREEN       = 0x2E8B57;
-      static constexpr uint32_t AQUAMARINE      = 0x7FFFD4;
-      static constexpr uint32_t LILAC           = 0xC8A2C8;
-      static constexpr uint32_t LAVENDER        = 0xE6E6FA;
-      static constexpr uint32_t CHOCOLATE       = 0xD2691E;
-      static constexpr uint32_t MOCHA           = 0xBEA493;
+      static constexpr uint32_t CERULEAN      = 0x007BA7;
+      static constexpr uint32_t SEA_GREEN     = 0x2E8B57;
+      static constexpr uint32_t AQUAMARINE    = 0x7FFFD4;
+      static constexpr uint32_t LILAC         = 0xC8A2C8;
+      static constexpr uint32_t LAVENDER      = 0xE6E6FA;
+      static constexpr uint32_t CHOCOLATE     = 0xD2691E;
+      static constexpr uint32_t MOCHA         = 0xBEA493;
 
       // Darker Colors
-      static constexpr uint32_t MAROON          = 0x800000;
-      static constexpr uint32_t OLIVE           = 0x808000;
-      static constexpr uint32_t AO              = 0x008000;
-      static constexpr uint32_t TEAL            = 0x008080;
-      static constexpr uint32_t NAVY            = 0x000080;
-      static constexpr uint32_t PURPLE          = 0x800080;
-      static constexpr uint32_t GRAY            = 0x808080;
+      static constexpr uint32_t MAROON        = 0x800000;
+      static constexpr uint32_t OLIVE         = 0x808000;
+      static constexpr uint32_t AO            = 0x008000;
+      static constexpr uint32_t TEAL          = 0x008080;
+      static constexpr uint32_t NAVY          = 0x000080;
+      static constexpr uint32_t PURPLE        = 0x800080;
+      static constexpr uint32_t GRAY          = 0x808080;
 
-      static constexpr uint32_t GREY = GRAY; // Alternative spelling
+      static constexpr uint32_t GREY  = GRAY; // Alternative spelling
 
-      static constexpr uint32_t OFF = BLACK; // Alias for off state
+      static constexpr uint32_t OFF   = BLACK; // Alias for off state
 
       // Hue, Saturation, Value (HSV) to RGB conversion
       inline uint32_t hsv(uint16_t h, uint8_t s, uint8_t v) {
