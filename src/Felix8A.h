@@ -13,28 +13,17 @@
 namespace Felix8A {
   using Color = Color32;
 
-  namespace Palettes {
+  namespace Sets {
 
     static const uint32_t ChristmasTreeSet[] = {
-      Color::RED,
-      Color::ORANGE,
-      Color::GREEN,
-      Color::BLUE,
-      Color::DIM_WHITE,
+      Color::RED, Color::ORANGE, Color::GREEN, Color::BLUE, Color::DIM_WHITE,
     };
-
-    static const Palette ChristmasTree(
-      ChristmasTreeSet,
-      FELIX8A_ARRAY_SIZE(ChristmasTreeSet)
-    );
 
     static const uint32_t SunsetSet[] = {
       Color::MAROON,    Color::RED,         Color::VERMILION,
       Color::CHOCOLATE, Color::ORANGE,      Color::AMBER,
       Color::YELLOW,    Color::WARM_WHITE,  Color::MOCHA
     };
-
-    static const Palette Sunset(SunsetSet, FELIX8A_ARRAY_SIZE(SunsetSet));
 
     static const uint32_t ForestSet[] = {
       Color::LIME,         Color::CHARTREUSE, Color::HARLEQUIN,
@@ -43,15 +32,11 @@ namespace Felix8A {
       Color::HONEYDEW,     Color::IVORY,      Color::OLIVE,
     };
 
-    static const Palette Forest(ForestSet, FELIX8A_ARRAY_SIZE(ForestSet));
-
     static const uint32_t OceanSet[] = {
       Color::CYAN,       Color::SKY_BLUE,   Color::AZURE,
       Color::SAPPHIRE,   Color::BLUE,       Color::NAVY,
       Color::COOL_WHITE, Color::AQUAMARINE, Color::SEA_GREEN,
     };
-
-    static const Palette Ocean(OceanSet, FELIX8A_ARRAY_SIZE(OceanSet));
 
     static const uint32_t BlushSet[] = {
       Color::INDIGO,  Color::VIOLET,    Color::E_PURPLE,
@@ -59,8 +44,6 @@ namespace Felix8A {
       Color::PURPLE,  Color::CRIMSON,   Color::LILAC,
       // Color::LAVENDER, // lighter
     };
-
-    static const Palette Blush(BlushSet, FELIX8A_ARRAY_SIZE(BlushSet));
 
     inline const uint32_t FullSet[] = {
       Color::RED,     Color::VERMILION, Color::ORANGE,        Color::AMBER,
@@ -71,9 +54,18 @@ namespace Felix8A {
       Color::MAGENTA, Color::HOT_PINK,  Color::ROSE,          Color::CRIMSON,
     };
 
-    static const Palette FullSpectrum(FullSet, FELIX8A_ARRAY_SIZE(FullSet));
+  } // namespace Sets
 
-  } // namespace Palettes
+  static const Palette ChristmasTree(
+    ChristmasTreeSet,
+    FELIX8A_ARRAY_SIZE(ChristmasTreeSet),
+  );
+
+  static const Palette Sunset(SunsetSet, FELIX8A_ARRAY_SIZE(SunsetSet));
+  static const Palette Forest(ForestSet, FELIX8A_ARRAY_SIZE(ForestSet));
+  static const Palette Ocean(OceanSet, FELIX8A_ARRAY_SIZE(OceanSet));
+  static const Palette Blush(BlushSet, FELIX8A_ARRAY_SIZE(BlushSet));
+  static const Palette FullSpectrum(FullSet, FELIX8A_ARRAY_SIZE(FullSet));
 
 } // namespace Felix8A
 

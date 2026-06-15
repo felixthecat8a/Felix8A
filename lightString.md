@@ -27,13 +27,14 @@ Adafruit_NeoPixel* lightString = nullptr;
 ```cpp
 /***** Classic Christmas Tree Light Color Palette *****/
 constexpr uint32_t ledRed = Felix8A::Color::RED;
-constexpr uint32_t ledAmber = Felix8A::Color::ORANGE;
+constexpr uint32_t ledOrange = Felix8A::Color::ORANGE;
 constexpr uint32_t ledGreen = Felix8A::Color::GREEN;
 constexpr uint32_t ledBlue = Felix8A::Color::BLUE;
-constexpr uint32_t ledColor[] = { ledRed, ledAmber, ledGreen, ledBlue };
+constexpr uint32_t ledWhite = Felix8A::Color::WHITE;
+constexpr uint32_t ledColor[] = { ledRed, ledOrange, ledGreen, ledBlue, ledWhite };
 // constexpr int numColors = sizeof(ledColor) / sizeof(ledColor[0]);
-constexpr Felix8A::Palette colorPalette(ledColor);
-constexpr int numColors = colorPalette.size();
+constexpr Felix8A::Palette ColorPalette(ledColor);
+constexpr int numColors = ColorPalette.size();
 
 /***** Initial Variables *****/
 constexpr int numModes = 5;
@@ -83,7 +84,7 @@ void lightsOff() {
 void solidColor() {
   if (settingsUpdated) {
     // lightString->fill(ledColor[currentColor]); lightString->show();
-    lightString->fill(colorPalette[currentColor]); lightString->show();
+    lightString->fill(ColorPalette[currentColor]); lightString->show();
   }
 }
 ```
@@ -93,7 +94,7 @@ void solidColor() {
 ```cpp
 void setColorWhiteGradient(int step) {
   // uint32_t color = ledColor[currentColor];
-  uint32_t color = colorPalette[currentColor];
+  uint32_t color = ColorPalette[currentColor];
   uint32_t white = Felix8A::Color::DIM_WHITE;
   uint32_t blend1 = Felix8A::Color::blend(color, white, 64);
   uint32_t blend2 = Felix8A::Color::blend(color, white, 128);
@@ -130,9 +131,11 @@ void colorGradient() {
   if (isAnimated) {
     if (settingsUpdated) chaseStep = 0;
 
+    int numGradientPhases = 5;
+
     if (Felix8A::Time::every(chaseInterval, lastUpdate)) {
       setColorWhiteGradient(chaseStep);
-      chaseStep = (chaseStep + 1) % 5;
+      chaseStep = (chaseStep + 1) % numGradientPhases;
     }
   } else if (settingsUpdated) {
     setColorWhiteGradient(0);
@@ -146,7 +149,7 @@ void colorGradient() {
 void setMultiColor(int step) {
   for (int i = 0; i < lightString->numPixels(); i++) {
     // lightString->setPixelColor(i, ledColor[(i + step) % numColors]);
-    lightString->setPixelColor(i, colorPalette.reversed(i + step));
+    lightString->setPixelColor(i, ColorPalette.reversed(i + step));
   }
 
   lightString->show();
@@ -177,19 +180,23 @@ void fireflyLights() {
   for (int i = 0; i < lightString->numPixels(); i++) {
     if (direction[i] == 0) {
       if (random(100) < 3) {
-        direction[i] = 1; brightness[i] = 10;
+        direction[i] = 1;
+        brightness[i] = 10;
       }
     }
     if (direction[i] != 0) {
       brightness[i] += direction[i] * 10;
       if (brightness[i] >= 200) {
-        brightness[i] = 200; direction[i] = -1;
+        brightness[i] = 200;
+        direction[i] = -1;
       }
       if (brightness[i] <= 0) {
-        brightness[i] = 0; direction[i] = 0;
+        brightness[i] = 0;
+        direction[i] = 0;
       }
     }
-    uint32_t baseColor = colorPalette[currentColor];
+    // uint32_t baseColor = ledColor[currentColor];
+    uint32_t baseColor = ColorPalette[currentColor];
     uint32_t scaled = Felix8A::Color::scale(baseColor, brightness[i]);
     lightString->setPixelColor(i, scaled);
   }
@@ -206,18 +213,15 @@ void twinkleLights() {
   if (Felix8A::Time::every(100, lastTwinkle)) {
     int count = lightString->numPixels();
     for (int i = 0; i < count; i++) {
-      uint32_t c = lightString->getPixelColor(i);
-      uint8_t r = ((c >> 16) & 0xFF) * 220 / 255;
-      uint8_t g = ((c >> 8) & 0xFF) * 220 / 255;
-      uint8_t b = (c & 0xFF) * 220 / 255;
-      lightString->setPixelColor(i, lightString->Color(r, g, b));
+      uint32_t color = lightString->getPixelColor(i);
+      lightString->setPixelColor(i, Felix8A::Color::scale(color, 220));
     }
 
     int newPixels = random(1, 4);
     for (int i = 0; i < newPixels; i++) {
       int pixel = random(count);
       // lightString->setPixelColor(pixel, ledColor[random(numColors)]);
-      lightString->setPixelColor(pixel, colorPalette[random(numColors)]);
+      lightString->setPixelColor(pixel, ColorPalette[random(numColors)]);
     }
 
     lightString->show();
