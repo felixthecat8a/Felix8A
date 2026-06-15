@@ -57,15 +57,15 @@ namespace Felix8A {
   } // namespace Sets
 
   static const Palette ChristmasTree(
-    ChristmasTreeSet,
-    FELIX8A_ARRAY_SIZE(ChristmasTreeSet),
+    Sets::ChristmasTreeSet,
+    FELIX8A_ARRAY_SIZE(Sets::ChristmasTreeSet)
   );
 
-  static const Palette Sunset(SunsetSet, FELIX8A_ARRAY_SIZE(SunsetSet));
-  static const Palette Forest(ForestSet, FELIX8A_ARRAY_SIZE(ForestSet));
-  static const Palette Ocean(OceanSet, FELIX8A_ARRAY_SIZE(OceanSet));
-  static const Palette Blush(BlushSet, FELIX8A_ARRAY_SIZE(BlushSet));
-  static const Palette FullSpectrum(FullSet, FELIX8A_ARRAY_SIZE(FullSet));
+  static const Palette Sunset(Sets::SunsetSet, FELIX8A_ARRAY_SIZE(Sets::SunsetSet));
+  static const Palette Forest(Sets::ForestSet, FELIX8A_ARRAY_SIZE(Sets::ForestSet));
+  static const Palette Ocean(Sets::OceanSet, FELIX8A_ARRAY_SIZE(Sets::OceanSet));
+  static const Palette Blush(Sets::BlushSet, FELIX8A_ARRAY_SIZE(Sets::BlushSet));
+  static const Palette FullSpectrum(Sets::FullSet, FELIX8A_ARRAY_SIZE(Sets::FullSet));
 
 } // namespace Felix8A
 
