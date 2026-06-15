@@ -45,7 +45,7 @@ namespace Felix8A {
       // Color::LAVENDER, // lighter
     };
 
-    inline const uint32_t FullSet[] = {
+    static const uint32_t FullSet[] = {
       Color::RED,     Color::VERMILION, Color::ORANGE,        Color::AMBER,
       Color::YELLOW,  Color::LIME,      Color::CHARTREUSE,    Color::HARLEQUIN,
       Color::GREEN,   Color::MINT,      Color::SPRING_GREEN,  Color::TURQUOISE,
