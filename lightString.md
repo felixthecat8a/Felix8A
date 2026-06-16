@@ -32,6 +32,9 @@ constexpr uint32_t ledGreen = Felix8A::Color::GREEN;
 constexpr uint32_t ledBlue = Felix8A::Color::BLUE;
 constexpr uint32_t colorArray[] = { ledRed, ledOrange, ledGreen, ledBlue };
 constexpr Felix8A::Palette MultiColorPalette(colorArray);
+
+//constexpr Felix8A::Palette MultiColorPalette(Felix8A::Sets::ChristmasTree5);
+
 /***** Animation Speed for Color Array *****/
 const unsigned long animInterval = 200;
 ```
