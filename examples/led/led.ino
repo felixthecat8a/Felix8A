@@ -13,9 +13,9 @@
 
 #include "src/Felix8A.h"
 
-const int PIN_RED   = 5;
-const int PIN_GREEN = 6;
-const int PIN_BLUE  = 9;
+const int PIN_RED   5
+const int PIN_GREEN 6
+const int PIN_BLUE  9
 
 void setup() {
   pinMode(PIN_RED,   OUTPUT);
