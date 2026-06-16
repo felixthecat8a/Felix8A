@@ -100,25 +100,6 @@ namespace Felix8A {
       // Themed Colors
       static constexpr uint32_t ARDUINO_TEAL    = 0x00878F;
 
-      static constexpr uint32_t Spectrum24[] = {
-        RED,        VERMILION,  ORANGE,   AMBER,    YELLOW,       LIME,
-        CHARTREUSE, HARLEQUIN,  GREEN,    MINT,     SPRING_GREEN, TURQUOISE,
-        CYAN,       SKY_BLUE,   AZURE,    SAPPHIRE, BLUE,         INDIGO,
-        VIOLET,     ELECTRIC_PURPLE,   MAGENTA,  HOT_PINK, ROSE,         CRIMSON,
-      };
-
-      static constexpr uint32_t Spectrum12[] = {
-        RED,    ORANGE,       YELLOW,   CHARTREUSE,
-        GREEN,  SPRING_GREEN, CYAN,     AZURE,
-        BLUE,   VIOLET,       MAGENTA,  ROSE,
-      };
-
-      static constexpr uint32_t Spectrum6[] = {
-        RED, YELLOW, GREEN, CYAN, BLUE, MAGENTA
-      };
-
-      static constexpr uint32_t Spectrum3[] = { RED, GREEN, BLUE };
-
       // Hue, Saturation, Value (HSV) to RGB conversion
       inline uint32_t hsv(uint16_t h, uint8_t s, uint8_t v) {
         if (s == 0) {

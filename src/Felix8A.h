@@ -43,6 +43,28 @@ namespace Felix8A {
       Color::ROSE,          Color::CRIMSON,     Color::LILAC,
     };
 
+    static const uint32_t Spectrum24[] = {
+      Color::RED,       Color::VERMILION,   Color::ORANGE,        Color::AMBER,
+      Color::YELLOW,    Color::LIME,        Color::CHARTREUSE,    Color::HARLEQUIN,
+      Color::GREEN,     Color::MINT,        Color::SPRING_GREEN,  Color::TURQUOISE,
+      Color::CYAN,      Color::SKY_BLUE,    Color::AZURE,         Color::SAPPHIRE,
+      Color::BLUE,      Color::INDIGO,      Color::VIOLET,        Color::ELECTRIC_PURPLE,
+      Color::MAGENTA,   Color::HOT_PINK,    Color::ROSE,          Color::CRIMSON,
+    };
+
+    static const uint32_t Spectrum12[] = {
+      Color::RED,    Color::ORANGE,       Color::YELLOW,   Color::CHARTREUSE,
+      Color::GREEN,  Color::SPRING_GREEN, Color::CYAN,     Color::AZURE,
+      Color::BLUE,   Color::VIOLET,       Color::MAGENTA,  Color::ROSE,
+    };
+
+    static const uint32_t Spectrum6[] = {
+      Color::RED,     Color::YELLOW,    Color::GREEN,
+      Color::CYAN,    Color::BLUE,      Color::MAGENTA
+    };
+
+    static const uint32_t Spectrum3[] = { Color::RED, Color::GREEN, Color::BLUE };
+
   } // namespace Sets
 
   static const Palette ChristmasTree(
@@ -55,10 +77,10 @@ namespace Felix8A {
   static const Palette Ocean(Sets::OceanSet, FELIX8A_ARRAY_SIZE(Sets::OceanSet));
   static const Palette Blush(Sets::BlushSet, FELIX8A_ARRAY_SIZE(Sets::BlushSet));
 
-  static const Palette Palette24(Color::Spectrum24, FELIX8A_ARRAY_SIZE(Color::Spectrum24));
-  static const Palette Palette12(Color::Spectrum12, FELIX8A_ARRAY_SIZE(Color::Spectrum12));
-  static const Palette Palette6(Color::Spectrum6, FELIX8A_ARRAY_SIZE(Color::Spectrum6));
-  static const Palette Palette3(Color::Spectrum3, FELIX8A_ARRAY_SIZE(Color::Spectrum3));
+  static const Palette Palette24(Sets::Spectrum24, FELIX8A_ARRAY_SIZE(Sets::Spectrum24));
+  static const Palette Palette12(Sets::Spectrum12, FELIX8A_ARRAY_SIZE(Sets::Spectrum12));
+  static const Palette Palette6(Sets::Spectrum6, FELIX8A_ARRAY_SIZE(Sets::Spectrum6));
+  static const Palette Palette3(Sets::Spectrum3, FELIX8A_ARRAY_SIZE(Sets::Spectrum3));
 
 } // namespace Felix8A
 

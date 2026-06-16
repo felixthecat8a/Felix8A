@@ -95,7 +95,7 @@ void solidColor() {
 void setColorWhiteGradient(int step) {
   // uint32_t color = ledColor[currentColor];
   uint32_t color = ColorPalette[currentColor];
-  uint32_t white = Felix8A::Color::DIM_WHITE;
+  uint32_t white = Felix8A::Color::GRAY;
   uint32_t blend1 = Felix8A::Color::blend(color, white, 64);
   uint32_t blend2 = Felix8A::Color::blend(color, white, 128);
   uint32_t blend3 = Felix8A::Color::blend(color, white, 192);
