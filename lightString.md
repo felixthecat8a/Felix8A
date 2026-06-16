@@ -41,7 +41,7 @@ const unsigned long animInterval = 200;
 ```cpp
 /***** Initial Variables for Solid Color Palette *****/
 const int numColors = Felix8A::Palette6.size();
-const int numModes = 5;
+const int numModes = 4;
 int currentMode = 0;
 int currentColor = 0;
 bool isAnimated = false;
@@ -73,20 +73,47 @@ void saveSettings() {
 
 ## Color Setting Functions
 
-### Solid Color Setting Functions
+### Solid Color Setting & Animated Solid Color Firefly Functions
 
 ```cpp
-/********1*********2*********3*********4*********5*********6*********7*********/
-void lightsOff() {
-  if (settingsUpdated) {
-    lightString->clear(); lightString->show();
+void fireflySolidColor() {
+  static uint8_t brightness[NUM_LEDS] = {0};
+  static int8_t direction[NUM_LEDS] = {0}; // 1 = up, -1 = down, 0 = idle
+  static unsigned long lastFireflyUpdate = 0;
+
+  if (!Felix8A::Time::every(30, lastFireflyUpdate)) return;
+
+  for (int i = 0; i < lightString->numPixels(); i++) {
+    if (direction[i] == 0) {
+      if (random(100) < 3) {
+        direction[i] = 1; brightness[i] = 10;
+      }
+    }
+    if (direction[i] != 0) {
+      brightness[i] += direction[i] * 10;
+
+      if (brightness[i] >= 200) {
+        brightness[i] = 200; direction[i] = -1;
+      }
+
+      if (brightness[i] <= 0) {
+        brightness[i] = 0; direction[i] = 0;
+      }
+    }
+
+    uint32_t baseColor = Felix8A::Palette6[currentColor];
+    uint32_t scaled = Felix8A::Color::scale(baseColor, brightness[i]);
+    lightString->setPixelColor(i, scaled);
   }
+
+  lightString->show();
 }
 
 void solidColor() {
-  if (settingsUpdated) {
-    // lightString->fill(ledColor[currentColor]); lightString->show();
-    lightString->fill(ColorPalette[currentColor]); lightString->show();
+  if (isAnimated) {
+    fireflySolidColor();
+  } else if (settingsUpdated) {
+    lightString->fill(Felix8A::Palette6[currentColor]); lightString->show();
   }
 }
 ```
@@ -136,7 +163,6 @@ void solidColorGradient() {
     if (settingsUpdated) animStep = 0;
 
     int numGradientPhases = 5;
-
     if (Felix8A::Time::every(150, lastUpdate)) {
       setColorWhiteGradient(animStep);
       animStep = (animStep + 1) % numGradientPhases;
@@ -150,26 +176,54 @@ void solidColorGradient() {
 ### Custom Multiple Color Setting Functions using `Felix8A::Time`
 
 ```cpp
-void setMultiColor(int step) {
+void setColorWhiteGradient(int step) {
+  uint32_t color = Felix8A::Palette6[currentColor];
+  uint32_t white = Felix8A::Color::GRAY;
+  uint32_t blend1 = Felix8A::Color::blend(color, white, 64);
+  uint32_t blend2 = Felix8A::Color::blend(color, white, 128);
+  uint32_t blend3 = Felix8A::Color::blend(color, white, 192);
+
   for (int i = 0; i < lightString->numPixels(); i++) {
-    lightString->setPixelColor(i, MultiColorPalette.reversed(i + step));
+    uint8_t phase = (i + step) % 5;
+
+    // if (phase == 0) {
+    //   lightString->setPixelColor(i, color);
+    // } else if (phase == 1) {
+    //   lightString->setPixelColor(i, blend1);
+    // } else if (phase == 2) {
+    //   lightString->setPixelColor(i, blend2);
+    // } else if (phase == 3) {
+    //   lightString->setPixelColor(i, blend3);
+    // } else {
+    //   lightString->setPixelColor(i, white);
+    // }
+
+    switch (phase) {
+      case 0: lightString->setPixelColor(i, color); break;
+      case 1: lightString->setPixelColor(i, blend1); break;
+      case 2: lightString->setPixelColor(i, blend2); break;
+      case 3: lightString->setPixelColor(i, blend3); break;
+      default: lightString->setPixelColor(i, white); break;
+    }
   }
+
   lightString->show();
 }
 
-void multiColor() {
-  static unsigned long lastAnimUpdate = 0;
-  static int colorStep = 0;
+void solidColorGradient() {
+  static unsigned long lastUpdate = 0;
+  static int animStep = 0;
 
   if (isAnimated) {
-    if (settingsUpdated) colorStep = 0;
+    if (settingsUpdated) animStep = 0;
 
-    if (Felix8A::Time::every(animInterval, lastAnimUpdate)) {
-      setMultiColor(colorStep);
-      colorStep = (colorStep + 1) % numColors;
+    int numGradientPhases = 5;
+    if (Felix8A::Time::every(150, lastUpdate)) {
+      setColorWhiteGradient(animStep);
+      animStep = (animStep + 1) % numGradientPhases;
     }
   } else if (settingsUpdated) {
-    setMultiColor(0);
+    setColorWhiteGradient(0);
   }
 }
 ```
@@ -189,7 +243,6 @@ void multiColorTwinkle() {
     }
 
     int newPixels = random(1, 4);
-
     for (int i = 0; i < newPixels; i++) {
       int pixel = random(count);
       int rand = random(MultiColorPalette.count());
@@ -201,44 +254,13 @@ void multiColorTwinkle() {
 }
 ```
 
-### Firefly Animation Function
+### Light Off Function
 
 ```cpp
-void fireflyLights() {
-  static uint8_t brightness[NUM_LEDS] = {0};
-  static int8_t direction[NUM_LEDS] = {0}; // 1 = up, -1 = down, 0 = idle
-  static unsigned long lastFireflyUpdate = 0;
-
-  if (!Felix8A::Time::every(30, lastFireflyUpdate)) return;
-
-  for (int i = 0; i < lightString->numPixels(); i++) {
-    if (direction[i] == 0) {
-      if (random(100) < 3) {
-        direction[i] = 1;
-        brightness[i] = 10;
-      }
-    }
-
-    if (direction[i] != 0) {
-      brightness[i] += direction[i] * 10;
-
-      if (brightness[i] >= 200) {
-        brightness[i] = 200;
-        direction[i] = -1;
-      }
-
-      if (brightness[i] <= 0) {
-        brightness[i] = 0;
-        direction[i] = 0;
-      }
-    }
-
-    uint32_t baseColor = Felix8A::Palette6[currentColor];
-    uint32_t scaled = Felix8A::Color::scale(baseColor, brightness[i]);
-    lightString->setPixelColor(i, scaled);
+void lightsOff() {
+  if (settingsUpdated) {
+    lightString->clear(); lightString->show();
   }
-
-  lightString->show();
 }
 ```
 
@@ -251,7 +273,6 @@ void updateMode() {
     case 1: solidColorGradient(); break;
     case 2: multiColor(); break;
     case 3: multiColorTwinkle(); break;
-    case 4: fireflyLights(); break;
     default: lightsOff(); break;
   }
 }
@@ -292,6 +313,7 @@ void loop() {
 
   if (button.wasTripleClicked()) {
     isAnimated = !isAnimated;
+    settingsUpdated = true;
   }
 
   if (button.wasHeld()) {
