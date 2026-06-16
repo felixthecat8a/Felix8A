@@ -1,5 +1,5 @@
 /**
- * @file Felix8A.ino
+ * @file led.ino
  * @brief Example sketch for the Felix8A RGB LED controller.
  * @note This sketch demonstrates basic color setting using the Color32 utility class.
  *       It cycles through a selection of colors defined in the Felix8A::Color class, changing the LED color every second.
