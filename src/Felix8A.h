@@ -20,29 +20,27 @@ namespace Felix8A {
     };
 
     static const uint32_t SunsetSet[] = {
-      Color::MAROON,    Color::RED,         Color::VERMILION,
-      Color::CHOCOLATE, Color::ORANGE,      Color::AMBER,
-      Color::YELLOW,    Color::WARM_WHITE,  Color::MOCHA
+      Color::MAROON,        Color::RED,         Color::VERMILION,
+      Color::OLIVE,         Color::ORANGE,      Color::AMBER,
+      Color::YELLOW,        Color::MOCHA,       Color::CORAL,
     };
 
     static const uint32_t ForestSet[] = {
-      Color::LIME,         Color::CHARTREUSE, Color::HARLEQUIN,
-      Color::GREEN,        Color::AO,         Color::MINT,
-      Color::SPRING_GREEN, Color::TURQUOISE,  Color::TEAL,
-      Color::HONEYDEW,     Color::IVORY,      Color::OLIVE,
+      Color::LIME,          Color::CHARTREUSE,  Color::HARLEQUIN,
+      Color::EMERALD,       Color::GREEN,       Color::MINT,
+      Color::SPRING_GREEN,  Color::TURQUOISE,   Color::HONEYDEW,
     };
 
     static const uint32_t OceanSet[] = {
-      Color::CYAN,       Color::SKY_BLUE,   Color::AZURE,
-      Color::SAPPHIRE,   Color::BLUE,       Color::NAVY,
-      Color::COOL_WHITE, Color::AQUAMARINE, Color::SEA_GREEN,
+      Color::TEAL,          Color::CYAN,        Color::SKY_BLUE,
+      Color::AZURE,         Color::SAPPHIRE,    Color::NAVY,
+      Color::BLUE,          Color::LAVENDER,    Color::CELESTE,
     };
 
     static const uint32_t BlushSet[] = {
-      Color::INDIGO,  Color::VIOLET,    Color::E_PURPLE,
-      Color::MAGENTA, Color::HOT_PINK,  Color::ROSE,
-      Color::PURPLE,  Color::CRIMSON,   Color::LILAC,
-      // Color::LAVENDER, // lighter
+      Color::INDIGO,        Color::VIOLET,      Color::ELECTRIC_PURPLE,
+      Color::PURPLE,        Color::MAGENTA,     Color::HOT_PINK,
+      Color::ROSE,          Color::CRIMSON,     Color::LILAC,
     };
 
   } // namespace Sets
