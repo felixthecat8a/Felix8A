@@ -11,7 +11,7 @@
  * @author felixthecat8a
  */
 
-#include "src/Felix8A.h"
+#include <Felix8A.h>
 
 #define PIN_RED   5
 #define PIN_GREEN 6
