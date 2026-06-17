@@ -1,11 +1,9 @@
 # `LightString.ino`
 
 An Arduino sketch for controlling colors and animations on a WS2812 LED string using the `Felix8A` and `FelixTheCatLED` libraries.
-
 Note: Math and Time helpers are in development
 
 ## Sketch & Hardware Setup using `FelixTheCatLED::Button`
-
 ```cpp
 #include <EEPROM.h>
 #include <FelixTheCatLED.h>
@@ -23,7 +21,6 @@ Adafruit_NeoPixel* lightString = nullptr;
 ```
 
 ### Custom Multi-color Setup using `Felix8A::Color` & `Felix8A::Palette`
-
 ```cpp
 /***** Classic Christmas Tree Light Multi-color Palette *****/
 constexpr uint32_t ledRed = Felix8A::Color::RED;
@@ -40,7 +37,6 @@ const unsigned long animInterval = 200;
 ```
 
 ### Initial Variables for Solid Color Palette
-
 ```cpp
 /***** Initial Variables for Solid Color Palette *****/
 const int numColors = Felix8A::Palette6.size();
@@ -48,11 +44,10 @@ const int numModes = 4;
 int currentMode = 0;
 int currentColor = 0;
 bool isAnimated = false;
-bool settingsUpdated = true;
+bool stateUpdated = true;
 ```
 
 ### EEPROM Setup using `Felix8A::Math::wrap`
-
 ```cpp
 /***** EEPROM  Setup *****/
 #define EEPROM_MODE_ADDR 0
@@ -70,16 +65,15 @@ void saveSettings() {
   currentColor = Felix8A::Math::wrap(currentColor, 0, numColors);
   EEPROM.update(EEPROM_MODE_ADDR, currentMode);
   EEPROM.update(EEPROM_COLOR_ADDR, currentColor);
-  settingsUpdated = true;
+  stateUpdated = true;
 }
 ```
 
 ## Color Setting Functions
 
 ### Solid Color Setting & Animated Solid Color Firefly Functions
-
 ```cpp
-void fireflySolidColor() {
+void firefly() {
   static uint8_t brightness[NUM_LEDS] = {0};
   static int8_t direction[NUM_LEDS] = {0}; // 1 = up, -1 = down, 0 = idle
   static unsigned long lastFireflyUpdate = 0;
@@ -89,18 +83,19 @@ void fireflySolidColor() {
   for (int i = 0; i < lightString->numPixels(); i++) {
     if (direction[i] == 0) {
       if (random(100) < 3) {
-        direction[i] = 1; brightness[i] = 10;
+        direction[i] = 1;
+        brightness[i] = 10;
       }
     }
     if (direction[i] != 0) {
       brightness[i] += direction[i] * 10;
-
       if (brightness[i] >= 200) {
-        brightness[i] = 200; direction[i] = -1;
+        brightness[i] = 200;
+        direction[i] = -1;
       }
-
       if (brightness[i] <= 0) {
-        brightness[i] = 0; direction[i] = 0;
+        brightness[i] = 0;
+        direction[i] = 0;
       }
     }
 
@@ -114,15 +109,14 @@ void fireflySolidColor() {
 
 void solidColor() {
   if (isAnimated) {
-    fireflySolidColor();
-  } else if (settingsUpdated) {
+    firefly();
+  } else if (stateUpdated) {
     lightString->fill(Felix8A::Palette6[currentColor]); lightString->show();
   }
 }
 ```
 
 ### Solid Color to White Gradient Setting Functions using `Felix8A::Time`
-
 ```cpp
 void setColorWhiteGradient(int step) {
   uint32_t color = Felix8A::Palette6[currentColor];
@@ -146,6 +140,7 @@ void setColorWhiteGradient(int step) {
     //   lightString->setPixelColor(i, white);
     // }
 
+    /* Alternate Way */
     switch (phase) {
       case 0: lightString->setPixelColor(i, color); break;
       case 1: lightString->setPixelColor(i, blend1); break;
@@ -157,82 +152,48 @@ void setColorWhiteGradient(int step) {
 
   lightString->show();
 }
-
 void solidColorGradient() {
   static unsigned long lastUpdate = 0;
   static int animStep = 0;
 
   if (isAnimated) {
-    if (settingsUpdated) animStep = 0;
-
+    if (stateUpdated) animStep = 0;
     int numGradientPhases = 5;
+
     if (Felix8A::Time::every(150, lastUpdate)) {
       setColorWhiteGradient(animStep);
       animStep = (animStep + 1) % numGradientPhases;
     }
-  } else if (settingsUpdated) {
+  } else if (stateUpdated) {
     setColorWhiteGradient(0);
   }
 }
 ```
 
 ### Custom Multiple Color Setting Functions using `Felix8A::Time`
-
 ```cpp
-void setColorWhiteGradient(int step) {
-  uint32_t color = Felix8A::Palette6[currentColor];
-  uint32_t white = Felix8A::Color::GRAY;
-  uint32_t blend1 = Felix8A::Color::blend(color, white, 64);
-  uint32_t blend2 = Felix8A::Color::blend(color, white, 128);
-  uint32_t blend3 = Felix8A::Color::blend(color, white, 192);
-
+void setMultiColor(int step) {
   for (int i = 0; i < lightString->numPixels(); i++) {
-    uint8_t phase = (i + step) % 5;
-
-    // if (phase == 0) {
-    //   lightString->setPixelColor(i, color);
-    // } else if (phase == 1) {
-    //   lightString->setPixelColor(i, blend1);
-    // } else if (phase == 2) {
-    //   lightString->setPixelColor(i, blend2);
-    // } else if (phase == 3) {
-    //   lightString->setPixelColor(i, blend3);
-    // } else {
-    //   lightString->setPixelColor(i, white);
-    // }
-
-    switch (phase) {
-      case 0: lightString->setPixelColor(i, color); break;
-      case 1: lightString->setPixelColor(i, blend1); break;
-      case 2: lightString->setPixelColor(i, blend2); break;
-      case 3: lightString->setPixelColor(i, blend3); break;
-      default: lightString->setPixelColor(i, white); break;
-    }
+    lightString->setPixelColor(i, MultiColorPalette.reversed(i + step));
   }
-
   lightString->show();
 }
-
-void solidColorGradient() {
-  static unsigned long lastUpdate = 0;
-  static int animStep = 0;
-
+void multiColor() {
+  static unsigned long lastAnimUpdate = 0;
+  static int colorStep = 0;
   if (isAnimated) {
-    if (settingsUpdated) animStep = 0;
-
-    int numGradientPhases = 5;
-    if (Felix8A::Time::every(150, lastUpdate)) {
-      setColorWhiteGradient(animStep);
-      animStep = (animStep + 1) % numGradientPhases;
+    if (stateUpdated) colorStep = 0;
+    if (Felix8A::Time::every(animInterval, lastAnimUpdate)) {
+      setMultiColor(colorStep);
+      colorStep = (colorStep + 1) % numColors;
     }
-  } else if (settingsUpdated) {
-    setColorWhiteGradient(0);
+  } else if (stateUpdated) {
+    setMultiColor(0);
   }
 }
 ```
 
 ### Multi-color Twinkle Animation Function
-
 ```cpp
 void multiColorTwinkle() {
   static unsigned long lastTwinkle = 0;
@@ -261,7 +222,7 @@ void multiColorTwinkle() {
 
 ```cpp
 void lightsOff() {
-  if (settingsUpdated) {
+  if (stateUpdated) {
     lightString->clear(); lightString->show();
   }
 }
@@ -304,28 +265,54 @@ void setup() {
 void loop() {
   button.update();
 
-  if (button.wasClicked()) {
-    currentMode++;
-    saveSettings();
-  }
+  // if (button.wasClicked()) {
+  //   currentMode++;
+  //   saveSettings();
+  // }
 
-  if (button.wasDoubleClicked()) {
-    currentMode--;
-    saveSettings();
-  }
+  // if (button.wasDoubleClicked()) {
+  //   currentMode--;
+  //   saveSettings();
+  // }
 
-  if (button.wasTripleClicked()) {
-    isAnimated = !isAnimated;
-    settingsUpdated = true;
-  }
+  // if (button.wasTripleClicked()) {
+  //   isAnimated = !isAnimated;
+  //   stateUpdated = true;
+  // }
 
-  if (button.wasHeld()) {
-    currentColor++;
-    saveSettings();
+  // if (button.wasHeld()) {
+  //   currentColor++;
+  //   saveSettings();
+  // }
+
+  /* Alternate Way */
+  switch (button.poll()) {
+    case FelixTheCatLED::Button::Event::Click:
+      currentMode++;
+      saveSettings();
+      break;
+
+    case FelixTheCatLED::Button::Event::DoubleClick:
+      currentMode--;
+      saveSettings();
+      break;
+
+    case FelixTheCatLED::Button::Event::TripleClick:
+      isAnimated = !isAnimated;
+      stateUpdated = true;
+      break;
+
+    case FelixTheCatLED::Button::Event::Hold:
+      currentColor++;
+      saveSettings();
+      break;
+
+    default:
+      break;
   }
 
   updateMode();
-  settingsUpdated = false;
+  stateUpdated = false;
 }
 /********1*********2*********3*********4*********5*********6*********7*********/
 ```
