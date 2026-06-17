@@ -286,29 +286,29 @@ void loop() {
   // }
 
   /* Alternate Way */
-  switch (button.poll()) {
-    case FelixTheCatLED::Button::Event::Click:
-      currentMode++;
-      saveSettings();
-      break;
+  FelixTheCatLED::Button::Event e;
 
-    case FelixTheCatLED::Button::Event::DoubleClick:
-      currentMode--;
-      saveSettings();
-      break;
-
-    case FelixTheCatLED::Button::Event::TripleClick:
-      isAnimated = !isAnimated;
-      stateUpdated = true;
-      break;
-
-    case FelixTheCatLED::Button::Event::Hold:
-      currentColor++;
-      saveSettings();
-      break;
-
-    default:
-      break;
+  while ((e = button.poll()) != FelixTheCatLED::Button::Event::None) {
+    switch (e) {
+      case FelixTheCatLED::Button::Event::Click:
+        currentMode++;
+        saveSettings();
+        break;
+      case FelixTheCatLED::Button::Event::DoubleClick:
+        currentMode--;
+        saveSettings();
+        break;
+      case FelixTheCatLED::Button::Event::TripleClick:
+        isAnimated = !isAnimated;
+        stateUpdated = true;
+        break;
+      case FelixTheCatLED::Button::Event::Hold:
+        currentColor++;
+        saveSettings();
+        break;
+      default:
+        break;
+    }
   }
 
   updateMode();
