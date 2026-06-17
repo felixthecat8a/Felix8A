@@ -7,7 +7,7 @@ namespace Felix8A {
 
   class Color32 {
     public:
-      // Core
+      // Core Methods
       static constexpr uint32_t hex(uint8_t r, uint8_t g, uint8_t b) {
         return (uint32_t(r) << 16) | (uint32_t(g) << 8) | b;
       }
