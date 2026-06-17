@@ -4,7 +4,7 @@
 ![License: MIT](https://img.shields.io/badge/license-MIT-yellow?link=https://opensource.org/licenses/MIT)
 ![GitHub repo file or directory count](https://img.shields.io/github/directory-file-count/felixthecat8a/Felix8A)
 ![GitHub repo size](https://img.shields.io/github/repo-size/felixthecat8a/Felix8A)
-![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/felixthecat8a/Felix8A)
+![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/felixthecat8a/Felix8A?color=%2300599C)
 ![GitHub top language](https://img.shields.io/github/languages/top/felixthecat8a/FelixTheCatLED?color=%2300599C)
 
 An Arduino Library toolkit for handling 32-bit hexadecimal colors in my projects.
