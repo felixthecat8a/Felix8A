@@ -1,11 +1,11 @@
 # Felix8A
 
-![GitHub Release](https://img.shields.io/github/v/release/felixthecat8a/Felix8A?logo=arduino&logoColor=00878F&color=00878F)
-[![License: MIT](https://img.shields.io/github/license/felixthecat8a/Felix8A)](https://opensource.org/licenses/MIT)
+![GitHub Release](https://img.shields.io/github/v/release/felixthecat8a/Felix8A?color=00878F)
+![License: MIT](https://img.shields.io/badge/license-MIT-yellow?link=https://opensource.org/licenses/MIT)
 ![GitHub repo size](https://img.shields.io/github/repo-size/felixthecat8a/Felix8A)
+![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/felixthecat8a/Felix8A)
 ![GitHub repo file or directory count](https://img.shields.io/github/directory-file-count/felixthecat8a/Felix8A)
-![GitHub top language](https://img.shields.io/github/languages/top/felixthecat8a/Felix8A)
-![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/felixthecat8a/Felix8A/total)
+![GitHub top language](https://img.shields.io/github/languages/top/felixthecat8a/FelixTheCatLED?color=%2300599C)
 
 An Arduino Library toolkit for handling 32-bit hexadecimal colors in my projects.
 
