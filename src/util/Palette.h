@@ -39,6 +39,21 @@ namespace Felix8A {
         );
       }
 
+      uint32_t lerp(uint8_t t) const {
+        if (_size == 0) return 0;
+        if (_size == 1) return _colors[0];
+
+        uint16_t scaled = uint16_t(t) * (_size - 1);
+
+        uint8_t index = scaled / 255;
+        uint8_t frac  = scaled & 0xFF;
+
+        uint32_t c1 = _colors[index];
+        uint32_t c2 = _colors[(index + 1) % _size];
+
+        return blend(c1, c2, frac);
+      }
+
     private:
       const uint32_t* _colors;
       uint8_t _size;
