@@ -127,7 +127,7 @@ void solidColor() {
 ```cpp
 void setColorWhiteGradient(int step) {
   uint32_t color = Felix8A::Palette6[currentColor];
-  uint32_t white = Felix8A::Color::GRAY;
+  uint32_t white = Felix8A::Color::rgb(150, 150, 150);
   uint32_t blend1 = Felix8A::Color::blend(color, white, 64);
   uint32_t blend2 = Felix8A::Color::blend(color, white, 128);
   uint32_t blend3 = Felix8A::Color::blend(color, white, 192);
@@ -172,10 +172,10 @@ void solidColorGradient() {
 ```cpp
 void setColorWhiteGradient(int step) {
   uint32_t color = Felix8A::Palette6[currentColor];
-  uint32_t white = Felix8A::Color::GRAY;
-  uint32_t blend1 = Felix8A::Color::blend(color, white, 64);
-  uint32_t blend2 = Felix8A::Color::blend(color, white, 128);
-  uint32_t blend3 = Felix8A::Color::blend(color, white, 192);
+  uint32_t white = Felix8A::Color::rgb(150, 150, 150);
+  uint32_t blend1 = Felix8A::Palette::blend(color, white, 64);
+  uint32_t blend2 = Felix8A::Palette::blend(color, white, 128);
+  uint32_t blend3 = Felix8A::Palette::blend(color, white, 192);
 
   for (int i = 0; i < lightString->numPixels(); i++) {
     uint8_t phase = (i + step) % 5;
