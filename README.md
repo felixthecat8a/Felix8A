@@ -5,7 +5,13 @@
 ![GitHub repo file or directory count](https://img.shields.io/github/directory-file-count/felixthecat8a/Felix8A)
 ![GitHub repo size](https://img.shields.io/github/repo-size/felixthecat8a/Felix8A)
 ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/felixthecat8a/Felix8A?color=%2300599C)
-![GitHub top language](https://img.shields.io/github/languages/top/felixthecat8a/FelixTheCatLED?color=%2300599C)
+![GitHub top language](https://img.shields.io/github/languages/top/felixthecat8a/Felix8A?color=%2300599C)
+
+![GitHub Created At](https://img.shields.io/github/created-at/felixthecat8a/Felix8A)
+![GitHub Release Date](https://img.shields.io/github/release-date/felixthecat8a/Felix8A)
+![GitHub commit activity](https://img.shields.io/github/commit-activity/m/felixthecat8a/LCD_BacklightRGB)
+![GitHub commits since latest release](https://img.shields.io/github/commits-since/felixthecat8a/Felix8A/latest)
+![GitHub last commit](https://img.shields.io/github/last-commit/felixthecat8a/Felix8A)
 
 An Arduino Library toolkit for handling 32-bit hexadecimal colors in my projects.
 
@@ -69,7 +75,7 @@ void loop() {
     // loop code here
   }
 
-  /* similiar behavior */
+  /* similar behavior */
   // if (Felix8A::Time::after(timeInterval, lastUpdate)) {
   //   // loop code here
   //   Felix8A::Time::reset(lastUpdate); // reset the timer
