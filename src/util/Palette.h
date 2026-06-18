@@ -25,19 +25,19 @@ namespace Felix8A {
         return (_size == 0) ? 0 : _colors[_size - 1 - (i % _size)];
       }
 
-      // indexed gradient stepping
-      // uint32_t lerp(uint8_t t) const {
-      //   if (_size == 0) return 0;
-      //   return _colors[(uint16_t(t) * (_size - 1)) / 255];
-      // }
+      constexpr const uint32_t* data() const { return _colors; }
 
-      constexpr uint32_t lerp(uint8_t t) const {
-        return (_size == 0)
-          ? 0
-          : _colors[(uint16_t(t) * (_size - 1)) / 255];
+      static constexpr uint8_t lerp8(uint8_t a, uint8_t b, uint8_t t) {
+        return a + ((uint16_t)(b - a) * t) / 255;
       }
 
-      constexpr const uint32_t* data() const { return _colors; }
+      static constexpr uint32_t blend(uint32_t c1, uint32_t c2, uint8_t t) {
+        return (
+          (uint32_t(lerp8((c1 >> 16) & 0xFF, (c2 >> 16) & 0xFF, t)) << 16) |
+          (uint32_t(lerp8((c1 >> 8)  & 0xFF, (c2 >> 8)  & 0xFF, t)) << 8)  |
+          (uint32_t(lerp8((c1 >> 0)  & 0xFF, (c2 >> 0)  & 0xFF, t)) << 0)
+        );
+      }
 
     private:
       const uint32_t* _colors;
