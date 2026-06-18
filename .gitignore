@@ -17,6 +17,7 @@ Thumbs.db
 
 # VS Code
 .vscode/
+cspell.json
 
 
 # Prerequisites
