@@ -19,6 +19,10 @@ namespace Felix8A {
       Color::RED, Color::ORANGE, Color::GREEN, Color::BLUE, Color::GRAY,
     };
 
+    static const uint32_t Independence3[] = {
+      Color::RED,     Color::WHITE,     Color::BLUE,
+    };
+
     static const uint32_t Sunset9[] = {
       Color::MAROON,        Color::RED,         Color::VERMILION,
       Color::OLIVE,         Color::ORANGE,      Color::AMBER,
@@ -80,6 +84,8 @@ namespace Felix8A {
     Sets::ChristmasTree5,
     FELIX8A_ARRAY_SIZE(Sets::ChristmasTree5)
   );
+
+  static const Palette Freedom(Sets::Independence3, FELIX8A_ARRAY_SIZE(Sets::Independence3));
 
   static const Palette Sunset(Sets::Sunset9, FELIX8A_ARRAY_SIZE(Sets::Sunset9));
   static const Palette Forest(Sets::Forest9, FELIX8A_ARRAY_SIZE(Sets::Forest9));
