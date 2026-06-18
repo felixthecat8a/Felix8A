@@ -30,6 +30,7 @@ constexpr uint32_t ledBlue = Felix8A::Color::BLUE;
 constexpr uint32_t colorArray[] = { ledRed, ledOrange, ledGreen, ledBlue };
 constexpr Felix8A::Palette MultiColorPalette(colorArray);
 
+/***** Preset Classic Christmas Tree Light Multi-color Palette *****/
 //constexpr Felix8A::Palette MultiColorPalette(Felix8A::Sets::ChristmasTree5);
 
 /***** Animation Speed for Color Array *****/
@@ -56,6 +57,7 @@ bool stateUpdated = true;
 void loadSettings() {
   EEPROM.get(EEPROM_MODE_ADDR, currentMode);
   EEPROM.get(EEPROM_COLOR_ADDR, currentColor);
+
   if (currentMode < 0 || currentMode >= numModes) currentMode = 0;
   if (currentColor < 0 || currentColor >= numColors) currentColor = 0;
 }
@@ -63,8 +65,10 @@ void loadSettings() {
 void saveSettings() {
   currentMode = Felix8A::Math::wrap(currentMode, 0, numModes);
   currentColor = Felix8A::Math::wrap(currentColor, 0, numColors);
+
   EEPROM.update(EEPROM_MODE_ADDR, currentMode);
   EEPROM.update(EEPROM_COLOR_ADDR, currentColor);
+
   stateUpdated = true;
 }
 ```
@@ -87,12 +91,15 @@ void firefly() {
         brightness[i] = 10;
       }
     }
+
     if (direction[i] != 0) {
       brightness[i] += direction[i] * 10;
+
       if (brightness[i] >= 200) {
         brightness[i] = 200;
         direction[i] = -1;
       }
+
       if (brightness[i] <= 0) {
         brightness[i] = 0;
         direction[i] = 0;
@@ -128,25 +135,16 @@ void setColorWhiteGradient(int step) {
   for (int i = 0; i < lightString->numPixels(); i++) {
     uint8_t phase = (i + step) % 5;
 
-    // if (phase == 0) {
-    //   lightString->setPixelColor(i, color);
-    // } else if (phase == 1) {
-    //   lightString->setPixelColor(i, blend1);
-    // } else if (phase == 2) {
-    //   lightString->setPixelColor(i, blend2);
-    // } else if (phase == 3) {
-    //   lightString->setPixelColor(i, blend3);
-    // } else {
-    //   lightString->setPixelColor(i, white);
-    // }
-
-    /* Alternate Way */
-    switch (phase) {
-      case 0: lightString->setPixelColor(i, color); break;
-      case 1: lightString->setPixelColor(i, blend1); break;
-      case 2: lightString->setPixelColor(i, blend2); break;
-      case 3: lightString->setPixelColor(i, blend3); break;
-      default: lightString->setPixelColor(i, white); break;
+    if (phase == 0) {
+      lightString->setPixelColor(i, color);
+    } else if (phase == 1) {
+      lightString->setPixelColor(i, blend1);
+    } else if (phase == 2) {
+      lightString->setPixelColor(i, blend2);
+    } else if (phase == 3) {
+      lightString->setPixelColor(i, blend3);
+    } else {
+      lightString->setPixelColor(i, white);
     }
   }
 
@@ -167,6 +165,31 @@ void solidColorGradient() {
   } else if (stateUpdated) {
     setColorWhiteGradient(0);
   }
+}
+```
+
+**Alternate White Gradient Setting Function**
+```cpp
+void setColorWhiteGradient(int step) {
+  uint32_t color = Felix8A::Palette6[currentColor];
+  uint32_t white = Felix8A::Color::GRAY;
+  uint32_t blend1 = Felix8A::Color::blend(color, white, 64);
+  uint32_t blend2 = Felix8A::Color::blend(color, white, 128);
+  uint32_t blend3 = Felix8A::Color::blend(color, white, 192);
+
+  for (int i = 0; i < lightString->numPixels(); i++) {
+    uint8_t phase = (i + step) % 5;
+
+    switch (phase) {
+      case 0: lightString->setPixelColor(i, color); break;
+      case 1: lightString->setPixelColor(i, blend1); break;
+      case 2: lightString->setPixelColor(i, blend2); break;
+      case 3: lightString->setPixelColor(i, blend3); break;
+      default: lightString->setPixelColor(i, white); break;
+    }
+  }
+
+  lightString->show();
 }
 ```
 
@@ -219,7 +242,6 @@ void multiColorTwinkle() {
 ```
 
 ### Light Off Function
-
 ```cpp
 void lightsOff() {
   if (stateUpdated) {
@@ -229,7 +251,6 @@ void lightsOff() {
 ```
 
 ## Set & Update Functions
-
 ```cpp
 void updateMode() {
   switch (currentMode) {
@@ -242,8 +263,7 @@ void updateMode() {
 }
 ```
 
-### Main Code
-
+### Setup Code
 ```cpp
 void setup() {
   loadSettings();
@@ -261,31 +281,43 @@ void setup() {
   lightString->setBrightness(51);
   lightString->show();
 }
+```
 
+### Loop Code
+```cpp
 void loop() {
   button.update();
 
-  // if (button.wasClicked()) {
-  //   currentMode++;
-  //   saveSettings();
-  // }
+  if (button.wasClicked()) {
+    currentMode++;
+    saveSettings();
+  }
 
-  // if (button.wasDoubleClicked()) {
-  //   currentMode--;
-  //   saveSettings();
-  // }
+  if (button.wasDoubleClicked()) {
+    currentMode--;
+    saveSettings();
+  }
 
-  // if (button.wasTripleClicked()) {
-  //   isAnimated = !isAnimated;
-  //   stateUpdated = true;
-  // }
+  if (button.wasTripleClicked()) {
+    isAnimated = !isAnimated;
+    stateUpdated = true;
+  }
 
-  // if (button.wasHeld()) {
-  //   currentColor++;
-  //   saveSettings();
-  // }
+  if (button.wasHeld()) {
+    currentColor++;
+    saveSettings();
+  }
 
-  /* Alternate Way */
+  updateMode();
+  stateUpdated = false;
+}
+```
+
+### Loop Code (Using Event Polling)
+```cpp
+void loop() {
+  button.update();
+
   FelixTheCatLED::Button::Event e;
 
   while ((e = button.poll()) != FelixTheCatLED::Button::Event::None) {
@@ -294,18 +326,22 @@ void loop() {
         currentMode++;
         saveSettings();
         break;
+
       case FelixTheCatLED::Button::Event::DoubleClick:
         currentMode--;
         saveSettings();
         break;
+
       case FelixTheCatLED::Button::Event::TripleClick:
         isAnimated = !isAnimated;
         stateUpdated = true;
         break;
+
       case FelixTheCatLED::Button::Event::Hold:
         currentColor++;
         saveSettings();
         break;
+
       default:
         break;
     }
