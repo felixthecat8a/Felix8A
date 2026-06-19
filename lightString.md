@@ -78,7 +78,7 @@ void saveSettings() {
 
 ### Solid Color Setting & Animated Solid Color Firefly Functions
 ```cpp
-void firefly() {
+void firefly(uint32_t baseColor) {
   static uint8_t brightness[NUM_LEDS] = {0};
   static int8_t direction[NUM_LEDS] = {0}; // 1 = up, -1 = down, 0 = idle
   static unsigned long lastFireflyUpdate = 0;
@@ -107,7 +107,6 @@ void firefly() {
       }
     }
 
-    uint32_t baseColor = Felix8A::Palette12[currentColor];
     uint32_t scaled = Felix8A::Color::scale(baseColor, brightness[i]);
     lightString->setPixelColor(i, scaled);
   }
@@ -117,7 +116,7 @@ void firefly() {
 
 void solidColor() {
   if (isAnimated) {
-    firefly();
+    firefly(Felix8A::Palette12[currentColor]);
   } else if (stateUpdated) {
     lightString->fill(Felix8A::Palette12[currentColor]); lightString->show();
   }
@@ -126,8 +125,7 @@ void solidColor() {
 
 ### Solid Color to White Gradient Setting Functions using `Felix8A::Time`
 ```cpp
-void setColorWhiteGradient(int step) {
-  uint32_t color = Felix8A::Palette12[currentColor];
+void setColorWhiteGradient(uint32_t color, int step) {
   uint32_t white = Felix8A::Color::rgb(150, 150, 150);
   uint32_t blend1 = Felix8A::Color::blend(color, white, 64);
   uint32_t blend2 = Felix8A::Color::blend(color, white, 128);
@@ -151,6 +149,7 @@ void setColorWhiteGradient(int step) {
 
   lightString->show();
 }
+
 void solidColorGradient() {
   static unsigned long lastUpdate = 0;
   static int animStep = 0;
@@ -160,19 +159,18 @@ void solidColorGradient() {
     int numGradientPhases = 5;
 
     if (Felix8A::Time::every(150, lastUpdate)) {
-      setColorWhiteGradient(animStep);
+      setColorWhiteGradient(Felix8A::Palette12[currentColor], animStep);
       animStep = (animStep + 1) % numGradientPhases;
     }
   } else if (stateUpdated) {
-    setColorWhiteGradient(0);
+    setColorWhiteGradient(Felix8A::Palette12[currentColor], 0);
   }
 }
 ```
 
 **Alternate White Gradient Setting Function**
 ```cpp
-void setColorWhiteGradient(int step) {
-  uint32_t color = Felix8A::Palette12[currentColor];
+void setColorWhiteGradient(uint32_t color, int step) {
   uint32_t white = Felix8A::Color::rgb(150, 150, 150);
   uint32_t blend1 = Felix8A::Palette::blend(color, white, 64);
   uint32_t blend2 = Felix8A::Palette::blend(color, white, 128);
@@ -211,7 +209,7 @@ void multiColor() {
   if (isAnimated) {
     if (stateUpdated) colorStep = 0;
 
-    if (Felix8A::Time::every(animInterval, lastAnimUpdate)) {
+    if (Felix8A::Time::every(150, lastAnimUpdate)) {
       setMultiColor(colorStep);
       colorStep = (colorStep + 1) % numColors;
     }
