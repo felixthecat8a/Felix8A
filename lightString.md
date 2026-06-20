@@ -20,24 +20,6 @@ FelixTheCatLED::Button button(BUTTON_PIN);
 Adafruit_NeoPixel* lightString = nullptr;
 ```
 
-### Themed Multi-color Setup using `Felix8A::Color` & `Felix8A::Palette`
-```cpp
-/***** Classic Christmas Tree Light Multi-color Palette *****/
-constexpr uint32_t color0 = Felix8A::Color::RED;
-constexpr uint32_t color1 = Felix8A::Color::ORANGE;
-constexpr uint32_t color2 = Felix8A::Color::GREEN;
-constexpr uint32_t color3 = Felix8A::Color::BLUE;
-constexpr uint32_t color4 = Felix8A::Color::GRAY;
-constexpr uint32_t colorArray[] = { color0, color1, color2, color3, color4 };
-constexpr Felix8A::Palette ColorPalette(colorArray);
-
-/***** Preset Classic Christmas Tree Light Multi-color Palette *****/
-//constexpr Felix8A::Palette ColorPalette(Felix8A::Sets::ChristmasTree5);
-
-/***** Animation Speed for Color Array *****/
-const unsigned long animInterval = 200;
-```
-
 ### Initial Variables for Solid Color Palette
 ```cpp
 /***** Initial Variables for Solid Color Palette *****/
@@ -192,7 +174,9 @@ void setColorWhiteGradient(uint32_t color, int step) {
 }
 ```
 
-### Multiple Color Setting Functions using `Felix8A::Time`
+## Multi-color Functions
+
+### Multi-color Setting Functions using `Felix8A::Time`
 ```cpp
 void setMultiColor(int step) {
   for (int i = 0; i < lightString->numPixels(); i++) {
@@ -219,32 +203,7 @@ void multiColor() {
 }
 ```
 
-## Themed Color Palette
-
-### Themed Color Palette Setting Functions using `Felix8A::Time`
-```cpp
-void setColorPalette(int step) {
-  for (int i = 0; i < lightString->numPixels(); i++) {
-    lightString->setPixelColor(i, ColorPalette.reversed(i + step));
-  }
-  lightString->show();
-}
-void customColorPalette() {
-  static unsigned long lastAnimUpdate = 0;
-  static int colorStep = 0;
-  if (isAnimated) {
-    if (stateUpdated) colorStep = 0;
-    if (Felix8A::Time::every(animInterval, lastAnimUpdate)) {
-      setColorPalette(colorStep);
-      colorStep = (colorStep + 1) % numColors;
-    }
-  } else if (stateUpdated) {
-    setColorPalette(0);
-  }
-}
-```
-
-### Themed Color Palette Twinkle Animation Function
+### Multi-color Twinkle Animation Function
 ```cpp
 void twinkleColorPalette() {
   static unsigned long lastTwinkle = 0;
@@ -261,7 +220,7 @@ void twinkleColorPalette() {
     for (int i = 0; i < newPixels; i++) {
       int pixel = random(count);
       int rand = random(ColorPalette.count());
-      lightString->setPixelColor(pixel, ColorPalette[rand]);
+      lightString->setPixelColor(pixel, Felix8A::Palette12.[rand]);
     }
 
     lightString->show();
@@ -287,7 +246,6 @@ void updateMode() {
     case 0: solidColor(); break;
     case 1: solidColorGradient(); break;
     case 2: multiColor(); break;
-    case 3: customColorPalette(); break;
     case 4: twinkleColorPalette(); break;
     default: lightsOff(); break;
   }
