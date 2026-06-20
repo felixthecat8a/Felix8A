@@ -24,7 +24,7 @@ Adafruit_NeoPixel* lightString = nullptr;
 ```cpp
 /***** Initial Variables for Solid Color Palette *****/
 const int numColors = Felix8A::Palette12.size();
-const int numModes = 5;
+const int numModes = 4;
 int currentMode = 0;
 int currentColor = 0;
 bool isAnimated = false;
@@ -205,7 +205,7 @@ void multiColor() {
 
 ### Multi-color Twinkle Animation Function
 ```cpp
-void twinkleColorPalette() {
+void multicolorTwinkle() {
   static unsigned long lastTwinkle = 0;
 
   if (Felix8A::Time::every(100, lastTwinkle)) {
@@ -220,7 +220,7 @@ void twinkleColorPalette() {
     for (int i = 0; i < newPixels; i++) {
       int pixel = random(count);
       int randColor = random(Felix8A::Palette12.count());
-      lightString->setPixelColor(pixel, Felix8A::Palette12.[randColor]);
+      lightString->setPixelColor(pixel, Felix8A::Palette12[randColor]);
     }
 
     lightString->show();
@@ -246,7 +246,7 @@ void updateMode() {
     case 0: solidColor(); break;
     case 1: solidColorGradient(); break;
     case 2: multiColor(); break;
-    case 4: twinkleColorPalette(); break;
+    case 3: multicolorTwinkle(); break;
     default: lightsOff(); break;
   }
 }
