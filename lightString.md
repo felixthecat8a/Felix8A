@@ -219,8 +219,8 @@ void twinkleColorPalette() {
     int newPixels = random(1, 4);
     for (int i = 0; i < newPixels; i++) {
       int pixel = random(count);
-      int rand = random(ColorPalette.count());
-      lightString->setPixelColor(pixel, Felix8A::Palette12.[rand]);
+      int randColor = random(Felix8A::Palette12.count());
+      lightString->setPixelColor(pixel, Felix8A::Palette12.[randColor]);
     }
 
     lightString->show();
