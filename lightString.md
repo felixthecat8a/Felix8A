@@ -271,7 +271,7 @@ void twinkleColorPalette() {
 
 ## Mode Switch Code
 
-### Light Off Function
+### Lights Off Function
 ```cpp
 void lightsOff() {
   if (stateUpdated) {
@@ -280,7 +280,7 @@ void lightsOff() {
 }
 ```
 
-## Set & Update Functions
+### Set & Update Function Switch
 ```cpp
 void updateMode() {
   switch (currentMode) {
