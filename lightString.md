@@ -51,8 +51,6 @@ void saveSettings() {
 
   EEPROM.update(EEPROM_MODE_ADDR, currentMode);
   EEPROM.update(EEPROM_COLOR_ADDR, currentColor);
-
-  stateUpdated = true;
 }
 ```
 
@@ -281,11 +279,13 @@ void loop() {
 
   if (button.wasClicked()) {
     currentMode++;
+    stateUpdated = true;
     saveSettings();
   }
 
   if (button.wasDoubleClicked()) {
     currentMode--;
+    stateUpdated = true;
     saveSettings();
   }
 
@@ -296,6 +296,7 @@ void loop() {
 
   if (button.wasHeld()) {
     currentColor++;
+    stateUpdated = true;
     saveSettings();
   }
 
@@ -315,11 +316,13 @@ void loop() {
     switch (e) {
       case FelixTheCatLED::Button::Event::Click:
         currentMode++;
+        stateUpdated = true;
         saveSettings();
         break;
 
       case FelixTheCatLED::Button::Event::DoubleClick:
         currentMode--;
+        stateUpdated = true;
         saveSettings();
         break;
 
@@ -330,6 +333,7 @@ void loop() {
 
       case FelixTheCatLED::Button::Event::Hold:
         currentColor++;
+        stateUpdated = true;
         saveSettings();
         break;
 
