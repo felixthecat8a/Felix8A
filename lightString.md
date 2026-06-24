@@ -20,10 +20,15 @@ FelixTheCatLED::Button button(BUTTON_PIN);
 Adafruit_NeoPixel* lightString = nullptr;
 ```
 
+### `Felix8A` Preset Solid Color Palettes
+```cpp
+const Felix8A::Palette ColorPalette = Felix8A::Palette12;
+```
+
 ### Initial Variables for Solid Color Palette
 ```cpp
 /***** Initial Variables for Solid Color Palette *****/
-const int numColors = Felix8A::Palette12.size();
+const int numColors = ColorPalette.size();
 const int numModes = 4;
 int currentMode = 0;
 int currentColor = 0;
@@ -96,9 +101,9 @@ void firefly(uint32_t baseColor) {
 
 void solidColor() {
   if (isAnimated) {
-    firefly(Felix8A::Palette12[currentColor]);
+    firefly(ColorPalette[currentColor]);
   } else if (stateUpdated) {
-    lightString->fill(Felix8A::Palette12[currentColor]); lightString->show();
+    lightString->fill(ColorPalette[currentColor]); lightString->show();
   }
 }
 ```
@@ -139,11 +144,11 @@ void solidColorGradient() {
     int numGradientPhases = 5;
 
     if (Felix8A::Time::every(150, lastUpdate)) {
-      setColorWhiteGradient(Felix8A::Palette12[currentColor], animStep);
+      setColorWhiteGradient(ColorPalette[currentColor], animStep);
       animStep = (animStep + 1) % numGradientPhases;
     }
   } else if (stateUpdated) {
-    setColorWhiteGradient(Felix8A::Palette12[currentColor], 0);
+    setColorWhiteGradient(ColorPalette[currentColor], 0);
   }
 }
 ```
@@ -178,7 +183,7 @@ void setColorWhiteGradient(uint32_t color, int step) {
 ```cpp
 void setMultiColor(int step) {
   for (int i = 0; i < lightString->numPixels(); i++) {
-    lightString->setPixelColor(i, Felix8A::Palette12.reversed(i + step));
+    lightString->setPixelColor(i, ColorPalette.reversed(i + step));
   }
 
   lightString->show();
@@ -217,8 +222,8 @@ void multicolorTwinkle() {
     int newPixels = random(1, 4);
     for (int i = 0; i < newPixels; i++) {
       int pixel = random(count);
-      int randColor = random(Felix8A::Palette12.count());
-      lightString->setPixelColor(pixel, Felix8A::Palette12[randColor]);
+      int randColor = random(ColorPalette.count());
+      lightString->setPixelColor(pixel, ColorPalette[randColor]);
     }
 
     lightString->show();
