@@ -22,7 +22,16 @@ Adafruit_NeoPixel* lightString = nullptr;
 
 ### `Felix8A` Preset Solid Color Palettes
 ```cpp
+// const Felix8A::Palette ColorPalette = Felix8A::Palette36;
+// const Felix8A::Palette ColorPalette = Felix8A::Palette24;
 const Felix8A::Palette ColorPalette = Felix8A::Palette12;
+// const Felix8A::Palette ColorPalette = Felix8A::Palette6;
+// const Felix8A::Palette ColorPalette = Felix8A::Palette3;
+// const Felix8A::Palette ColorPalette = Felix8A::ChristmasTree;
+// const Felix8A::Palette ColorPalette = Felix8A::Sunset;
+// const Felix8A::Palette ColorPalette = Felix8A::Forest;
+// const Felix8A::Palette ColorPalette = Felix8A::Ocean;
+// const Felix8A::Palette ColorPalette = Felix8A::Blush;
 ```
 
 ### Initial Variables for Solid Color Palette
