@@ -232,7 +232,7 @@ void multicolorTwinkle() {
 
     for (int i = 0; i < newPixels; i++) {
       int pixel = random(count);
-      int randColor = ColorPalette[random(ColorPalette.count())];
+      uint32_t randColor = ColorPalette[random(ColorPalette.count())];
       lightString->setPixelColor(pixel, randColor);
     }
 
