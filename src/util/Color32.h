@@ -1,5 +1,5 @@
-#ifndef COLOR32_H
-#define COLOR32_H
+#ifndef FELIX8A_COLOR32_H
+#define FELIX8A_COLOR32_H
 
 #include <Arduino.h>
 
@@ -133,4 +133,4 @@ namespace Felix8A {
 
 } // namespace Felix8A
 
-#endif // COLOR32_H
+#endif // FELIX8A_COLOR32_H

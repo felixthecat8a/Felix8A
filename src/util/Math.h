@@ -1,5 +1,5 @@
-#ifndef MATH_H
-#define MATH_H
+#ifndef FELIX8A_MATH_H
+#define FELIX8A_MATH_H
 
 #include <Arduino.h>
 
@@ -100,4 +100,4 @@ namespace Felix8A {
 
 } // namespace Felix8A
 
-#endif // MATH_H
+#endif // FELIX8A_MATH_H

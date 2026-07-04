@@ -1,5 +1,5 @@
-#ifndef TIME_H
-#define TIME_H
+#ifndef FELIX8A_TIME_H
+#define FELIX8A_TIME_H
 
 #include <Arduino.h>
 
@@ -27,4 +27,4 @@ namespace Felix8A {
   } // namespace Time
 } // namespace Felix8A
 
-#endif // TIME_H
+#endif // FELIX8A_TIME_H

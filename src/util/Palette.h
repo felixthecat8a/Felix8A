@@ -1,5 +1,5 @@
-#ifndef PALETTE_H
-#define PALETTE_H
+#ifndef FELIX8A_PALETTE_H
+#define FELIX8A_PALETTE_H
 
 #include <Arduino.h>
 
@@ -61,4 +61,4 @@ namespace Felix8A {
 
 } // namespace Felix8A
 
-#endif // PALETTE_H
+#endif // FELIX8A_PALETTE_H
