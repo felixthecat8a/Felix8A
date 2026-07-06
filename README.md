@@ -95,7 +95,7 @@ void myFunction {
 }
 ```
 
-### `Felix8A::Time` As a One-shot Timer
+### `Felix8A::Time` As a One-shot Timers
 
 ```cpp
 #include <Felix8A.h>
@@ -111,6 +111,22 @@ void setup() {
 void loop() {
   if (!done && Felix8A::Time::after(3000, startTime)) {
     done = true;
+    Serial.println("3 seconds passed!");
+  }
+}
+```
+```cpp
+#include <Felix8A.h>
+
+unsigned long startTime = 0;
+
+void setup() {
+  Serial.begin(115200);
+  Felix8A::Time::reset(startTime); // arm
+}
+
+void loop() {
+  if (Felix8A::Time::once(3000, startTime)) {
     Serial.println("3 seconds passed!");
   }
 }

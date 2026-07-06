@@ -24,6 +24,16 @@ namespace Felix8A {
       timestamp = millis();
     }
 
+    static inline bool once(unsigned long interval, unsigned long& start) {
+      if (start == 0) return false; // not armed
+
+      if (millis() - start >= interval) {
+        start = 0; // disarm so it won't trigger again
+        return true;
+      }
+      return false;
+    }
+
   } // namespace Time
 } // namespace Felix8A
 

@@ -44,19 +44,15 @@ namespace Felix8A {
         T range = maxVal - minVal;
         if (range == 0) return minVal;
 
+        // value = (value - minVal) % range;
+        // if (value < 0) value += range;
+        // return value + minVal;
+
         while (value < minVal) value += range;
         while (value >= maxVal) value -= range;
 
         return value;
       }
-      // template<typename T>
-      // static inline T wrap(T value, T minVal, T maxVal) {
-      //   T range = maxVal - minVal;
-      //   if (range == 0) return minVal;
-      //   value = (value - minVal) % range;
-      //   if (value < 0) value += range;
-      //   return value + minVal;
-      // }
 
       // Wraps value into [min, max] (inclusive)
       template<typename T>
