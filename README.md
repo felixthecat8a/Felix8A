@@ -1,12 +1,11 @@
 # Felix8A
 
-![GitHub Release](https://img.shields.io/github/v/release/felixthecat8a/Felix8A?color=00878F)
-![License: MIT](https://img.shields.io/badge/license-MIT-yellow?link=https://opensource.org/licenses/MIT)
+![GitHub Release](https://img.shields.io/github/v/release/felixthecat8a/Felix8A?color=00878F&logo=arduino&logoColor=00878F)
+[![License: MIT](https://img.shields.io/github/license/felixthecat8a/Felix8A)](https://opensource.org/licenses/MIT)
 ![GitHub repo file or directory count](https://img.shields.io/github/directory-file-count/felixthecat8a/Felix8A)
 ![GitHub repo size](https://img.shields.io/github/repo-size/felixthecat8a/Felix8A)
-![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/felixthecat8a/Felix8A?color=%2300599C)
-![GitHub top language](https://img.shields.io/github/languages/top/felixthecat8a/Felix8A?color=%2300599C)
-<!-- ![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/felixthecat8a/Felix8A/total) -->
+![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/felixthecat8a/Felix8A?color=00599C)
+![GitHub top language](https://img.shields.io/github/languages/top/felixthecat8a/Felix8A?color=00599C&logo=cplusplus&logoColor=00599C)
 
 ![GitHub Created At](https://img.shields.io/github/created-at/felixthecat8a/Felix8A)
 ![GitHub Release Date](https://img.shields.io/github/release-date/felixthecat8a/Felix8A)
