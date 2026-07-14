@@ -4,37 +4,50 @@
 #include <Arduino.h>
 
 namespace Felix8A {
-  namespace Time {
 
-    static inline bool every(unsigned long interval, unsigned long& last) {
-      unsigned long now = millis();
-      unsigned long diff = now - last;
-      if (diff >= interval) {
-        last += interval * (diff / interval);
-        return true;
+  class Time {
+    public:
+      static inline bool every(unsigned long interval, unsigned long& last) {
+        unsigned long now = millis();
+        unsigned long diff = now - last;
+        if (diff >= interval) {
+          last += interval * (diff / interval);
+          return true;
+        }
+        return false;
       }
-      return false;
-    }
 
-    static inline bool after(unsigned long interval, unsigned long start) {
-      return millis() - start >= interval;
-    }
-
-    static inline void reset(unsigned long& timestamp) {
-      timestamp = millis();
-    }
-
-    static inline bool once(unsigned long interval, unsigned long& start) {
-      if (start == 0) return false; // not armed
-
-      if (millis() - start >= interval) {
-        start = 0; // disarm so it won't trigger again
-        return true;
+      static inline bool after(unsigned long interval, unsigned long start) {
+        return millis() - start >= interval;
       }
-      return false;
-    }
 
-  } // namespace Time
+      static inline void reset(unsigned long& timestamp) {
+        timestamp = millis();
+      }
+
+      static inline bool once(unsigned long interval, unsigned long& start) {
+        if (start == 0) return false; // not armed
+
+        if (millis() - start >= interval) {
+          start = 0; // disarm so it won't trigger again
+          return true;
+        }
+        return false;
+      }
+
+      static inline void arm(unsigned long& start) {
+        start = millis();
+      }
+
+      static inline void disarm(unsigned long& start) {
+        start = 0;
+      }
+
+      static inline bool isArmed(unsigned long start) {
+        return start != 0;
+      }
+  };
+
 } // namespace Felix8A
 
 #endif // FELIX8A_TIME_H
