@@ -1,4 +1,3 @@
-
 # Implementing `Felix8A::Time`
 
 ```cpp
