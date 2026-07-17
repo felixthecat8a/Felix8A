@@ -53,18 +53,23 @@ void loop() {
   if (bttn.wasClicked()) {
     currentIndex++;
     if (currentIndex > maxIndex) currentIndex = 0;
+    setColor(currentIndex);
   }
 
   if (bttn.wasDoubleClicked()) {
     currentIndex--;
     if (currentIndex < 0) currentIndex = maxIndex;
+    setColor(currentIndex);
   }
 
   if (bttn.wasHeld()) {
     currentIndex = 0;
+    setColor(currentIndex);
   }
+}
 
-  switch (currentIndex) {
+void setColor(int index) {
+  switch (index) {
     case 0: rgb.off(); break;
     case 1: rgb.setRed(); break;
     case 2: rgb.setOrange(); break;
