@@ -13,7 +13,7 @@
 ![GitHub commits since latest release](https://img.shields.io/github/commits-since/felixthecat8a/Felix8A/latest)
 ![GitHub last commit](https://img.shields.io/github/last-commit/felixthecat8a/Felix8A)
 
-An Arduino Library toolkit for handling 32-bit hexadecimal colors in my projects.
+An Arduino Library toolkit for handling components in my projects.
 
 ## Installation
 
