@@ -20,28 +20,31 @@ An Arduino Library toolkit for handling components in my projects.
 ### Install via ZIP file
 
 1. Download the *.zip* file of the [latest release](https://github.com/felixthecat8a/Felix8A/releases/latest/).
-2. In the **Arduino IDE**, go to ***Sketch*** > ***Include Library*** > ***Add .ZIP Library...***.
+2. In the **Arduino IDE**, go to ***Sketch > Include Library > Add .ZIP Library...***.
 3. Select the downloaded *.zip* file.
 
 ### Updating the Library
 
 To update the library:
-1. Delete the existing ***Felix8A*** folder from your libraries directory: ***Documents*** > ***Arduino*** > ***libraries*** > ***Felix8A***
+1. Delete the existing ***Felix8A*** folder from your *libraries* directory.
+    - ***Documents > Arduino > libraries > Felix8A***
 2. Follow the installation steps above to install the latest version.
 
 ---
 
 ## Implementation
 
+### Colors
+
 ```cpp
 #include <Felix8A.h>
 
 const uint32_t colorArray[] = {
-  Felix8A::Color::RED,
-  Felix8A::Color::ORANGE,
-  Felix8A::Color::GREEN,
-  Felix8A::Color::BLUE,
-  Felix8A::Color::WHITE
+    Felix8A::Color::RED,
+    Felix8A::Color::ORANGE,
+    Felix8A::Color::GREEN,
+    Felix8A::Color::BLUE,
+    Felix8A::Color::WHITE
 };
 
 const Felix8A::Palette ColorPalette(colorArray);
@@ -54,5 +57,51 @@ void setup() {
 
 void loop() {
     // loop code
+}
+```
+
+### LEDs
+
+```cpp
+#include <Felix8A.h>
+
+Felix8A::LED led(6);
+
+const unsigned long blinkInterval = 1000;
+unsigned long lastBlink = 0;
+
+void setup() {
+    led.begin();
+}
+
+void loop() {
+    if (Felix8A::Time::every(blinkInterval, lastBlink)) {
+        led.toggle();
+    }
+}
+```
+
+### Buttons
+
+```cpp
+#include <Felix8A.h>
+
+Felix8A::LED led(6);
+Felix8A::Button bttn(2);
+
+const unsigned long blinkInterval = 1000;
+unsigned long lastBlink = 0;
+
+void setup() {
+    led.begin();
+    bttn.begin();
+}
+
+void loop() {
+    bttn.update();
+
+    if (bttn.wasClicked()) {
+        led.toggle();
+    }
 }
 ```
