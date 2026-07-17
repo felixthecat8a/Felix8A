@@ -1,18 +1,16 @@
 # `LightString.ino`
 
-An Arduino sketch for controlling colors and animations on a WS2812 LED string using the `Felix8A` and `FelixTheCatLED` libraries.
-Note: Math and Time helpers are in development
+An Arduino sketch for controlling colors and animations on a WS2812 LED string using the `Felix8A` library.
 
-## Sketch & Hardware Setup using `FelixTheCatLED::Button`
+## Sketch & Hardware Setup using `Felix8A::Button`
 ```cpp
 #include <EEPROM.h>
-#include <FelixTheCatLED.h>
 #include <Felix8A.h>
 #include <Adafruit_NeoPixel.h>
 
-/***** FelixTheCatLED::Button Setup *****/
+/***** Felix8A::Button Setup *****/
 #define BUTTON_PIN 2
-FelixTheCatLED::Button button(BUTTON_PIN);
+Felix8A::Button button(BUTTON_PIN);
 
 /***** NeoPixel Setup *****/
 #define LED_PIN A0
@@ -325,28 +323,28 @@ void loop() {
 void loop() {
   button.update();
 
-  FelixTheCatLED::Button::Event e;
+  Felix8A::Button::Event e;
 
-  while ((e = button.poll()) != FelixTheCatLED::Button::Event::None) {
+  while ((e = button.poll()) != Felix8A::Button::Event::None) {
     switch (e) {
-      case FelixTheCatLED::Button::Event::Click:
+      case Felix8A::Button::Event::Click:
         currentMode++;
         stateUpdated = true;
         saveSettings();
         break;
 
-      case FelixTheCatLED::Button::Event::DoubleClick:
+      case Felix8A::Button::Event::DoubleClick:
         currentMode--;
         stateUpdated = true;
         saveSettings();
         break;
 
-      case FelixTheCatLED::Button::Event::TripleClick:
+      case Felix8A::Button::Event::TripleClick:
         isAnimated = !isAnimated;
         stateUpdated = true;
         break;
 
-      case FelixTheCatLED::Button::Event::Hold:
+      case Felix8A::Button::Event::Hold:
         currentColor++;
         stateUpdated = true;
         saveSettings();

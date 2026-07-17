@@ -1,70 +1,54 @@
 /**
  * @file led.ino
- * @brief Example sketch for the Felix8A RGB LED controller.
+ * @brief Example sketch for the Felix8A LED controller.
  *
  * @details
- * This sketch demonstrates basic color setting using the Color32 utility class.
- * It cycles through a selection of predefined colors from the Felix8A::Color class,
- * changing the LED color every second.
+ * This sketch demonstrates the LED, PWM & Time classes
  *
  * @section wiring Wiring
- * Select pins with ~ for pwm
- * * Red pin   → PIN_RED   (9)
- * * Green pin → PIN_GREEN (10)
- * * Blue pin  → PIN_BLUE  (11)
+ * * LED pin (6)
+ * * PWM pin (5)
  *
- * LED type:
- * * Common Cathode:
- * * Connect common pin to GND
- * * PWM values: 0 = OFF, 255 = FULL brightness
- *
- * * Common Anode:
- * * Connect common pin to +5V
- * * PWM values are inverted: 0 = FULL brightness, 255 = OFF
- * * Software must invert values (255 - value) when writing colors
- *
- * @note Ensure appropriate current-limiting resistors are used on each color channel.
+ * @note Ensure appropriate current-limiting resistors are used on each LED channel.
  *
  * @author felixthecat8a
  */
-
 #include <Felix8A.h>
 
-#define PIN_RED   9
-#define PIN_GREEN 10
-#define PIN_BLUE  11
+#define LED_PIN 6
+Felix8A::LED led(LED_PIN);
 
-bool commonAnode = true;
+const unsigned long blinkInterval = 1000;
+unsigned long lastBlink = 0;
+
+#define PWM_PIN 5
+Felix8A::PWM pwm(PWM_PIN);
+
+int brightness = 0;
+int fadeAmount = 5;
 
 void setup() {
-  pinMode(PIN_RED,   OUTPUT);
-  pinMode(PIN_GREEN, OUTPUT);
-  pinMode(PIN_BLUE,  OUTPUT);
+  led.begin();
+  led.on();
+  pwm.begin();
 }
 
 void loop() {
-  setColor(Felix8A::Color::RED);
-  delay(1000);
-  setColor(Felix8A::Color::ORANGE);
-  delay(1000);
-  setColor(Felix8A::Color::GREEN);
-  delay(1000);
-  setColor(Felix8A::Color::BLUE);
-  delay(1000);
-}
-
-void setColor(uint32_t color) {
-  uint8_t r = Felix8A::Color::red(color);
-  uint8_t g = Felix8A::Color::green(color);
-  uint8_t b = Felix8A::Color::blue(color);
-
-  if (commonAnode) {
-    r = 255 - r;
-    g = 255 - g;
-    b = 255 - b;
+  if (Felix8A::Time::every(blinkInterval, lastBlink)) {
+    led.toggle();
   }
 
-  analogWrite(PIN_RED,   r);
-  analogWrite(PIN_GREEN, g);
-  analogWrite(PIN_BLUE,  b);
+  fade();
+}
+
+void fade() {
+  static unsigned long lastUpdate = 0; // persists between calls
+
+  if (Felix8A::Time::every(50, lastUpdate)) {
+    pwm.setBrightness(brightness);
+    brightness += fadeAmount;
+    if (brightness <= 0 || brightness >= 255) {
+      fadeAmount = -fadeAmount; // Reverse direction at limits
+    }
+  }
 }

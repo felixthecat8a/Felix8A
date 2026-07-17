@@ -34,20 +34,8 @@ namespace Felix8A {
         }
         return false;
       }
-
-      static inline void arm(unsigned long& start) {
-        start = millis();
-      }
-
-      static inline void disarm(unsigned long& start) {
-        start = 0;
-      }
-
-      static inline bool isArmed(unsigned long start) {
-        return start != 0;
-      }
   };
 
-} // namespace Felix8A
+}
 
-#endif // FELIX8A_TIME_H
+#endif // FELIX_8A_H

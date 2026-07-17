@@ -1,5 +1,5 @@
 /**
- * @file palette.ino
+ * @file color.ino
  * @brief Example sketch for the Felix8A RGB LED controller.
  *
  * @details
@@ -30,31 +30,43 @@
 
 #include <Felix8A.h>
 
-const uint32_t colorArray[] = {
-    Felix8A::Color::RED,
-    Felix8A::Color::ORANGE,
-    Felix8A::Color::GREEN,
-    Felix8A::Color::BLUE,
-    Felix8A::Color::WHITE
-};
-
-const Felix8A::Palette ColorPalette(colorArray);
-const int numColors = ColorPalette.size();
-
-#define RED_PIN 9
-#define GREEN_PIN 10
-#define BLUE_PIN 11
-Felix8A::RGB rgb(RED_PIN, GREEN_PIN, BLUE_PIN);
+#define PIN_RED   9
+#define PIN_GREEN 10
+#define PIN_BLUE  11
 
 bool commonAnode = true;
 
 void setup() {
-  rgb.begin();
+  pinMode(PIN_RED,   OUTPUT);
+  pinMode(PIN_GREEN, OUTPUT);
+  pinMode(PIN_BLUE,  OUTPUT);
 }
 
 void loop() {
-  for (int i = 0; i < ColorPalette.size(); i++) {
-    rgb.setHex(ColorPalette[i]);
-    delay(1000);
+  setColor(Felix8A::Color::RED);
+  delay(1000);
+  setColor(Felix8A::Color::ORANGE);
+  delay(1000);
+  setColor(Felix8A::Color::GREEN);
+  delay(1000);
+  setColor(Felix8A::Color::BLUE);
+  delay(1000);
+  setColor(Felix8A::Color::WHITE);
+  delay(1000);
+}
+
+void setColor(uint32_t color) {
+  uint8_t r = Felix8A::Color::red(color);
+  uint8_t g = Felix8A::Color::green(color);
+  uint8_t b = Felix8A::Color::blue(color);
+
+  if (commonAnode) {
+    r = 255 - r;
+    g = 255 - g;
+    b = 255 - b;
   }
+
+  analogWrite(PIN_RED,   r);
+  analogWrite(PIN_GREEN, g);
+  analogWrite(PIN_BLUE,  b);
 }

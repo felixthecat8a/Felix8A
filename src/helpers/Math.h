@@ -61,39 +61,6 @@ namespace Felix8A {
       }
   };
 
-  class Temperature {
-    public:
-      // Celsius/Fahrenheit
-      static float CtoF(float c) { return c * 9.0f / 5.0f + 32.0f; }
-      static float FtoC(float f) { return (f - 32.0f) * 5.0f / 9.0f; }
-
-      // Celsius/Kelvin
-      static float CtoK(float c) { return c + 273.15f; }
-      static float KtoC(float k) { return k - 273.15f; }
-
-      // Fahrenheit/Kelvin
-      static float FtoK(float f) { return CtoK(FtoC(f)); }
-      static float KtoF(float k) { return CtoF(KtoC(k)); }
-  };
-
-  class TemperatureColorHue {
-    public:
-      static constexpr float GREEN_HUE = 120.0f;
-      static constexpr float HUE_SHIFT_RANGE = 120.0f; // How far hue can shift to red or blue
-
-      static float fromCelsius(float tempC, float greenPointC = 21.0f, float maxShiftC = 11.0f) {
-        float diff = Math::clamp(tempC - greenPointC, -maxShiftC, maxShiftC);
-        float hueShift = diff * (HUE_SHIFT_RANGE / maxShiftC);
-        float hue = GREEN_HUE - hueShift;
-        return Math::clamp(hue, 0.0f, 240.0f);
-      }
-
-      static float fromFahrenheit(float tempF, float greenPointF = 72.0f, float maxShiftF = 25.0f) {
-        float tempC = Temperature::FtoC(tempF);
-        return fromCelsius(tempC, Temperature::FtoC(greenPointF), Temperature::FtoC(maxShiftF));
-      }
-  };
-
 } // namespace Felix8A
 
 #endif // FELIX8A_MATH_H
