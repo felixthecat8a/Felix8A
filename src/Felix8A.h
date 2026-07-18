@@ -3,6 +3,7 @@
 
 #include "Felix32.h"
 #include "components/FelixLED.h"
+#include "components/FelixPWM.h"
 #include "components/FelixButton.h"
 #include "helpers/Math.h"
 #include "helpers/Time.h"

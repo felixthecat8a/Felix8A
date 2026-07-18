@@ -1,4 +1,4 @@
-#include "FelixLED.h"
+#include "FelixPWM.h"
 
 namespace Felix8A {
 
@@ -72,23 +72,31 @@ namespace Felix8A {
     _writeRaw(_activeLow ? PWM_MAX : 0);
   }
 
-  void PWM::setBrightness(uint8_t brightness) {
-    _brightness = brightness;
+  void PWM::setPWM(uint8_t level) {
+    _brightness = level;
     uint8_t value = _activeLow ? (PWM_MAX - _brightness) : _brightness;
     _writeRaw(value);
     _state = (_brightness > 0);
   }
 
+  void PWM::setGlow(uint8_t glow) {
+    setPWM(glow);
+  }
+
+  void PWM::setBrightness(uint8_t level) {
+    setPWM(level);
+  }
+
   void PWM::on() {
-    setBrightness(PWM_MAX);
+    setPWM(PWM_MAX);
   }
 
   void PWM::off() {
-    setBrightness(0);
+    setPWM(0);
   }
 
   void PWM::toggle() {
-    setBrightness(_state ? 0 : PWM_MAX);
+    setPWM(_state ? 0 : PWM_MAX);
   }
 
   void PWM::setPin(uint8_t pin) {
@@ -106,7 +114,7 @@ namespace Felix8A {
 
   void PWM::setActiveLow(bool activeLow) {
     _activeLow = activeLow;
-    setBrightness(_brightness);
+    setPWM(_brightness);
   }
 
   void PWM::_writeRaw(uint8_t value) {
@@ -159,9 +167,13 @@ namespace Felix8A {
     _showRGB((hex >> 16) & 0xFF, (hex >> 8) & 0xFF, hex & 0xFF);
   }
 
-  void RGB::setBrightness(uint8_t brightness) {
-    _brightness = constrain(brightness, 0, 255);
+  void RGB::setBrightness(uint8_t level) {
+    _brightness = constrain(level, 0, 255);
     _showRGB(_color.r, _color.g, _color.b);
+  }
+
+  void RGB::setGlow(uint8_t glow) {
+    setBrightness(glow);
   }
 
   void RGB::setHex(uint32_t hex) {
