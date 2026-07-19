@@ -18,34 +18,19 @@ Felix8A::Button button(BUTTON_PIN);
 Adafruit_NeoPixel* lightString = nullptr;
 ```
 
-### `Felix8A` Preset Solid Color Palettes
+### Initial Variables for Main Solid Color Palette
 ```cpp
-// const Felix8A::Palette ColorPalette = Felix8A::Palette36;
-// const Felix8A::Palette ColorPalette = Felix8A::Palette24;
-const Felix8A::Palette ColorPalette = Felix8A::Palette12;
-// const Felix8A::Palette ColorPalette = Felix8A::Palette6;
-// const Felix8A::Palette ColorPalette = Felix8A::Palette3;
-// const Felix8A::Palette ColorPalette = Felix8A::ChristmasTree;
-// const Felix8A::Palette ColorPalette = Felix8A::Sunset;
-// const Felix8A::Palette ColorPalette = Felix8A::Forest;
-// const Felix8A::Palette ColorPalette = Felix8A::Ocean;
-// const Felix8A::Palette ColorPalette = Felix8A::Blush;
-```
-
-### Initial Variables for Solid Color Palette
-```cpp
-/***** Initial Variables for Solid Color Palette *****/
+const Felix8A::Palette ColorPalette = Felix8A::Palette6;
 const int numColors = ColorPalette.size();
-const int numModes = 4;
+const int numModes = 6;
 int currentMode = 0;
 int currentColor = 0;
 bool isAnimated = false;
-bool stateUpdated = true;
+bool buttonEventActivated = true;
 ```
 
 ### EEPROM Setup using `Felix8A::Math::wrap`
 ```cpp
-/***** EEPROM  Setup *****/
 #define EEPROM_MODE_ADDR 0
 #define EEPROM_COLOR_ADDR 1
 
@@ -77,7 +62,9 @@ void firefly(uint32_t baseColor) {
 
   if (!Felix8A::Time::every(30, lastFireflyUpdate)) return;
 
-  for (int i = 0; i < lightString->numPixels(); i++) {
+  int count = lightString->numPixels();
+
+  for (int i = 0; i < count; i++) {
     if (direction[i] == 0) {
       if (random(100) < 3) {
         direction[i] = 1;
@@ -105,12 +92,12 @@ void firefly(uint32_t baseColor) {
 
   lightString->show();
 }
-
-void solidColor() {
+/***** Mode 0: Solid Color *****/
+void solidColor(int colorIndex, bool wasUdated) {
   if (isAnimated) {
-    firefly(ColorPalette[currentColor]);
-  } else if (stateUpdated) {
-    lightString->fill(ColorPalette[currentColor]); lightString->show();
+    firefly(ColorPalette[colorIndex]);
+  } else if (wasUdated) {
+    lightString->fill(ColorPalette[colorIndex]); lightString->show();
   }
 }
 ```
@@ -123,7 +110,8 @@ void setColorWhiteGradient(uint32_t color, int step) {
   uint32_t blend2 = Felix8A::Color::blend(color, white, 128);
   uint32_t blend3 = Felix8A::Color::blend(color, white, 192);
 
-  for (int i = 0; i < lightString->numPixels(); i++) {
+  int count = lightString->numPixels();
+  for (int i = 0; i < count; i++) {
     uint8_t phase = (i + step) % 5;
 
     if (phase == 0) {
@@ -141,21 +129,21 @@ void setColorWhiteGradient(uint32_t color, int step) {
 
   lightString->show();
 }
-
-void solidColorGradient() {
+/***** Mode 1: Color to White Gradient *****/
+void solidColorGradient(int colorIndex, bool isAnim, bool wasUdated) {
   static unsigned long lastUpdate = 0;
   static int animStep = 0;
 
-  if (isAnimated) {
-    if (stateUpdated) animStep = 0;
+  if (isAnim) {
+    if (wasUdated) animStep = 0;
     int numGradientPhases = 5;
 
     if (Felix8A::Time::every(150, lastUpdate)) {
-      setColorWhiteGradient(ColorPalette[currentColor], animStep);
+      setColorWhiteGradient(ColorPalette[colorIndex], animStep);
       animStep = (animStep + 1) % numGradientPhases;
     }
-  } else if (stateUpdated) {
-    setColorWhiteGradient(ColorPalette[currentColor], 0);
+  } else if (wasUdated) {
+    setColorWhiteGradient(ColorPalette[colorIndex], 0);
   }
 }
 ```
@@ -164,11 +152,13 @@ void solidColorGradient() {
 ```cpp
 void setColorWhiteGradient(uint32_t color, int step) {
   uint32_t white = Felix8A::Color::rgb(150, 150, 150);
-  uint32_t blend1 = Felix8A::Palette::blend(color, white, 64);
-  uint32_t blend2 = Felix8A::Palette::blend(color, white, 128);
-  uint32_t blend3 = Felix8A::Palette::blend(color, white, 192);
+  uint32_t blend1 = Felix8A::Palette::blend(color, white, 51);
+  uint32_t blend2 = Felix8A::Palette::blend(color, white, 102);
+  uint32_t blend3 = Felix8A::Palette::blend(color, white, 153);
+  uint32_t blend4 = Felix8A::Palette::blend(color, white, 204);
 
-  for (int i = 0; i < lightString->numPixels(); i++) {
+  int count = lightString->numPixels();
+  for (int i = 0; i < count; i++) {
     uint8_t phase = (i + step) % 5;
 
     switch (phase) {
@@ -176,7 +166,7 @@ void setColorWhiteGradient(uint32_t color, int step) {
       case 1: lightString->setPixelColor(i, blend1); break;
       case 2: lightString->setPixelColor(i, blend2); break;
       case 3: lightString->setPixelColor(i, blend3); break;
-      default: lightString->setPixelColor(i, white); break;
+      default: lightString->setPixelColor(i, blend4); break;
     }
   }
 
@@ -188,34 +178,37 @@ void setColorWhiteGradient(uint32_t color, int step) {
 
 ### Multi-color Setting Functions using `Felix8A::Time`
 ```cpp
-void setMultiColor(int step) {
-  for (int i = 0; i < lightString->numPixels(); i++) {
-    lightString->setPixelColor(i, ColorPalette.reversed(i + step));
+void setMultiColor(Felix8A::Palette palette, int step) {
+  int count = lightString->numPixels();
+
+  for (int i = 0; i < count; i++) {
+    lightString->setPixelColor(i, palette.reversed(i + step));
   }
 
   lightString->show();
 }
-
-void multiColor() {
+/***** Mode 2: Multi-color Function *****/
+void multiColor(Felix8A::Palette palette, bool isAnim, bool wasUdated) {
   static unsigned long lastAnimUpdate = 0;
   static int colorStep = 0;
 
-  if (isAnimated) {
-    if (stateUpdated) colorStep = 0;
+  if (isAnim) {
+    if (wasUdated) colorStep = 0;
 
     if (Felix8A::Time::every(150, lastAnimUpdate)) {
-      setMultiColor(colorStep);
-      colorStep = (colorStep + 1) % numColors;
+      setMultiColor(palette, colorStep);
+      colorStep = (colorStep + 1) % palette.count();
     }
-  } else if (stateUpdated) {
-    setMultiColor(0);
+  } else if (wasUdated) {
+    setMultiColor(palette, 0);
   }
 }
 ```
 
 ### Multi-color Twinkle Animation Function
 ```cpp
-void multicolorTwinkle() {
+/***** Mode 3: MultiColor Twinkle Animation *****/
+void multicolorTwinkle(Felix8A::Palette palette) {
   static unsigned long lastTwinkle = 0;
 
   if (Felix8A::Time::every(100, lastTwinkle)) {
@@ -230,7 +223,7 @@ void multicolorTwinkle() {
 
     for (int i = 0; i < newPixels; i++) {
       int pixel = random(count);
-      uint32_t randColor = ColorPalette[random(ColorPalette.count())];
+      uint32_t randColor = palette[random(palette.count())];
       lightString->setPixelColor(pixel, randColor);
     }
 
@@ -243,8 +236,8 @@ void multicolorTwinkle() {
 
 ### Lights Off Function
 ```cpp
-void lightsOff() {
-  if (stateUpdated) {
+void lightsOff(bool wasUdated) {
+  if (wasUdated) {
     lightString->clear(); lightString->show();
   }
 }
@@ -252,13 +245,15 @@ void lightsOff() {
 
 ### Set & Update Function Switch
 ```cpp
-void updateMode() {
-  switch (currentMode) {
-    case 0: solidColor(); break;
-    case 1: solidColorGradient(); break;
-    case 2: multiColor(); break;
-    case 3: multicolorTwinkle(); break;
-    default: lightsOff(); break;
+void updateMode(int mode, int color, bool anim, bool stateChanged) {
+  switch (mode) {
+    case 0: solidColor(color, stateChanged); break;
+    case 1: solidColorGradient(color, anim, stateChanged); break;
+    case 2: multiColor(ColorPalette, anim, stateChanged); break;
+    case 3: multicolorTwinkle(ColorPalette); break;
+    case 4: multiColor(Felix8A::ChristmasTree, anim, stateChanged); break;
+    case 5: multicolorTwinkle(Felix8A::ChristmasTree); break;
+    default: lightsOff(stateChanged); break;
   }
 }
 ```
@@ -279,6 +274,7 @@ void setup() {
   } else {
     lightString = new Adafruit_NeoPixel(NUM_LEDS, LED_PIN, NEO_GRB + NEO_KHZ800);
   }
+
   lightString->begin();
   lightString->setBrightness(51);
   lightString->show();
@@ -291,30 +287,26 @@ void loop() {
   button.update();
 
   if (button.wasClicked()) {
-    currentMode++;
-    stateUpdated = true;
+    currentMode++; buttonEventActivated = true;
     saveSettings();
   }
 
   if (button.wasDoubleClicked()) {
-    currentMode--;
-    stateUpdated = true;
+    currentMode--; buttonEventActivated = true;
     saveSettings();
   }
 
   if (button.wasTripleClicked()) {
-    isAnimated = !isAnimated;
-    stateUpdated = true;
+    isAnimated = !isAnimated; buttonEventActivated = true;
   }
 
   if (button.wasHeld()) {
-    currentColor++;
-    stateUpdated = true;
+    currentColor++; buttonEventActivated = true;
     saveSettings();
   }
 
-  updateMode();
-  stateUpdated = false;
+  updateMode(currentMode, currentColor, isAnimated, buttonEventActivated);
+  buttonEventActivated = false;
 }
 ```
 
@@ -329,24 +321,24 @@ void loop() {
     switch (e) {
       case Felix8A::Button::Event::Click:
         currentMode++;
-        stateUpdated = true;
+        buttonEventActivated = true;
         saveSettings();
         break;
 
       case Felix8A::Button::Event::DoubleClick:
         currentMode--;
-        stateUpdated = true;
+        buttonEventActivated = true;
         saveSettings();
         break;
 
       case Felix8A::Button::Event::TripleClick:
         isAnimated = !isAnimated;
-        stateUpdated = true;
+        buttonEventActivated = true;
         break;
 
       case Felix8A::Button::Event::Hold:
         currentColor++;
-        stateUpdated = true;
+        buttonEventActivated = true;
         saveSettings();
         break;
 
@@ -355,11 +347,13 @@ void loop() {
     }
   }
 
-  updateMode();
-  stateUpdated = false;
+  updateMode(currentMode, currentColor, isAnimated, buttonEventActivated);
+  buttonEventActivated = false;
 }
 ```
 
+#### My 100 Column Helper
+
 ```
-/********1*********2*********3*********4*********5*********6*********7*********/
+/********1*********2*********3*********4*********5*********6*********7*********8*********9*********/
 ```
