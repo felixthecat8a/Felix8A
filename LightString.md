@@ -109,7 +109,7 @@ void setColorWhiteGradient(uint32_t color, int step) {
   uint32_t blend1 = Felix8A::Color::blend(color, white, 51);
   uint32_t blend2 = Felix8A::Color::blend(color, white, 102);
   uint32_t blend3 = Felix8A::Color::blend(color, white, 153);
-  uint32_t blend3 = Felix8A::Color::blend(color, white, 204);
+  uint32_t blend4 = Felix8A::Color::blend(color, white, 204);
 
   int count = lightString->numPixels();
   for (int i = 0; i < count; i++) {
