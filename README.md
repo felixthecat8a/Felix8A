@@ -9,11 +9,11 @@
 
 ![GitHub Created At](https://img.shields.io/github/created-at/felixthecat8a/Felix8A)
 ![GitHub Release Date](https://img.shields.io/github/release-date/felixthecat8a/Felix8A)
-![GitHub commit activity](https://img.shields.io/github/commit-activity/m/felixthecat8a/LCD_BacklightRGB)
+![GitHub commit activity](https://img.shields.io/github/commit-activity/m/felixthecat8a/Felix8A)
 ![GitHub commits since latest release](https://img.shields.io/github/commits-since/felixthecat8a/Felix8A/latest)
 ![GitHub last commit](https://img.shields.io/github/last-commit/felixthecat8a/Felix8A)
 
-An Arduino Library toolkit for handling components in my projects.
+An Arduino utility toolkit for handling common components in embedded projects — including LEDs, RGB control, buttons, timing, and color utilities.
 
 ## Installation
 
@@ -30,11 +30,19 @@ To update the library:
     - ***Documents > Arduino > libraries > Felix8A***
 2. Follow the installation steps above to install the latest version.
 
+### Add to PlatformIO Project
+
+Add the following to the project's `platformio.ini` file:
+```
+lib_deps =
+    https://github.com/felixthecat8a/Felix8A.git
+```
+
 ---
 
 ## Implementation
 
-### Colors
+### RGB LEDs & Colors
 
 ```cpp
 #include <Felix8A.h>
@@ -88,16 +96,13 @@ void loop() {
 }
 ```
 
-### Buttons
+### Button Inputs
 
 ```cpp
 #include <Felix8A.h>
 
 Felix8A::LED led(6);
 Felix8A::Button bttn(2);
-
-const unsigned long blinkInterval = 1000;
-unsigned long lastBlink = 0;
 
 void setup() {
     // setup code
