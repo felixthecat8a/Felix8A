@@ -18,9 +18,27 @@ Felix8A::Button button(BUTTON_PIN);
 Adafruit_NeoPixel* lightString = nullptr;
 ```
 
-### Initial Variables for Main Solid Color Palette
+### Color Array Setup using `Felix8A::Palette`
+```cpp
+/***** Classic Christmas Tree Light Multi-color Palette *****/
+const uint32_t colorArray[] = {
+  Felix8A::Color::RED,
+  Felix8A::Color::YELLOW,
+  Felix8A::Color::GREEN,
+  Felix8A::Color::CYAN,
+  Felix8A::Color::BLUE,
+  Felix8A::Color::MAGENTA,
+};
+const Felix8A::Palette ColorPalette(colorArray);
+```
+
+### Optional Preset Multi-color Palette
 ```cpp
 const Felix8A::Palette ColorPalette = Felix8A::Palette6;
+```
+
+### Initial Variables for Main Solid Color Palette
+```cpp
 const int numColors = ColorPalette.size();
 const int numModes = 6;
 int currentMode = 0;
