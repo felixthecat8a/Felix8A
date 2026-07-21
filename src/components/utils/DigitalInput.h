@@ -3,38 +3,45 @@
 
 #include <Arduino.h>
 
-namespace Felix8A {
+namespace Felix8A
+{
 
-  class DigitalInput {
-    public:
-      explicit DigitalInput(uint8_t pin, bool activeLow = true)
+  class DigitalInput
+  {
+  public:
+    explicit DigitalInput(uint8_t pin, bool activeLow = true)
         : _pin(pin), _activeLow(activeLow) {}
 
-      void begin(bool usePullup = true) {
-        if (_activeLow && usePullup) {
-          pinMode(_pin, INPUT_PULLUP);
-        } else {
-          pinMode(_pin, INPUT);
-        }
-
-        _state = readRaw();
+    void begin(bool usePullup = true)
+    {
+      if (_activeLow && usePullup)
+      {
+        pinMode(_pin, INPUT_PULLUP);
+      }
+      else
+      {
+        pinMode(_pin, INPUT);
       }
 
-      bool read() const {
-        bool raw = digitalRead(_pin);
-        return _activeLow ? !raw : raw;
-      }
+      _state = readRaw();
+    }
 
-      bool state() const { return _state; }
-      void update() { _state = read(); }
-      void setActiveLow(bool v) { _activeLow = v; }
+    bool read() const
+    {
+      bool raw = digitalRead(_pin);
+      return _activeLow ? !raw : raw;
+    }
 
-    protected:
-      bool readRaw() const { return digitalRead(_pin); }
+    bool state() const { return _state; }
+    void update() { _state = read(); }
+    void setActiveLow(bool v) { _activeLow = v; }
 
-      uint8_t _pin;
-      bool _activeLow;
-      bool _state = false;
+  protected:
+    bool readRaw() const { return digitalRead(_pin); }
+
+    uint8_t _pin;
+    bool _activeLow;
+    bool _state = false;
   };
 
 } // namespace Felix8A

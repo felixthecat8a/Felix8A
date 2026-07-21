@@ -1,15 +1,16 @@
 #include "FelixButton.h"
 
-namespace Felix8A {
+namespace Felix8A
+{
 
   Button::Button(uint8_t pin, bool activeLow, uint16_t debounceTime)
-    : _input(pin, activeLow), _debounceTime(debounceTime) {}
+      : _input(pin, activeLow), _debounceTime(debounceTime) {}
 
   /* Lifecycle */
-  void Button::begin() {
+  void Button::begin()
+  {
     _input.begin(true);
     _stableState = _input.read();
-
     _lastReading = _stableState;
 
     _state = State::Idle;
@@ -18,20 +19,24 @@ namespace Felix8A {
     _holdFired = false;
   }
 
-  void Button::update() {
+  void Button::update()
+  {
     uint32_t now = millis();
     bool reading = _input.read();
 
-    if (reading != _lastReading) {
+    if (reading != _lastReading)
+    {
       _lastDebounceTime = now;
       _lastReading = reading;
     }
 
-    if ((now - _lastDebounceTime) < _debounceTime) {
+    if ((now - _lastDebounceTime) < _debounceTime)
+    {
       return;
     }
 
-    if (reading != _stableState) {
+    if (reading != _stableState)
+    {
       _stableState = reading;
       handleStableChange(now);
     }
@@ -42,26 +47,33 @@ namespace Felix8A {
 
   /* Private Methods */
 
-  void Button::handleStableChange(uint32_t now) {
-    if (_stableState) {
+  void Button::handleStableChange(uint32_t now)
+  {
+    if (_stableState)
+    {
       // PRESS
       _pressedTime = now;
       _holdFired = false;
 
-      if (_state == State::WaitingMulti && (now - _lastReleaseTime) <= _multiClickTime) {
+      if (_state == State::WaitingMulti && (now - _lastReleaseTime) <= _multiClickTime)
+      {
         _clickCount++;
-      } else {
+      }
+      else
+      {
         _clickCount = 1;
       }
 
       _event = Event::Press;
       _state = State::Pressed;
-
-    } else {
+    }
+    else
+    {
       // RELEASE
       _event = Event::Release;
 
-      if (_state == State::Held) {
+      if (_state == State::Held)
+      {
         _resetClicks();
         _state = State::Idle;
         return;
@@ -72,43 +84,28 @@ namespace Felix8A {
     }
   }
 
-  // void Button::handleHold(uint32_t now) {
-  //   if (_state == State::Pressed && !_holdFired && (now - _pressedTime) >= _holdTime) {
-  //     _event = Event::Hold;
-  //     _holdFired = true;
-  //     _resetClicks();
-  //     _state = State::Held;
-  //   }
-  // }
-  // New
-  void Button::handleHold(uint32_t now) {
-    // FIRST HOLD TRIGGER
-    if (_state == State::Pressed && !_holdFired && (now - _pressedTime) >= _holdTime) {
+  void Button::handleHold(uint32_t now)
+  {
+    if (_state == State::Pressed && !_holdFired && (now - _pressedTime) >= _holdTime)
+    {
       _event = Event::Hold;
       _holdFired = true;
-      _lastHoldRepeat = now;
-
-      if (!_continuousHold) {
-        _resetClicks();
-        _state = State::Held;
-      }
-    }
-
-    // CONTINUOUS HOLD (repeat)
-    if (_continuousHold && _holdFired && _stableState) {
-      if ((now - _lastHoldRepeat) >= _holdRepeatTime) {
-        _event = Event::Hold;
-        _lastHoldRepeat = now;
-      }
+      _resetClicks();
+      _state = State::Held;
     }
   }
 
-  void Button::handleClickTimeout(uint32_t now) {
-    if (_state == State::WaitingMulti && (now - _lastReleaseTime) > _multiClickTime) {
+  void Button::handleClickTimeout(uint32_t now)
+  {
+    if (_state == State::WaitingMulti && (now - _lastReleaseTime) > _multiClickTime)
+    {
 
-      if (_clickCount == 1)      _event = Event::Click;
-      else if (_clickCount == 2) _event = Event::DoubleClick;
-      else if (_clickCount >= 3) _event = Event::TripleClick;
+      if (_clickCount == 1)
+        _event = Event::Click;
+      else if (_clickCount == 2)
+        _event = Event::DoubleClick;
+      else if (_clickCount >= 3)
+        _event = Event::TripleClick;
 
       _resetClicks();
       _state = State::Idle;
