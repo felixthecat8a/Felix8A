@@ -47,6 +47,10 @@ namespace Felix8A {
       void setHoldTime(uint16_t ms) { _holdTime = ms; }
       void setMultiClickTime(uint16_t ms) { _multiClickTime = ms; }
 
+      // New
+      void setHoldRepeat(uint16_t ms) { _holdRepeatTime = ms; }
+      void enableContinuousHold(bool enable = true) { _continuousHold = enable; }
+
     private:
       enum class State : uint8_t {
         Idle,
@@ -88,6 +92,11 @@ namespace Felix8A {
       bool _holdFired   = false;
 
       uint8_t  _clickCount = 0;
+
+      // New
+      uint16_t _holdRepeatTime = 200;   // interval between repeats
+      uint32_t _lastHoldRepeat = 0;
+      bool     _continuousHold = false; // enable/disable feature
     };
 
 } // namespace Felix8A

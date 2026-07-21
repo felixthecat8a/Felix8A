@@ -72,12 +72,34 @@ namespace Felix8A {
     }
   }
 
+  // void Button::handleHold(uint32_t now) {
+  //   if (_state == State::Pressed && !_holdFired && (now - _pressedTime) >= _holdTime) {
+  //     _event = Event::Hold;
+  //     _holdFired = true;
+  //     _resetClicks();
+  //     _state = State::Held;
+  //   }
+  // }
+  // New
   void Button::handleHold(uint32_t now) {
+    // FIRST HOLD TRIGGER
     if (_state == State::Pressed && !_holdFired && (now - _pressedTime) >= _holdTime) {
       _event = Event::Hold;
       _holdFired = true;
-      _resetClicks();
-      _state = State::Held;
+      _lastHoldRepeat = now;
+
+      if (!_continuousHold) {
+        _resetClicks();
+        _state = State::Held;
+      }
+    }
+
+    // CONTINUOUS HOLD (repeat)
+    if (_continuousHold && _holdFired && _stableState) {
+      if ((now - _lastHoldRepeat) >= _holdRepeatTime) {
+        _event = Event::Hold;
+        _lastHoldRepeat = now;
+      }
     }
   }
 
