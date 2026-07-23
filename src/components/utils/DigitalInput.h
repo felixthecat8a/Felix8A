@@ -3,31 +3,23 @@
 
 #include <Arduino.h>
 
-namespace Felix8A
-{
+namespace Felix8A {
 
-  class DigitalInput
-  {
+  class DigitalInput {
   public:
-    explicit DigitalInput(uint8_t pin, bool activeLow = true)
-        : _pin(pin), _activeLow(activeLow) {}
+    explicit DigitalInput(uint8_t pin, bool activeLow = true) : _pin(pin), _activeLow(activeLow) {}
 
-    void begin(bool usePullup = true)
-    {
-      if (_activeLow && usePullup)
-      {
+    void begin(bool usePullup = true) {
+      if (_activeLow && usePullup) {
         pinMode(_pin, INPUT_PULLUP);
-      }
-      else
-      {
+      } else {
         pinMode(_pin, INPUT);
       }
 
       _state = readRaw();
     }
 
-    bool read() const
-    {
+    bool read() const {
       bool raw = digitalRead(_pin);
       return _activeLow ? !raw : raw;
     }
@@ -40,8 +32,8 @@ namespace Felix8A
     bool readRaw() const { return digitalRead(_pin); }
 
     uint8_t _pin;
-    bool _activeLow;
-    bool _state = false;
+    bool    _activeLow;
+    bool    _state = false;
   };
 
 } // namespace Felix8A

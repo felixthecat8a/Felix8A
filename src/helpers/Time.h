@@ -3,38 +3,30 @@
 
 #include <Arduino.h>
 
-namespace Felix8A
-{
+namespace Felix8A {
 
-  class Time
-  {
+  class Time {
   public:
-    static inline bool every(unsigned long interval, unsigned long &last)
-    {
-      unsigned long now = millis();
+    static inline bool every(unsigned long interval, unsigned long& last) {
+      unsigned long now  = millis();
       unsigned long diff = now - last;
-      if (diff >= interval)
-      {
+      if (diff >= interval) {
         last += interval * (diff / interval);
         return true;
       }
       return false;
     }
 
-    static inline bool after(unsigned long interval, unsigned long start)
-    {
+    static inline bool after(unsigned long interval, unsigned long start) {
       return millis() - start >= interval;
     }
 
-    static inline void reset(unsigned long &timestamp) { timestamp = millis(); }
+    static inline void reset(unsigned long& timestamp) { timestamp = millis(); }
 
-    static inline bool once(unsigned long interval, unsigned long &start)
-    {
-      if (start == 0)
-        return false; // not armed
+    static inline bool once(unsigned long interval, unsigned long& start) {
+      if (start == 0) return false; // not armed
 
-      if (millis() - start >= interval)
-      {
+      if (millis() - start >= interval) {
         start = 0; // disarm so it won't trigger again
         return true;
       }

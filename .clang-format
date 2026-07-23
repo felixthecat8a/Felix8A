@@ -1,0 +1,67 @@
+# .clang-format
+BasedOnStyle: LLVM
+
+# Indentation
+IndentWidth: 2
+TabWidth: 2
+UseTab: Never
+
+# Line length
+ColumnLimit: 100
+
+# Braces
+# BreakBeforeBraces: Allman
+BreakBeforeBraces: Attach
+AllowShortFunctionsOnASingleLine: All
+AllowShortIfStatementsOnASingleLine: Always
+
+# Spacing
+SpaceBeforeParens: ControlStatements
+SpacesInParentheses: false
+SpaceInEmptyParentheses: false
+SpacesInSquareBrackets: false
+SpaceAroundPointerQualifiers: Default
+
+# Functions & classes
+IndentCaseLabels: true
+IndentGotoLabels: false
+AccessModifierOffset: -2
+
+# Pointers & references
+PointerAlignment: Left
+ReferenceAlignment: Left
+DerivePointerAlignment: false
+
+# Includes
+SortIncludes: true
+IncludeBlocks: Preserve
+
+# Comments
+ReflowComments: true
+
+# Alignment
+AlignConsecutiveAssignments: true
+AlignConsecutiveDeclarations: true
+
+# Keep simple one-liners
+AllowShortBlocksOnASingleLine: Always
+AllowShortLoopsOnASingleLine: false
+
+# Function formatting
+BinPackParameters: false
+BinPackArguments: false
+
+# Prevent overly aggressive wrapping
+PenaltyBreakBeforeFirstCallParameter: 1000
+PenaltyReturnTypeOnItsOwnLine: 300
+
+# Constructor initializer formatting
+ConstructorInitializerAllOnOneLineOrOnePerLine: true
+BreakConstructorInitializers: BeforeComma
+
+# Namespace
+NamespaceIndentation: All
+
+# Misc
+Cpp11BracedListStyle: true
+Standard: c++17
