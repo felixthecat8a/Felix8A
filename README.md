@@ -2,8 +2,8 @@
 
 ![GitHub Release](https://img.shields.io/github/v/release/felixthecat8a/Felix8A?color=00878F&logo=arduino&logoColor=00878F)
 [![License: MIT](https://img.shields.io/github/license/felixthecat8a/Felix8A)](https://opensource.org/licenses/MIT)
-![GitHub repo file or directory count](https://img.shields.io/github/directory-file-count/felixthecat8a/Felix8A)
 ![GitHub repo size](https://img.shields.io/github/repo-size/felixthecat8a/Felix8A)
+![GitHub repo file or directory count](https://img.shields.io/github/directory-file-count/felixthecat8a/Felix8A)
 ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/felixthecat8a/Felix8A?color=00599C)
 ![GitHub top language](https://img.shields.io/github/languages/top/felixthecat8a/Felix8A?color=00599C&logo=cplusplus&logoColor=00599C)
 
@@ -20,14 +20,13 @@ An Arduino utility toolkit for handling common components in embedded projects â
 ### Install via ZIP file
 
 1. Download the *.zip* file of the [latest release](https://github.com/felixthecat8a/Felix8A/releases/latest/).
-2. In the **Arduino IDE**, go to ***Sketch > Include Library > Add .ZIP Library...***.
+2. In the ***Arduino IDE***, go to ***Sketch > Include Library > Add .ZIP Library...***.
 3. Select the downloaded *.zip* file.
 
 ### Updating the Library
 
 To update the library:
-1. Delete the existing ***Felix8A*** folder from your *libraries* directory.
-    - ***Documents > Arduino > libraries > Felix8A***
+1. Go to ***Documents > Arduino > libraries > Felix8A*** and delete the existing ***Felix8A*** folder from your *libraries* directory.
 2. Follow the installation steps above to install the latest version.
 
 ### Add to PlatformIO Project
