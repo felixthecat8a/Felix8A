@@ -2,6 +2,11 @@
 Felix8A.ino
 Felix8A_notes.md
 
+# PlatformIO files
+.pio/
+.pioenvs/
+.piolibdeps/
+
 # Arduino ignore files
 sketch.json
 *.ino.cpp
