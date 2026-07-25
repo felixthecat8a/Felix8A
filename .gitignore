@@ -1,30 +1,7 @@
-# Ignore main sketch file used for development
-Felix8A.ino
-Felix8A_notes.md
+# Created by https://www.toptal.com/developers/gitignore/api/c++,platformio,visualstudiocode
+# Edit at https://www.toptal.com/developers/gitignore?templates=c++,platformio,visualstudiocode
 
-# PlatformIO files
-.pio/
-.pioenvs/
-.piolibdeps/
-
-# Arduino ignore files
-sketch.json
-*.ino.cpp
-*.ino.elf
-*.hex
-
-# Arduino IDE temp files
-*.arduino.*
-
-# macOS / Windows junk
-.DS_Store
-Thumbs.db
-
-# VS Code
-.vscode/
-cspell.json
-
-
+### C++ ###
 # Prerequisites
 *.d
 
@@ -38,18 +15,10 @@ cspell.json
 *.gch
 *.pch
 
-# Linker files
-*.ilk
-
-# Debugger Files
-*.pdb
-
 # Compiled Dynamic libraries
 *.so
 *.dylib
 *.dll
-*.so.*
-
 
 # Fortran module files
 *.mod
@@ -66,31 +35,33 @@ cspell.json
 *.out
 *.app
 
-# Build directories
-build/
-Build/
-build-*/
+### PlatformIO ###
+.pioenvs
+.piolibdeps
+.clang_complete
+.gcc-flags.json
+.pio
 
-# CMake generated files
-CMakeFiles/
-CMakeCache.txt
-cmake_install.cmake
-Makefile
-install_manifest.txt
-compile_commands.json
+### VisualStudioCode ###
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/*.code-snippets
 
-# Temporary files
-*.tmp
-*.log
-*.bak
-*.swp
+# Local History for Visual Studio Code
+.history/
 
-# vcpkg
-vcpkg_installed/
+# Built Visual Studio Code Extensions
+*.vsix
 
-# debug information files
-*.dwo
+### VisualStudioCode Patch ###
+# Ignore all local history of files
+.history
+.ionide
 
-# test output & cache
-Testing/
-.cache/
+# End of https://www.toptal.com/developers/gitignore/api/c++,platformio,visualstudiocode
+
+Felix8A.ino
+Felix8A_notes.md
