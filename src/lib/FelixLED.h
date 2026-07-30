@@ -1,0 +1,61 @@
+#ifndef FELIX_LED_H
+#define FELIX_LED_H
+
+#include <Arduino.h>
+#include "utils/DigitalOutput.h"
+
+namespace Felix8A {
+
+  // class LED : public DigitalOutput {
+  // public:
+  //   using DigitalOutput::DigitalOutput;
+
+  //   void on() { write(true); }
+  //   void off() { write(false); }
+  //   bool isOn() const { return state(); }
+  //   uint8_t getPin() const { return pin(); }
+  // };
+
+  class LED {
+  public:
+    explicit LED(uint8_t pin, bool activeLow = false) : _out(pin, activeLow) {}
+
+    void begin() { _out.begin(); }
+
+    void on() { _out.write(true); }
+    void off() { _out.write(false); }
+    void toggle() { _out.toggle(); }
+    bool isOn() const { return _out.state(); }
+
+    void setPin(uint8_t pin) { _out.setPin(pin); }
+    uint8_t getPin() const { return _out.pin(); }
+
+    void setActiveLow(bool activeLow) { _out.setActiveLow(activeLow); }
+    bool isActiveLow() const { return _out.isActiveLow(); }
+
+  private:
+    DigitalOutput _out;
+  };
+
+  class Relay {
+  public:
+    explicit Relay(uint8_t pin, bool activeLow = true) : _out(pin, activeLow) {}
+
+    void begin() { _out.begin(); }
+
+    void enable() { _out.write(true); }
+    void disable() { _out.write(false); }
+
+    void toggle() { _out.toggle(); }
+
+    void set(bool enabled) { _out.write(enabled); }
+
+    bool isEnabled() const { return _out.state(); }
+
+  private:
+    DigitalOutput _out;
+  };
+
+} // namespace Felix8A
+
+#endif // FELIX_LED_H

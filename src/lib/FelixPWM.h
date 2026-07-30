@@ -1,18 +1,18 @@
 #ifndef FELIX_PWM_H
 #define FELIX_PWM_H
 
-#include "utils/ColorRGB.h"
 #include <Arduino.h>
+#include "utils/ColorRGB.h"
 
 #ifdef ARDUINO_ARCH_AVR
-#include <avr/pgmspace.h>
-#define READ_GAMMA(x) pgm_read_byte(&_gammaTable[x])
+  #include <avr/pgmspace.h>
+  #define READ_GAMMA(x) pgm_read_byte(&_gammaTable[x])
 #else
-#define READ_GAMMA(x) _gammaTable[x]
+  #define READ_GAMMA(x) _gammaTable[x]
 #endif
 
 #ifndef PWM_MAX
-#define PWM_MAX 255
+  #define PWM_MAX 255
 #endif
 
 namespace Felix8A {
@@ -26,44 +26,38 @@ namespace Felix8A {
     explicit PWM(uint8_t pin, bool activeLow = false, LED_t type = BASIC_LED, int8_t channel = -1);
     ~PWM();
 
-    void    begin();
-    void    setPWM(uint8_t level);
-    void    setGlow(uint8_t glow);
-    void    setBrightness(uint8_t brightness);
+    void begin();
+    void setPWM(uint8_t level);
+    void setGlow(uint8_t glow);
+    void setBrightness(uint8_t brightness);
     uint8_t getBrightness() const { return _brightness; }
-    void    on();
-    void    off();
-    void    toggle();
-    bool    isOn() const { return _state; }
-    void    setPin(uint8_t pin);
+    void on();
+    void off();
+    void toggle();
+    bool isOn() const { return _state; }
+    void setPin(uint8_t pin);
     uint8_t getPin() const { return _pin; }
-    void    setActiveLow(bool activeLow);
-    bool    isActiveLow() const { return _activeLow; }
+    void setActiveLow(bool activeLow);
+    bool isActiveLow() const { return _activeLow; }
 
   private:
     void _writeRaw(uint8_t value);
 
     uint8_t _pin;
-    bool    _activeLow;
-    LED_t   _type;
-    int8_t  _channel;
+    bool _activeLow;
+    LED_t _type;
+    int8_t _channel;
 
     uint8_t _brightness = 0;
-    bool    _state      = false;
+    bool _state = false;
   };
 
   /* RGB LED */
 
   class RGB {
   public:
-    RGB(uint8_t rPin,
-        uint8_t gPin,
-        uint8_t bPin,
-        bool    commonAnode = true,
-        LED_t   type        = BASIC_LED,
-        int8_t  rCh         = -1,
-        int8_t  gCh         = -1,
-        int8_t  bCh         = -1);
+    RGB(uint8_t rPin, uint8_t gPin, uint8_t bPin, bool commonAnode = true,
+      LED_t type = BASIC_LED, int8_t rCh = -1, int8_t gCh = -1, int8_t bCh = -1);
 
     void begin();
 
@@ -75,11 +69,11 @@ namespace Felix8A {
     void setBrightness(uint8_t brightness);
     void setGlow(uint8_t glow) { setBrightness(glow); }
 
-    uint8_t  getRed() const { return _color.r; }
-    uint8_t  getGreen() const { return _color.g; }
-    uint8_t  getBlue() const { return _color.b; }
+    uint8_t getRed() const { return _color.r; }
+    uint8_t getGreen() const { return _color.g; }
+    uint8_t getBlue() const { return _color.b; }
     uint32_t getHex() const { return _color.hex(); }
-    uint8_t  getBrightness() const { return _brightness; }
+    uint8_t getBrightness() const { return _brightness; }
 
     String getHexString() const;
 
@@ -104,14 +98,14 @@ namespace Felix8A {
     void setGammaCorrection(bool enabled);
 
   private:
-    PWM       _rPWM, _gPWM, _bPWM;
-    bool      _isCommonAnode;
+    PWM _rPWM, _gPWM, _bPWM;
+    bool _isCommonAnode;
     RGB_Color _color;
 
-    uint8_t _brightness   = 255;
-    bool    _gammaEnabled = false;
+    uint8_t _brightness = 255;
+    bool _gammaEnabled = false;
 
-    int   _hue;
+    int _hue;
     float _sat = 1.0f;
     float _val = 1.0f;
 
@@ -119,7 +113,9 @@ namespace Felix8A {
       return (uint16_t(c) * _brightness) / PWM_MAX;
     }
 
-    inline uint8_t _applyGamma(uint8_t c) const { return _gammaEnabled ? READ_GAMMA(c) : c; }
+    inline uint8_t _applyGamma(uint8_t c) const {
+      return _gammaEnabled ? READ_GAMMA(c) : c;
+    }
 
     inline uint8_t _process(uint8_t c) const {
       c = _applyBrightness(c);

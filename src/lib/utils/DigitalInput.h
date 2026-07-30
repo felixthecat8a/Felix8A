@@ -7,7 +7,8 @@ namespace Felix8A {
 
   class DigitalInput {
   public:
-    explicit DigitalInput(uint8_t pin, bool activeLow = true) : _pin(pin), _activeLow(activeLow) {}
+    explicit DigitalInput(uint8_t pin, bool activeLow = true)
+      : _pin(pin), _activeLow(activeLow) {}
 
     void begin(bool usePullup = true) {
       if (_activeLow && usePullup) {
@@ -32,8 +33,8 @@ namespace Felix8A {
     bool readRaw() const { return digitalRead(_pin); }
 
     uint8_t _pin;
-    bool    _activeLow;
-    bool    _state = false;
+    bool _activeLow;
+    bool _state = false;
   };
 
 } // namespace Felix8A

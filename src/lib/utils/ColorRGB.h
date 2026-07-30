@@ -7,7 +7,16 @@ namespace Felix8A {
   struct RGB_Color {
     uint8_t r, g, b;
 
-    constexpr uint32_t hex() const { return (uint32_t(r) << 16) | (uint32_t(g) << 8) | b; }
+    constexpr RGB_Color(uint8_t red, uint8_t green, uint8_t blue)
+      : r(red), g(green), b(blue) {}
+
+    constexpr uint32_t hex() const {
+      return (uint32_t(r) << 16) | (uint32_t(g) << 8) | b;
+    }
+
+    static constexpr RGB_Color fromHex(uint32_t hex) {
+      return RGB_Color((hex >> 16) & 0xFF, (hex >> 8) & 0xFF, hex & 0xFF);
+    }
   };
 
   namespace ColorRGB {

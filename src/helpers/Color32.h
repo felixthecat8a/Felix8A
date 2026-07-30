@@ -17,15 +17,17 @@ namespace Felix8A {
     static constexpr uint32_t fromHex(uint32_t c) { return c & 0xFFFFFF; }
 
     // Channel extraction
-    static constexpr uint8_t red(uint32_t c) { return (c >> 16) & 0xFF; }
+    static constexpr uint8_t red(uint32_t c)   { return (c >> 16) & 0xFF; }
     static constexpr uint8_t green(uint32_t c) { return (c >> 8) & 0xFF; }
-    static constexpr uint8_t blue(uint32_t c) { return c & 0xFF; }
+    static constexpr uint8_t blue(uint32_t c)  { return c & 0xFF; }
 
     // Brightness scaling
     static constexpr uint32_t scale(uint32_t c, uint8_t s) {
-      return hex((uint16_t(red(c)) * (s + 1)) >> 8,
-                 (uint16_t(green(c)) * (s + 1)) >> 8,
-                 (uint16_t(blue(c)) * (s + 1)) >> 8);
+      return hex(
+        (uint16_t(red(c))   * (s + 1)) >> 8,
+        (uint16_t(green(c)) * (s + 1)) >> 8,
+        (uint16_t(blue(c))  * (s + 1)) >> 8
+      );
     }
 
     // Color Blending
@@ -38,12 +40,12 @@ namespace Felix8A {
     }
 
     // Shades of White
-    static constexpr uint32_t BLACK = 0x000000;
-    static constexpr uint32_t GRAY  = 0x999999;
-    static constexpr uint32_t WHITE = 0xFFFFFF;
+    static constexpr uint32_t BLACK           = 0x000000;
+    static constexpr uint32_t GRAY            = 0x999999;
+    static constexpr uint32_t WHITE           = 0xFFFFFF;
 
-    static constexpr uint32_t OFF  = BLACK; // Alias for off state
-    static constexpr uint32_t GREY = GRAY;  // Alternative spelling
+    static constexpr uint32_t OFF   = BLACK; // Alias for off state
+    static constexpr uint32_t GREY  = GRAY; // Alternative spelling
 
     // Full Color Spectrum
     static constexpr uint32_t RED             = 0xFF0000;
@@ -72,23 +74,23 @@ namespace Felix8A {
     static constexpr uint32_t CRIMSON         = 0xFF0040;
 
     // Lighter Colors
-    static constexpr uint32_t CORAL    = 0xBF4040;
-    static constexpr uint32_t MOCHA    = 0xBFBF40;
-    static constexpr uint32_t HONEYDEW = 0x40BF40;
-    static constexpr uint32_t CELESTE  = 0x40BFBF;
-    static constexpr uint32_t LAVENDER = 0x4040BF;
-    static constexpr uint32_t LILAC    = 0xBF40BF;
+    static constexpr uint32_t CORAL           = 0xBF4040;
+    static constexpr uint32_t MOCHA           = 0xBFBF40;
+    static constexpr uint32_t HONEYDEW        = 0x40BF40;
+    static constexpr uint32_t CELESTE         = 0x40BFBF;
+    static constexpr uint32_t LAVENDER        = 0x4040BF;
+    static constexpr uint32_t LILAC           = 0xBF40BF;
 
     // Darker Colors
-    static constexpr uint32_t MAROON  = 0x800000;
-    static constexpr uint32_t OLIVE   = 0x808000;
-    static constexpr uint32_t EMERALD = 0x008000;
-    static constexpr uint32_t TEAL    = 0x008080;
-    static constexpr uint32_t NAVY    = 0x000080;
-    static constexpr uint32_t PURPLE  = 0x800080;
+    static constexpr uint32_t MAROON          = 0x800000;
+    static constexpr uint32_t OLIVE           = 0x808000;
+    static constexpr uint32_t EMERALD         = 0x008000;
+    static constexpr uint32_t TEAL            = 0x008080;
+    static constexpr uint32_t NAVY            = 0x000080;
+    static constexpr uint32_t PURPLE          = 0x800080;
 
     // Themed Colors
-    static constexpr uint32_t ARDUINO_TEAL = 0x00878F;
+    static constexpr uint32_t ARDUINO_TEAL    = 0x00878F;
 
     // Hue, Saturation, Value (HSV) to RGB conversion
     inline uint32_t hsv(uint16_t h, uint8_t s, uint8_t v) {
@@ -96,27 +98,21 @@ namespace Felix8A {
 
       h %= 360;
 
-      uint8_t region    = h / 60;
+      uint8_t region = h / 60;
       uint8_t remainder = h % 60;
-      uint8_t f         = (remainder * 255) / 60;
+      uint8_t f = (remainder * 255) / 60;
 
       uint8_t p = (v * (255 - s)) / 255;
       uint8_t q = (v * (255 - ((uint16_t)s * f) / 255)) / 255;
       uint8_t t = (v * (255 - ((uint16_t)s * (255 - f)) / 255)) / 255;
 
       switch (region) {
-        case 0:
-          return hex(v, t, p);
-        case 1:
-          return hex(q, v, p);
-        case 2:
-          return hex(p, v, t);
-        case 3:
-          return hex(p, q, v);
-        case 4:
-          return hex(t, p, v);
-        default:
-          return hex(v, p, q);
+        case 0: return hex(v, t, p);
+        case 1: return hex(q, v, p);
+        case 2: return hex(p, v, t);
+        case 3: return hex(p, q, v);
+        case 4: return hex(t, p, v);
+        default: return hex(v, p, q);
       }
     }
 
