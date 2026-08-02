@@ -35,26 +35,12 @@ jobs:
             platforms: |
               - name: arduino:avr
             artifact-name-suffix: arduino-avr-mega
-          - fqbn: arduino:avr:leonardo
-            platforms: |
-              - name: arduino:avr
-            artifact-name-suffix: arduino-avr-leonardo
-          - fqbn: arduino:megaavr:nona4809
+
+          - fqbn: arduino:megaavr:nano_every
             platforms: |
               - name: arduino:megaavr
-            artifact-name-suffix: arduino-megaavr-nona4809
-          - fqbn: arduino:samd:mkrzero
-            platforms: |
-              - name: arduino:samd
-            artifact-name-suffix: arduino-samd-mkrzero
-          - fqbn: arduino:mbed_portenta:envie_m7:target_core=cm4
-            platforms: |
-              - name: arduino:mbed_portenta
-            artifact-name-suffix: arduino-mbed_portenta-envie_m7-target_core-cm4
-          - fqbn: arduino:mbed_portenta:envie_m7
-            platforms: |
-              - name: arduino:mbed_portenta
-            artifact-name-suffix: arduino-mbed_portenta-envie_m7
+            artifact-name-suffix: arduino-megaavr-nano_every
+
           - fqbn: arduino:mbed_nano:nano33ble
             platforms: |
               - name: arduino:mbed_nano
@@ -63,6 +49,10 @@ jobs:
             platforms: |
               - name: arduino:mbed_nano
             artifact-name-suffix: arduino-mbed_nano-nanorp2040connect
+          - fqbn: arduino:samd:mkrzero
+            platforms: |
+              - name: arduino:samd
+            artifact-name-suffix: arduino-samd-mkrzero
 
     steps:
       - name: Checkout repository
