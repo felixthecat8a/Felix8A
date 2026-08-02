@@ -14,10 +14,11 @@
 
 <!-- GitHub Activity -->
 ![GitHub Created At](https://img.shields.io/github/created-at/felixthecat8a/Felix8A)
-![GitHub Release Date](https://img.shields.io/github/release-date/felixthecat8a/Felix8A)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/felixthecat8a/Felix8A)
-![GitHub commits since latest release](https://img.shields.io/github/commits-since/felixthecat8a/Felix8A/latest)
 ![GitHub last commit](https://img.shields.io/github/last-commit/felixthecat8a/Felix8A)
+![GitHub Release Date](https://img.shields.io/github/release-date/felixthecat8a/Felix8A)
+![GitHub commits since latest release](https://img.shields.io/github/commits-since/felixthecat8a/Felix8A/latest)
+
 
 An Arduino utility toolkit for handling common components in embedded projects — including LEDs, RGB control, buttons, timing, and color utilities.
 
