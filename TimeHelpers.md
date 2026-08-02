@@ -17,7 +17,7 @@ void loop() {
 }
 ```
 
-## Similiar Behavior:
+## Similar Behavior:
 
 ```cpp
 #include <Felix8A.h>

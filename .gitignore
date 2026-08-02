@@ -63,5 +63,7 @@
 
 # End of https://www.toptal.com/developers/gitignore/api/c++,platformio,visualstudiocode
 
+cspell.json
+
 Felix8A.ino
 Felix8A_notes.md
