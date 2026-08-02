@@ -43,10 +43,6 @@ jobs:
             platforms: |
               - name: arduino:megaavr
             artifact-name-suffix: arduino-megaavr-nona4809
-          - fqbn: arduino:sam:arduino_due_x_dbg
-            platforms: |
-              - name: arduino:sam
-            artifact-name-suffix: arduino-sam-arduino_due_x_dbg
           - fqbn: arduino:samd:mkrzero
             platforms: |
               - name: arduino:samd
