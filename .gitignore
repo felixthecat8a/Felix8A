@@ -61,9 +61,8 @@
 .history
 .ionide
 
-# End of https://www.toptal.com/developers/gitignore/api/c++,platformio,visualstudiocode
-
 cspell.json
+# End of https://www.toptal.com/developers/gitignore/api/c++,platformio,visualstudiocode
 
 Felix8A.ino
 Felix8A_notes.md
