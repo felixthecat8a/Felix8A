@@ -27,31 +27,29 @@ jobs:
 
       matrix:
         board:
+          - fqbn: arduino:avr:uno
+            platform-name: arduino:avr
+            artifact-name-suffix: arduino-avr-uno
           - fqbn: arduino:avr:nano
-            platforms: |
-              - name: arduino:avr
+            platform-name: arduino:avr
             artifact-name-suffix: arduino-avr-nano
           - fqbn: arduino:avr:mega
-            platforms: |
-              - name: arduino:avr
+            platform-name: arduino:avr
             artifact-name-suffix: arduino-avr-mega
-
-          - fqbn: arduino:megaavr:nano_every
-            platforms: |
-              - name: arduino:megaavr
-            artifact-name-suffix: arduino-megaavr-nano_every
-
+          - fqbn: arduino:megaavr:nona4809
+            platform-name: arduino:megaavr
+            artifact-name-suffix: arduino-megaavr-nona4809
           - fqbn: arduino:mbed_nano:nano33ble
-            platforms: |
-              - name: arduino:mbed_nano
+            platform-name: arduino:mbed_nano
             artifact-name-suffix: arduino-mbed_nano-nano33ble
           - fqbn: arduino:mbed_nano:nanorp2040connect
-            platforms: |
-              - name: arduino:mbed_nano
+            platform-name: arduino:mbed_nano
             artifact-name-suffix: arduino-mbed_nano-nanorp2040connect
+          - fqbn: arduino:esp32:nano_nora
+            platform-name: arduino:esp32
+            artifact-name-suffix: arduino-esp32-nano_nora
           - fqbn: arduino:samd:mkrzero
-            platforms: |
-              - name: arduino:samd
+            platform-name: arduino:samd
             artifact-name-suffix: arduino-samd-mkrzero
 
     steps:
@@ -63,7 +61,7 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           fqbn: ${{ matrix.board.fqbn }}
-          platforms: ${{ matrix.board.platforms }}
+          platforms: ${{ matrix.board.platform-name }}
           libraries: |
             # Install the library from the local path.
             - source-path: ./
