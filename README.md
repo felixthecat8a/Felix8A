@@ -7,6 +7,12 @@
 ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/felixthecat8a/Felix8A?color=00599C)
 ![GitHub top language](https://img.shields.io/github/languages/top/felixthecat8a/Felix8A?color=00599C&logo=cplusplus&logoColor=00599C)
 
+<!-- Workflows -->
+![Check Arduino](https://github.com/felixthecat8a/LCD_BacklightRGB/actions/workflows/check-arduino.yml/badge.svg)
+![Compile Examples](https://github.com/felixthecat8a/LCD_BacklightRGB/actions/workflows/compile-examples.yml/badge.svg)
+![Spell Check](https://github.com/felixthecat8a/LCD_BacklightRGB/actions/workflows/spell-check.yml/badge.svg)
+
+<!-- GitHub Activity -->
 ![GitHub Created At](https://img.shields.io/github/created-at/felixthecat8a/Felix8A)
 ![GitHub Release Date](https://img.shields.io/github/release-date/felixthecat8a/Felix8A)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/felixthecat8a/Felix8A)
