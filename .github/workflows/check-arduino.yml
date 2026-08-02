@@ -1,0 +1,25 @@
+name: Check Arduino
+
+on:
+  push:
+  pull_request:
+    branches:
+      - main
+      - master
+  workflow_dispatch:
+  repository_dispatch:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Arduino Lint
+        uses: arduino/arduino-lint-action@v3
+        with:
+          compliance: specification
+          library-manager: update
+          project-type: library
