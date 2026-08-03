@@ -4,16 +4,17 @@
 #include <Arduino.h>
 
 namespace Felix8A {
+  namespace Time {
 
-  class Time {
-  public:
     static inline bool every(unsigned long interval, unsigned long& last) {
       unsigned long now  = millis();
       unsigned long diff = now - last;
+
       if (diff >= interval) {
         last += interval * (diff / interval);
         return true;
       }
+
       return false;
     }
 
@@ -30,10 +31,15 @@ namespace Felix8A {
         start = 0; // disarm so it won't trigger again
         return true;
       }
+
       return false;
     }
-  };
 
+    static inline void arm(unsigned long& start) { start = millis(); }
+    static inline void disarm(unsigned long& start) { start = 0; }
+    static inline bool isArmed(unsigned long start) { return start != 0; }
+
+  } // namespace Time
 } // namespace Felix8A
 
-#endif // FELIX_8A_H
+#endif // FELIX8A_TIME_H

@@ -50,7 +50,7 @@ void myFunction() {
 }
 ```
 
-## `Felix8A::Time` As a One-shot Timers
+## `Felix8A::Time` As a One-shot Timer
 
 ```cpp
 #include <Felix8A.h>
@@ -70,6 +70,7 @@ void loop() {
   }
 }
 ```
+
 ```cpp
 #include <Felix8A.h>
 

@@ -5,8 +5,8 @@
 
 namespace Felix8A {
 
-  class Math {
-  public:
+  namespace Math {
+
     // Clamping: Keeps a value within a range.
     template <typename T> static inline T clamp(T value, T minVal, T maxVal) {
       if (value < minVal) return minVal;
@@ -56,7 +56,8 @@ namespace Felix8A {
     template <typename T> static inline T wrapInclusive(T value, T minVal, T maxVal) {
       return wrap(value, minVal, maxVal + 1);
     }
-  };
+
+  } // namespace Math
 
 } // namespace Felix8A
 
