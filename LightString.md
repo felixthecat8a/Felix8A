@@ -78,7 +78,7 @@ void firefly(uint32_t baseColor) {
   static int8_t direction[NUM_LEDS] = {0}; // 1 = up, -1 = down, 0 = idle
   static unsigned long lastFireflyUpdate = 0;
 
-  if (!Felix8A::Time::every(30, lastFireflyUpdate)) return;
+  if (!Time8A::every(30, lastFireflyUpdate)) return;
 
   int count = lightString->numPixels();
 
@@ -120,7 +120,7 @@ void solidColor(int colorIndex, bool wasUpdated) {
 }
 ```
 
-### Solid Color to White Gradient Setting Functions using `Felix8A::Time`
+### Solid Color to White Gradient Setting Functions using `Time8A`
 ```cpp
 void setColorWhiteGradient(uint32_t color, int step) {
   uint32_t white = Felix8A::Color::rgb(150, 150, 150);
@@ -159,7 +159,7 @@ void solidColorGradient(int colorIndex, bool isAnim, bool wasUpdated) {
     if (wasUpdated) animStep = 0;
     int numGradientPhases = 5;
 
-    if (Felix8A::Time::every(150, lastUpdate)) {
+    if (Time8A::every(150, lastUpdate)) {
       setColorWhiteGradient(ColorPalette[colorIndex], animStep);
       animStep = (animStep + 1) % numGradientPhases;
     }
@@ -198,7 +198,7 @@ void setColorWhiteGradient(uint32_t color, int step) {
 
 ## Multi-color Functions
 
-### Multi-color Setting Functions using `Felix8A::Time`
+### Multi-color Setting Functions using `Time8A`
 ```cpp
 void setMultiColor(Felix8A::Palette palette, int step) {
   int count = lightString->numPixels();
@@ -217,7 +217,7 @@ void multiColor(Felix8A::Palette palette, bool isAnim, bool wasUpdated) {
   if (isAnim) {
     if (wasUpdated) colorStep = 0;
 
-    if (Felix8A::Time::every(150, lastAnimUpdate)) {
+    if (Time8A::every(150, lastAnimUpdate)) {
       setMultiColor(palette, colorStep);
       colorStep = (colorStep + 1) % palette.count();
     }
@@ -233,7 +233,7 @@ void multiColor(Felix8A::Palette palette, bool isAnim, bool wasUpdated) {
 void multicolorTwinkle(Felix8A::Palette palette) {
   static unsigned long lastTwinkle = 0;
 
-  if (Felix8A::Time::every(100, lastTwinkle)) {
+  if (Time8A::every(100, lastTwinkle)) {
     int count = lightString->numPixels();
 
     for (int i = 0; i < count; i++) {

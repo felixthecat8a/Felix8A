@@ -34,7 +34,7 @@ void setup() {
 }
 
 void loop() {
-  if (Felix8A::Time::every(blinkInterval, lastBlink)) {
+  if (Time8A::every(blinkInterval, lastBlink)) {
     led.toggle();
   }
 
@@ -44,7 +44,7 @@ void loop() {
 void fade() {
   static unsigned long lastUpdate = 0; // persists between calls
 
-  if (Felix8A::Time::every(50, lastUpdate)) {
+  if (Time8A::every(50, lastUpdate)) {
     pwm.setBrightness(brightness);
     brightness += fadeAmount;
     if (brightness <= 0 || brightness >= 255) {

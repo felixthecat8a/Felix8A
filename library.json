@@ -1,0 +1,30 @@
+{
+  "name": "Felix8A",
+  "version": "1.2.0",
+  "description": "Arduino toolkit for handling components in projects.",
+  "keywords": [
+    "arduino",
+    "digital",
+    "pwm",
+    "rgb",
+    "led",
+    "button",
+    "non-blocking",
+    "timing"
+  ],
+  "authors": [
+    {
+      "name": "Felix Ochoa",
+      "maintainer": true
+    }
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/felixthecat8a/Felix8A"
+  },
+  "frameworks": [
+    "arduino"
+  ],
+  "platforms": "*"
+}

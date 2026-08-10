@@ -3,7 +3,7 @@
 namespace Felix8A {
 
   Button::Button(uint8_t pin, bool activeLow, uint16_t debounceTime)
-    : _input(pin, activeLow), _debounceTime(debounceTime) {}
+      : _input(pin, activeLow), _debounceTime(debounceTime) {}
 
   /* Lifecycle */
   void Button::begin() {
@@ -13,8 +13,9 @@ namespace Felix8A {
 
     _state = State::Idle;
     _event = Event::None;
+
     _clickCount = 0;
-    _holdFired = false;
+    _holdFired  = false;
   }
 
   void Button::update() {
@@ -26,9 +27,7 @@ namespace Felix8A {
       _lastReading = reading;
     }
 
-    if ((now - _lastDebounceTime) < _debounceTime) {
-      return;
-    }
+    if ((now - _lastDebounceTime) < _debounceTime) { return; }
 
     if (reading != _stableState) {
       _stableState = reading;
@@ -61,7 +60,7 @@ namespace Felix8A {
       _event = Event::Release;
 
       if (_state == State::Held) {
-        _resetClicks();
+        resetClicks();
         _state = State::Idle;
         return;
       }
@@ -75,7 +74,7 @@ namespace Felix8A {
     if (_state == State::Pressed && !_holdFired && (now - _pressedTime) >= _holdTime) {
       _event = Event::Hold;
       _holdFired = true;
-      _resetClicks();
+      resetClicks();
       _state = State::Held;
     }
   }
@@ -87,7 +86,7 @@ namespace Felix8A {
       else if (_clickCount == 2) _event = Event::DoubleClick;
       else if (_clickCount >= 3) _event = Event::TripleClick;
 
-      _resetClicks();
+      resetClicks();
       _state = State::Idle;
     }
   }

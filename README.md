@@ -96,7 +96,7 @@ void setup() {
 
 void loop() {
     // loop code
-    if (Felix8A::Time::every(blinkInterval, lastBlink)) {
+    if (Time8A::every(blinkInterval, lastBlink)) {
         led.toggle();
     }
 }

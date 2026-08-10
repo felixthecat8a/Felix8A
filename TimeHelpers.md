@@ -1,4 +1,4 @@
-# Implementing `Felix8A::Time`
+# Implementing `Time8A`
 
 ```cpp
 #include <Felix8A.h>
@@ -11,7 +11,7 @@ void setup() {
 }
 
 void loop() {
-  if (Felix8A::Time::every(timeInterval, lastUpdate)) {
+  if (Time8A::every(timeInterval, lastUpdate)) {
     // loop code here
   }
 }
@@ -26,31 +26,31 @@ const unsigned long timeInterval = 1000; // 1 sec
 unsigned long lastUpdate = 0;
 
 void setup() {
-  Felix8A::Time::reset(lastUpdate); // start timer
+  Time8A::reset(lastUpdate); // start timer
   // setup code here
 }
 
 void loop() {
-  if (Felix8A::Time::after(timeInterval, lastUpdate)) {
+  if (Time8A::after(timeInterval, lastUpdate)) {
     // loop code here
-    Felix8A::Time::reset(lastUpdate); // restart timer manually
+    Time8A::reset(lastUpdate); // restart timer manually
   }
 }
 ```
 
-## Implementing `Felix8A::Time` Inside Functions
+## Implementing `Time8A` Inside Functions
 
 ```cpp
 void myFunction() {
   static unsigned long lastUpdate = 0; // persists between calls
 
-  if (Felix8A::Time::every(500, lastUpdate)) {
+  if (Time8A::every(500, lastUpdate)) {
     // code
   }
 }
 ```
 
-## `Felix8A::Time` As a One-shot Timer
+## `Time8A` As a One-shot Timer
 
 ```cpp
 #include <Felix8A.h>
@@ -60,11 +60,11 @@ bool done = false;
 
 void setup() {
   Serial.begin(115200);
-  Felix8A::Time::reset(startTime);
+  Time8A::reset(startTime);
 }
 
 void loop() {
-  if (!done && Felix8A::Time::after(3000, startTime)) {
+  if (!done && Time8A::after(3000, startTime)) {
     done = true;
     Serial.println("3 seconds passed!");
   }
@@ -78,11 +78,11 @@ unsigned long startTime = 0;
 
 void setup() {
   Serial.begin(115200);
-  Felix8A::Time::arm(startTime);
+  Time8A::arm(startTime);
 }
 
 void loop() {
-  if (Felix8A::Time::once(3000, startTime)) {
+  if (Time8A::once(3000, startTime)) {
     Serial.println("3 seconds passed!");
   }
 }

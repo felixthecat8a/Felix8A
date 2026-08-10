@@ -117,6 +117,7 @@ namespace Felix8A {
     }
 
     inline uint32_t hsv(uint16_t h) { return hsv(h, 255, 255); }
+
   };
 
 } // namespace Felix8A
