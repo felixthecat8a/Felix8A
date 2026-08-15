@@ -31,9 +31,17 @@ namespace Felix8A {
     }
 
     // Color Blending
+    // static inline uint8_t lerp(uint8_t a, uint8_t b, uint8_t t) {
+    //   return a + ((int32_t(b) - int32_t(a)) * t) / 255;
+    // }
+
+    // static inline uint32_t blend(uint32_t a, uint32_t b, uint8_t t) {
+    //   return hex(lerp(red(a), red(b), t), lerp(green(a), green(b), t), lerp(blue(a), blue(b), t));
+    // }
+
     static inline uint32_t blend(uint32_t a, uint32_t b, uint8_t t) {
       auto lerp = [t](uint8_t x, uint8_t y) -> uint8_t {
-        return x + ((int16_t(y) - int16_t(x)) * t) / 255;
+        return x + ((uint32_t(y) - uint32_t(x)) * t) / 255;
       };
 
       return hex(lerp(red(a), red(b)), lerp(green(a), green(b)), lerp(blue(a), blue(b)));
@@ -93,7 +101,8 @@ namespace Felix8A {
     static constexpr uint32_t ARDUINO_TEAL    = 0x00878F;
 
     // Hue, Saturation, Value (HSV) to RGB conversion
-    inline uint32_t hsv(uint16_t h, uint8_t s, uint8_t v) {
+    // h: 0–359 degrees, s: 0–255, v: 0–255
+    static inline uint32_t hsv(uint16_t h, uint8_t s, uint8_t v) {
       if (s == 0) { return hex(v, v, v); } // Grayscale
 
       h %= 360;
@@ -116,10 +125,42 @@ namespace Felix8A {
       }
     }
 
-    inline uint32_t hsv(uint16_t h) { return hsv(h, 255, 255); }
+    static inline uint32_t hsv(uint16_t h) { return hsv(h, 255, 255); }
 
+    // Standard Heat Map
+    template <typename T>
+    static inline uint32_t heat(T value, T min, T max, bool inverted = false) {
+      if (min >= max) { return BLUE; }
+
+      value = constrain(value, min, max);
+
+      uint16_t hue = 240 - ((value - min) * 240 / (max - min));
+
+      if (inverted) { hue = 240 - hue; }
+
+      return hsv(hue, 255, 255);
+    }
+
+    // Centered Heat Map
+    template <typename T>
+    static inline uint32_t heat(T value, T min, T center, T max, bool inverted = false) {
+      if (min >= center || center >= max) { return BLUE; }
+
+      value = constrain(value, min, max);
+
+      uint16_t hue;
+
+      if (value <= center) {
+        hue = 240 - ((value - min) * 120L / (center - min));
+      } else {
+        hue = 120 - ((value - center) * 120L / (max - center));
+      }
+
+      if (inverted) { hue = 240 - hue; }
+
+      return hsv(hue, 255, 255);
+    }
   };
-
 } // namespace Felix8A
 
 #endif // FELIX8A_COLOR32_H
