@@ -10,9 +10,9 @@ UseTab: Never
 ColumnLimit: 100
 
 # Braces
-# BreakBeforeBraces: Allman
 BreakBeforeBraces: Attach
-AllowShortFunctionsOnASingleLine: All
+# AllowShortFunctionsOnASingleLine: All
+AllowShortFunctionsOnASingleLine: Inline
 AllowShortIfStatementsOnASingleLine: Always
 
 # Spacing
@@ -24,6 +24,7 @@ SpaceAroundPointerQualifiers: Default
 
 # Functions & classes
 IndentCaseLabels: true
+AllowShortCaseLabelsOnASingleLine: true
 IndentGotoLabels: false
 AccessModifierOffset: -2
 
