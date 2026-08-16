@@ -80,9 +80,7 @@ void firefly(uint32_t baseColor) {
 
   if (!Time8A::every(30, lastFireflyUpdate)) return;
 
-  int count = lightString->numPixels();
-
-  for (int i = 0; i < count; i++) {
+  for (int i = 0; i < NUM_LEDS; i++) {
     if (direction[i] == 0) {
       if (random(100) < 3) {
         direction[i] = 1;
