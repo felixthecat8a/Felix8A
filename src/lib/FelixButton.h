@@ -2,13 +2,23 @@
 #define FELIX_BUTTON_H
 
 #include <Arduino.h>
+
 #include "utils/DigitalInput.h"
 
 namespace Felix8A {
 
   class Button {
   public:
-    enum class Event : uint8_t { None, Press, Release, Click, DoubleClick, TripleClick, Hold };
+    enum class Event : uint8_t {
+      None,
+      Press,
+      Release,
+      Click,
+      DoubleClick,
+      TripleClick,
+      QuadrupleClick,
+      Hold
+    };
 
     explicit Button(uint8_t pin, bool activeLow = true, uint16_t debounceTime = 50);
 
@@ -23,7 +33,7 @@ namespace Felix8A {
     /* Event Polling */
     Event poll() {
       Event e = _event;
-      _event = Event::None;
+      _event  = Event::None;
       return e;
     }
 
@@ -33,6 +43,7 @@ namespace Felix8A {
     bool wasClicked() { return consume(Event::Click); }
     bool wasDoubleClicked() { return consume(Event::DoubleClick); }
     bool wasTripleClicked() { return consume(Event::TripleClick); }
+    bool wasQuadrupleClicked() { return consume(Event::QuadrupleClick); }
     bool wasHeld() { return consume(Event::Hold); }
 
     /* Configuration */
@@ -58,7 +69,7 @@ namespace Felix8A {
 
     /* Data */
     DigitalInput _input;
-    uint16_t _debounceTime;
+    uint16_t     _debounceTime;
 
     uint16_t _holdTime       = 1000;
     uint16_t _multiClickTime = 300;

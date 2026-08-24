@@ -19,12 +19,12 @@ namespace Felix8A {
   }
 
   void Button::update() {
-    uint32_t now = millis();
-    bool reading = _input.read();
+    uint32_t now     = millis();
+    bool     reading = _input.read();
 
     if (reading != _lastReading) {
       _lastDebounceTime = now;
-      _lastReading = reading;
+      _lastReading      = reading;
     }
 
     if ((now - _lastDebounceTime) < _debounceTime) { return; }
@@ -44,7 +44,7 @@ namespace Felix8A {
     if (_stableState) {
       // PRESS
       _pressedTime = now;
-      _holdFired = false;
+      _holdFired   = false;
 
       if (_state == State::WaitingMulti && (now - _lastReleaseTime) <= _multiClickTime) {
         _clickCount++;
@@ -66,13 +66,13 @@ namespace Felix8A {
       }
 
       _lastReleaseTime = now;
-      _state = State::WaitingMulti;
+      _state           = State::WaitingMulti;
     }
   }
 
   void Button::handleHold(uint32_t now) {
     if (_state == State::Pressed && !_holdFired && (now - _pressedTime) >= _holdTime) {
-      _event = Event::Hold;
+      _event     = Event::Hold;
       _holdFired = true;
       resetClicks();
       _state = State::Held;
@@ -82,9 +82,15 @@ namespace Felix8A {
   void Button::handleClickTimeout(uint32_t now) {
     if (_state == State::WaitingMulti && (now - _lastReleaseTime) > _multiClickTime) {
 
-      if (_clickCount == 1)      _event = Event::Click;
-      else if (_clickCount == 2) _event = Event::DoubleClick;
-      else if (_clickCount >= 3) _event = Event::TripleClick;
+      if (_clickCount == 1) {
+        _event = Event::Click;
+      } else if (_clickCount == 2) {
+        _event = Event::DoubleClick;
+      } else if (_clickCount == 3) {
+        _event = Event::TripleClick;
+      } else if (_clickCount >= 4) {
+        _event = Event::QuadrupleClick;
+      }
 
       resetClicks();
       _state = State::Idle;

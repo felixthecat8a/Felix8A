@@ -23,8 +23,8 @@ NamespaceIndentation: All
 AllowShortNamespacesOnASingleLine: false
 
 # Alignment & Simple One-liners
-AlignConsecutiveDeclarations: false
-AlignConsecutiveAssignments: false
+AlignConsecutiveDeclarations: true
+AlignConsecutiveAssignments: true
 AllowShortBlocksOnASingleLine: Always
 AllowShortIfStatementsOnASingleLine: AllIfsAndElse
 AllowShortLoopsOnASingleLine: false

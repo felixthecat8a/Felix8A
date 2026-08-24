@@ -7,7 +7,7 @@ namespace Felix8A {
 
   class Palette {
   public:
-    constexpr Palette(const uint32_t* colors, uint8_t size) : _colors(colors), _size(size) {}
+    constexpr Palette(const uint32_t *colors, uint8_t size) : _colors(colors), _size(size) {}
 
     template <size_t N>
     constexpr Palette(const uint32_t (&colors)[N]) : _colors(colors), _size(N) {}
@@ -21,7 +21,7 @@ namespace Felix8A {
       return (_size == 0) ? 0 : _colors[_size - 1 - (i % _size)];
     }
 
-    constexpr const uint32_t* data() const { return _colors; }
+    constexpr const uint32_t *data() const { return _colors; }
 
     uint32_t lerp(uint8_t t) const {
       if (_size == 0) return 0;
@@ -39,7 +39,7 @@ namespace Felix8A {
     }
 
   private:
-    const uint32_t* _colors;
+    const uint32_t *_colors;
     uint8_t         _size;
 
     static constexpr uint8_t lerp8(uint8_t a, uint8_t b, uint8_t t) {
@@ -47,9 +47,11 @@ namespace Felix8A {
     }
 
     static constexpr uint32_t blend(uint32_t c1, uint32_t c2, uint8_t t) {
-      return ((uint32_t(lerp8((c1 >> 16) & 0xFF, (c2 >> 16) & 0xFF, t)) << 16) |
-              (uint32_t(lerp8((c1 >> 8) & 0xFF, (c2 >> 8) & 0xFF, t)) << 8) |
-              (uint32_t(lerp8((c1 >> 0) & 0xFF, (c2 >> 0) & 0xFF, t)) << 0));
+      return (
+          (uint32_t(lerp8((c1 >> 16) & 0xFF, (c2 >> 16) & 0xFF, t)) << 16) |
+          (uint32_t(lerp8((c1 >> 8) & 0xFF, (c2 >> 8) & 0xFF, t)) << 8) |
+          (uint32_t(lerp8((c1 >> 0) & 0xFF, (c2 >> 0) & 0xFF, t)) << 0)
+      );
     }
   };
 

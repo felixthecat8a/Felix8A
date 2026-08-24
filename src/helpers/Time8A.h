@@ -38,6 +38,6 @@ namespace Time8A {
   static inline void disarm(unsigned long& start) { start = 0; }
   static inline bool isArmed(unsigned long start) { return start != 0; }
 
-} // namespace AsyncTime
+} // namespace Time8A
 
 #endif // FELIX8A_TIME_8A_H

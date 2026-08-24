@@ -75,6 +75,7 @@ wasReleased	KEYWORD2
 wasClicked	KEYWORD2
 wasDoubleClicked	KEYWORD2
 wasTripleClicked	KEYWORD2
+wasQuadrupleClicked KEYWORD2
 wasHeld	KEYWORD2
 setHoldTime	KEYWORD2
 setMultiClickTime KEYWORD2

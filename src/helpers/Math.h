@@ -4,7 +4,6 @@
 #include <Arduino.h>
 
 namespace Felix8A {
-
   namespace Math {
 
     // Clamping: Keeps a value within a range.
@@ -44,10 +43,13 @@ namespace Felix8A {
       // if (value < 0) value += range;
       // return value + minVal;
 
-      while (value < minVal)
+      while (value < minVal) {
         value += range;
-      while (value >= maxVal)
+      }
+
+      while (value >= maxVal) {
         value -= range;
+      }
 
       return value;
     }
@@ -58,7 +60,6 @@ namespace Felix8A {
     }
 
   } // namespace Math
-
 } // namespace Felix8A
 
 #endif // FELIX8A_MATH_H
