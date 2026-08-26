@@ -321,25 +321,32 @@ void loop() {
   button.update();
 
   if (button.wasClicked()) {
-    currentMode++; buttonEventActivated = true;
+    currentMode++;
+    buttonEventActivated = true;
     saveSettings();
   }
 
   if (button.wasDoubleClicked()) {
-    currentMode--; buttonEventActivated = true;
+    currentMode--;
+    buttonEventActivated = true;
     saveSettings();
   }
 
   if (button.wasTripleClicked()) {
-    isAnimated = !isAnimated; buttonEventActivated = true;
+    isAnimated = !isAnimated;
+    buttonEventActivated = true;
+  }
+
+  if (button.wasQuadrupleClicked()) {
+    animChase = !animChase;
+    buttonEventActivated = true;
   }
 
   if (button.wasHeld()) {
-    currentColor++; buttonEventActivated = true;
+    currentColor++;
+    buttonEventActivated = true;
     saveSettings();
   }
-
-  // Space for Quadruple Click or Long Press
 
   updateMode(currentMode, currentColor, isAnimated, buttonEventActivated);
   buttonEventActivated = false;
@@ -373,13 +380,16 @@ void loop() {
         buttonEventActivated = true;
         break;
 
+      case Felix8A::Button::Event::QuadrupleClick:
+        animChase = !animChase;
+        buttonEventActivated = true;
+        break;
+
       case Felix8A::Button::Event::Hold:
         currentColor++;
         buttonEventActivated = true;
         saveSettings();
         break;
-
-      // Space for Quadruple Click or Long Press
 
       default: break;
     }
