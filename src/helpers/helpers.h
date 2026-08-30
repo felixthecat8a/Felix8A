@@ -1,5 +1,5 @@
-#ifndef FELIX8A_MATH_H
-#define FELIX8A_MATH_H
+#ifndef FELIX8A_HELPERS_H
+#define FELIX8A_HELPERS_H
 
 #include <Arduino.h>
 
@@ -56,7 +56,6 @@ namespace Felix8A {
   template <typename T> static inline T wrapInclusive(T value, T minVal, T maxVal) {
     return wrap(value, minVal, maxVal + 1);
   }
-
 } // namespace Felix8A
 
-#endif // FELIX8A_MATH_H
+#endif // FELIX8A_HELPERS_H

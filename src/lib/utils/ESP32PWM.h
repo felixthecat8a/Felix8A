@@ -16,9 +16,9 @@
 namespace Felix8A {
   namespace ESP32PWM {
 
-    static bool channelUsed[16] = {false};
+    inline bool channelUsed[16] = {false};
 
-    int8_t allocateChannel() {
+    inline int8_t allocateChannel() {
       for (int i = 0; i < 16; i++) {
         if (!channelUsed[i]) {
           channelUsed[i] = true;
@@ -28,11 +28,11 @@ namespace Felix8A {
       return -1;
     }
 
-    void freeChannel(int8_t channel) {
+    inline void freeChannel(int8_t channel) {
       if (channel >= 0 && channel < 16) { channelUsed[channel] = false; }
     }
 
-    void begin(uint8_t pin, int8_t& channel) {
+    inline void begin(uint8_t pin, int8_t& channel) {
   #if ESP_ARDUINO_VERSION_MAJOR >= 3
       ledcAttach(pin, ESP32_PWM_FREQ, ESP32_PWM_RES);
   #else
@@ -45,7 +45,7 @@ namespace Felix8A {
   #endif
     }
 
-    void write(uint8_t pin, int8_t channel, uint8_t value) {
+    inline void write(uint8_t pin, int8_t channel, uint8_t value) {
   #if ESP_ARDUINO_VERSION_MAJOR >= 3
       ledcWrite(pin, value);
   #else
@@ -53,7 +53,7 @@ namespace Felix8A {
   #endif
     }
 
-    void detach(uint8_t pin, int8_t channel) {
+    inline void detach(uint8_t pin, int8_t channel) {
   #if ESP_ARDUINO_VERSION_MAJOR < 3
       if (channel >= 0) { ledcDetachPin(pin); }
   #endif
