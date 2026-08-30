@@ -6,7 +6,6 @@ PWM	KEYWORD1
 RGB	KEYWORD1
 Button	KEYWORD1
 Time8A KEYWORD1
-Math KEYWORD1
 
 hex KEYWORD2
 rgb KEYWORD2
@@ -15,13 +14,15 @@ red KEYWORD2
 green   KEYWORD2
 blue    KEYWORD2
 scale   KEYWORD2
+lerp  KEYWORD2
 blend   KEYWORD2
+hsv KEYWORD2
+heat  KEYWORD2
 
 size  KEYWORD2
 count KEYWORD2
 data  KEYWORD2
 reversed  KEYWORD2
-lerp  KEYWORD2
 
 BLACK LITERAL1
 GRAY  LITERAL1
@@ -67,19 +68,6 @@ NAVY  LITERAL1
 PURPLE  LITERAL1
 ARDUINO_TEAL  LITERAL1
 
-isDown	KEYWORD2
-isHeld	KEYWORD2
-poll	KEYWORD2
-wasPressed	KEYWORD2
-wasReleased	KEYWORD2
-wasClicked	KEYWORD2
-wasDoubleClicked	KEYWORD2
-wasTripleClicked	KEYWORD2
-wasQuadrupleClicked KEYWORD2
-wasHeld	KEYWORD2
-setHoldTime	KEYWORD2
-setMultiClickTime KEYWORD2
-
 begin	KEYWORD2
 on	KEYWORD2
 off	KEYWORD2
@@ -116,6 +104,19 @@ setViolet	KEYWORD2
 setMagenta	KEYWORD2
 setRose KEYWORD2
 
+isDown	KEYWORD2
+isHeld	KEYWORD2
+poll	KEYWORD2
+wasPressed	KEYWORD2
+wasReleased	KEYWORD2
+wasClicked	KEYWORD2
+wasDoubleClicked	KEYWORD2
+wasTripleClicked	KEYWORD2
+wasQuadrupleClicked KEYWORD2
+wasHeld	KEYWORD2
+setHoldTime	KEYWORD2
+setMultiClickTime KEYWORD2
+
 every KEYWORD2
 after KEYWORD2
 reset KEYWORD2
@@ -123,7 +124,6 @@ once  KEYWORD2
 arm KEYWORD2
 disarm  KEYWORD2
 isArmed KEYWORD2
-
 
 clamp KEYWORD2
 inverseLerp KEYWORD2
