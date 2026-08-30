@@ -4,6 +4,7 @@
 #include <Arduino.h>
 
 #include "utils/ColorRGB.h"
+#include "utils/ESP32PWM.h"
 
 #ifdef ARDUINO_ARCH_AVR
   #include <avr/pgmspace.h>

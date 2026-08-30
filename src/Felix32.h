@@ -138,6 +138,9 @@ namespace Felix8A {
   static const Palette Palette6(Sets::Spectrum6, FELIX32_ARRAY_SIZE(Sets::Spectrum6));
   static const Palette Palette3(Sets::Spectrum3, FELIX32_ARRAY_SIZE(Sets::Spectrum3));
 
+
+
+
   static inline uint32_t ColorMap(float value, float min, float max, uint32_t start, uint32_t end) {
     if (min >= max) { return start; }
 
@@ -162,61 +165,6 @@ namespace Felix8A {
     uint8_t t = ((value - center) * 255.0f) / (max - center);
     return Color::blend(cMid, cHigh, t);
   }
-
-  class ColorMap2 {
-  public:
-    static inline uint32_t set(float value, float min, float max, uint32_t start, uint32_t end) {
-      if (min >= max) { return start; }
-
-      value = constrain(value, min, max);
-
-      uint8_t t = ((value - min) * 255.0f) / (max - min);
-      return blend(start, end, t);
-    }
-
-    static inline uint32_t set(
-        float    value,
-        float    min,
-        float    center,
-        float    max,
-        uint32_t cLow,
-        uint32_t cMid,
-        uint32_t cHigh
-    ) {
-      if (min >= center || center >= max) { return cLow; }
-
-      value = constrain(value, min, max);
-
-      if (value <= center) {
-        uint8_t t = ((value - min) * 255.0f) / (center - min);
-        return blend(cLow, cMid, t);
-      }
-
-      uint8_t t = ((value - center) * 255.0f) / (max - center);
-      return blend(cMid, cHigh, t);
-    }
-
-  private:
-    static constexpr uint32_t hex(uint8_t r, uint8_t g, uint8_t b) {
-      return (uint32_t(r) << 16) | (uint32_t(g) << 8) | b;
-    }
-
-    static constexpr uint8_t red(uint32_t c) { return (c >> 16) & 0xFF; }
-    static constexpr uint8_t green(uint32_t c) { return (c >> 8) & 0xFF; }
-    static constexpr uint8_t blue(uint32_t c) { return c & 0xFF; }
-
-    static inline uint32_t blend(uint32_t a, uint32_t b, uint8_t t) {
-      auto lerp = [t](uint8_t x, uint8_t y) -> uint8_t {
-        return x + ((int32_t(y) - int32_t(x)) * t) / 255;
-      };
-
-      uint8_t redBlend   = lerp(red(a), red(b));
-      uint8_t greenBlend = lerp(green(a), green(b));
-      uint8_t blueBlend  = lerp(blue(a), blue(b));
-
-      return hex(redBlend, greenBlend, blueBlend);
-    }
-  };
 
 } // namespace Felix8A
 

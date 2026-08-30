@@ -2,34 +2,6 @@
 
 namespace Felix8A {
 
-  /* ESP32 Helpers */
-
-#ifdef ESP32
-  static bool _ledcChannelUsed[16] = {false};
-
-  static int8_t allocateLEDCChannel() {
-    for (int i = 0; i < 16; i++) {
-      if (!_ledcChannelUsed[i]) {
-        _ledcChannelUsed[i] = true;
-        return i;
-      }
-    }
-    return -1; // none available
-  }
-
-  static void freeLEDCChannel(int8_t ch) {
-    if (ch >= 0 && ch < 16) { _ledcChannelUsed[ch] = false; }
-  }
-#endif
-
-#ifndef ESP32_PWM_FREQ
-  #define ESP32_PWM_FREQ 5000 // 5 kHz frequency
-#endif
-
-#ifndef ESP32_PWM_RES
-  #define ESP32_PWM_RES 8 // 8-bit resolution
-#endif
-
   /* PWM LED */
 
   PWM::PWM(uint8_t pin, bool activeLow, LED_t type, int8_t channel)
@@ -37,9 +9,7 @@ namespace Felix8A {
 
   PWM::~PWM() {
 #ifdef ESP32
-  #if ESP_ARDUINO_VERSION_MAJOR < 3
-    if (_type == ESP32_LED && _channel >= 0) { freeLEDCChannel(_channel); }
-  #endif
+    if (_type == ESP32_LED) { ESP32PWM::freeChannel(_channel); }
 #endif
   }
 
@@ -49,16 +19,7 @@ namespace Felix8A {
 
       case ESP32_LED:
 #ifdef ESP32
-  #if ESP_ARDUINO_VERSION_MAJOR >= 3
-        ledcAttach(_pin, ESP32_PWM_FREQ, ESP32_PWM_RES);
-  #else
-        if (_channel < 0) {
-          _channel = allocateLEDCChannel();
-          if (_channel < 0) { return; }
-        }
-        ledcSetup(_channel, ESP32_PWM_FREQ, ESP32_PWM_RES);
-        ledcAttachPin(_pin, _channel);
-  #endif
+        ESP32PWM::begin(_pin, _channel);
 #endif
         break;
     }
@@ -82,11 +43,8 @@ namespace Felix8A {
 
   void PWM::setPin(uint8_t pin) {
 #ifdef ESP32
-  #if ESP_ARDUINO_VERSION_MAJOR < 3
-    if (_type == ESP32_LED && _channel >= 0) { ledcDetachPin(_pin); }
-  #endif
+    if (_type == ESP32_LED) { ESP32PWM::detach(_pin, _channel); }
 #endif
-
     _pin = pin;
     begin();
   }
@@ -102,11 +60,7 @@ namespace Felix8A {
 
       case ESP32_LED:
 #ifdef ESP32
-  #if ESP_ARDUINO_VERSION_MAJOR >= 3
-        ledcWrite(_pin, value);
-  #else
-        ledcWrite(_channel, value);
-  #endif
+        ESP32PWM::write(_pin, _channel, value);
 #endif
         break;
     }
@@ -167,38 +121,16 @@ namespace Felix8A {
 
     float r, g, b;
 
+    // clang-format off
     switch (sector) {
-      case 0:
-        r = _val;
-        g = t;
-        b = p;
-        break;
-      case 1:
-        r = q;
-        g = _val;
-        b = p;
-        break;
-      case 2:
-        r = p;
-        g = _val;
-        b = t;
-        break;
-      case 3:
-        r = p;
-        g = q;
-        b = _val;
-        break;
-      case 4:
-        r = t;
-        g = p;
-        b = _val;
-        break;
-      default:
-        r = _val;
-        g = p;
-        b = q;
-        break;
+      case 0: r = _val; g = t; b = p; break;
+      case 1: r = q; g = _val; b = p; break;
+      case 2: r = p; g = _val; b = t; break;
+      case 3: r = p; g = q; b = _val; break;
+      case 4: r = t; g = p; b = _val; break;
+      default: r = _val; g = p; b = q; break;
     }
+    // clang-format on
 
     uint8_t red   = constrain(roundf(r * PWM_MAX), 0, PWM_MAX);
     uint8_t green = constrain(roundf(g * PWM_MAX), 0, PWM_MAX);
