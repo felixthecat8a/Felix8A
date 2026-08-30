@@ -62,8 +62,8 @@ void loadSettings() {
 }
 
 void saveSettings() {
-  currentMode = Felix8A::Math::wrap(currentMode, 0, numModes);
-  currentColor = Felix8A::Math::wrap(currentColor, 0, numColors);
+  currentMode = Felix8A::wrap(currentMode, 0, numModes);
+  currentColor = Felix8A::wrap(currentColor, 0, numColors);
 
   EEPROM.update(EEPROM_MODE_ADDR, currentMode);
   EEPROM.update(EEPROM_COLOR_ADDR, currentColor);
