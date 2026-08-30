@@ -2,10 +2,12 @@
 #define FELIX8A_H
 
 #include "Felix32.h"
-#include "helpers/helpers.h"
-#include "helpers/Time8A.h"
+
 #include "lib/FelixButton.h"
 #include "lib/FelixLED.h"
 #include "lib/FelixPWM.h"
+
+#include "helpers/Time8A.h"
+#include "helpers/helpers.h"
 
 #endif // FELIX8A_H
