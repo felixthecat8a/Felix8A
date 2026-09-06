@@ -9,14 +9,16 @@ namespace Felix8A {
   public:
     explicit DigitalInput(uint8_t pin, bool activeLow = true) : _pin(pin), _activeLow(activeLow) {}
 
-    void begin(bool usePullup = true) {
+    virtual ~DigitalInput() = default;
+
+    virtual void begin(bool usePullup = true) {
       if (_activeLow && usePullup) {
         pinMode(_pin, INPUT_PULLUP);
       } else {
         pinMode(_pin, INPUT);
       }
 
-      _state = readRaw();
+      update();
     }
 
     bool read() const {
@@ -24,9 +26,14 @@ namespace Felix8A {
       return _activeLow ? !raw : raw;
     }
 
+    virtual void update() { _state = read(); }
+
     bool state() const { return _state; }
-    void update() { _state = read(); }
-    void setActiveLow(bool v) { _activeLow = v; }
+
+    void setActiveLow(bool v) {
+      _activeLow = v;
+      update();
+    }
 
   protected:
     bool readRaw() const { return digitalRead(_pin); }

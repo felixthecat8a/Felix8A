@@ -47,18 +47,17 @@ namespace Felix8A {
     bool wasHeld() { return consume(Event::Hold); }
 
     /* Configuration */
-    void setHoldTime(uint16_t ms) { _holdTime = ms; }
-    void setMultiClickTime(uint16_t ms) { _multiClickTime = ms; }
+    void     setHoldTime(uint16_t ms) { _holdTime = ms; }
+    uint16_t holdTime() const { return _holdTime; }
+    void     setMultiClickTime(uint16_t ms) { _multiClickTime = ms; }
+    uint16_t multiClickTime() const { return _multiClickTime; }
+    void     setDebounceTime(uint16_t ms) { _debounceTime = ms; }
+    uint16_t debounceTime() const { return _debounceTime; }
 
   private:
     enum class State : uint8_t { Idle, Pressed, Held, WaitingMulti };
 
-    void handleStableChange(uint32_t now);
-    void handleHold(uint32_t now);
-    void handleClickTimeout(uint32_t now);
-
-    void resetClicks() { _clickCount = 0; }
-
+    /* Consume Event */
     bool consume(Event e) {
       if (_event == e) {
         _event = Event::None;
@@ -67,10 +66,17 @@ namespace Felix8A {
       return false;
     }
 
+    /* State machine */
+    void handleStableChange(uint32_t now);
+    void handleHold(uint32_t now);
+    void handleClickTimeout(uint32_t now);
+
+    void resetClicks() { _clickCount = 0; }
+
     /* Data */
     DigitalInput _input;
-    uint16_t     _debounceTime;
 
+    uint16_t _debounceTime;
     uint16_t _holdTime       = 1000;
     uint16_t _multiClickTime = 300;
 
@@ -86,6 +92,25 @@ namespace Felix8A {
     bool _holdFired   = false;
 
     uint8_t _clickCount = 0;
+  };
+
+  /* Limit Switch */
+
+  enum class LimitSwitchContactType { NO, NC };
+
+  class LimitSwitch : public DigitalInput {
+  public:
+    explicit LimitSwitch(uint8_t pin, LimitSwitchContactType type = LimitSwitchContactType::NO)
+        : DigitalInput(pin, true), _type(type) {}
+
+    bool triggered() const { return _type == LimitSwitchContactType::NO ? state() : !state(); }
+
+    LimitSwitchContactType contactType() const { return _type; }
+
+    void setContactType(LimitSwitchContactType type) { _type = type; }
+
+  private:
+    LimitSwitchContactType _type;
   };
 
 } // namespace Felix8A

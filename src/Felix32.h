@@ -6,8 +6,6 @@
 #include "color/Color32.h"
 #include "color/Palette.h"
 
-#include "helpers/helpers.h"
-
 #define FELIX32_ARRAY_SIZE(x) (sizeof(x) / sizeof(x[0]))
 
 namespace Felix8A {
@@ -140,13 +138,12 @@ namespace Felix8A {
   static const Palette Palette6(Sets::Spectrum6, FELIX32_ARRAY_SIZE(Sets::Spectrum6));
   static const Palette Palette3(Sets::Spectrum3, FELIX32_ARRAY_SIZE(Sets::Spectrum3));
 
-
-
+  /* Trying a ColorMap Function */
 
   static inline uint32_t ColorMap(float value, float min, float max, uint32_t start, uint32_t end) {
     if (min >= max) { return start; }
 
-    value = clamp(value, min, max);
+    value = constrain(value, min, max);
 
     uint8_t t = ((value - min) * 255.0f) / (max - min);
     return Color::blend(start, end, t);
@@ -157,7 +154,7 @@ namespace Felix8A {
   ) {
     if (min >= center || center >= max) { return cLow; }
 
-    value = clamp(value, min, max);
+    value = constrain(value, min, max);
 
     if (value <= center) {
       uint8_t t = ((value - min) * 255.0f) / (center - min);

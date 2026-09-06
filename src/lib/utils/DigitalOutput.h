@@ -12,11 +12,12 @@ namespace Felix8A {
 
     void begin() {
       pinMode(_pin, OUTPUT);
-      write(false); // default OFF
+      write(false);
     }
 
     void write(bool on) {
-      _state     = on;
+      _state = on;
+
       bool level = _activeLow ? !on : on;
       digitalWrite(_pin, level ? HIGH : LOW);
     }
@@ -25,11 +26,16 @@ namespace Felix8A {
 
     void toggle() { write(!_state); }
 
-    void setActiveLow(bool v) { _activeLow = v; }
+    void setActiveLow(bool v) {
+      _activeLow = v;
+      write(_state);
+    }
+
     bool isActiveLow() const { return _activeLow; }
 
     uint8_t pin() const { return _pin; }
-    void    setPin(uint8_t pin) { _pin = pin; }
+
+    void setPin(uint8_t pin) { _pin = pin; }
 
   protected:
     uint8_t _pin;

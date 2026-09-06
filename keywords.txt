@@ -115,7 +115,11 @@ wasTripleClicked	KEYWORD2
 wasQuadrupleClicked KEYWORD2
 wasHeld	KEYWORD2
 setHoldTime	KEYWORD2
+holdTime  KEYWORD2
 setMultiClickTime KEYWORD2
+multiClickTime  KEYWORD2
+setDebounceTime KEYWORD2
+debounceTime  KEYWORD2
 
 every KEYWORD2
 after KEYWORD2
