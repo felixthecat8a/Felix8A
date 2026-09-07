@@ -111,10 +111,10 @@ void firefly(uint32_t color) {
   lightString->show();
 }
 /***** Mode 0: Solid Color *****/
-void solidColor(int colorIndex, bool isAnim, bool wasUdated) {
+void solidColor(int colorIndex, bool isAnim, bool wasUpdated) {
   if (isAnim) {
     firefly(ColorPalette[colorIndex]);
-  } else if (wasUdated) {
+  } else if (wasUpdated) {
     lightString->fill(ColorPalette[colorIndex]);
     lightString->show();
   }
@@ -154,11 +154,11 @@ void setColorGradient(uint32_t color, int step) {
   lightString->show();
 }
 /***** Mode 1: Color and White Gradient Chase Animation *****/
-void colorGradientChase(int colorIndex, bool wasUdated) {
+void colorGradientChase(int colorIndex, bool wasUpdated) {
   static unsigned long lastUpdate = 0;
   static int animStep = 0;
 
-  if (wasUdated) animStep = 0;
+  if (wasUpdated) animStep = 0;
   int numGradientPhases = 5;
 
   if (Time8A::every(150, lastUpdate)) {
@@ -167,10 +167,10 @@ void colorGradientChase(int colorIndex, bool wasUdated) {
   }
 }
 /***** Mode 1: Color and White Gradient *****/
-void colorGradient(int colorIndex, bool isAnim, bool wasUdated) {
+void colorGradient(int colorIndex, bool isAnim, bool wasUpdated) {
   if (isAnim) {
-    colorGradientChase(colorIndex, wasUdated);
-  } else if (wasUdated) {
+    colorGradientChase(colorIndex, wasUpdated);
+  } else if (wasUpdated) {
     setColorGradient(ColorPalette[colorIndex], 0);
   }
 }
@@ -242,11 +242,11 @@ void setMultiColor(Felix8A::Palette palette, int step) {
   lightString->show();
 }
 /***** Mode 2: MultiColor Chase Function *****/
-void multiColorChase(Felix8A::Palette palette, bool wasUdated) {
+void multiColorChase(Felix8A::Palette palette, bool wasUpdated) {
   static unsigned long lastAnimUpdate = 0;
   static int colorStep = 0;
 
-  if (wasUdated) colorStep = 0;
+  if (wasUpdated) colorStep = 0;
 
   if (Time8A::every(150, lastAnimUpdate)) {
     setMultiColor(palette, colorStep);
@@ -254,14 +254,14 @@ void multiColorChase(Felix8A::Palette palette, bool wasUdated) {
   }
 }
 /***** Mode 2: MultiColor Mode Function *****/
-void multiColor(Felix8A::Palette palette, bool isAnim, bool wasUdated) {
+void multiColor(Felix8A::Palette palette, bool isAnim, bool wasUpdated) {
   if (isAnim) {
     if (chaseAnimation) {
-      multiColorChase(palette, wasUdated);
+      multiColorChase(palette, wasUpdated);
     } else {
       multicolorTwinkle(palette);
     }
-  } else if (wasUdated) {
+  } else if (wasUpdated) {
     setMultiColor(palette, 0);
   }
 }
@@ -271,8 +271,8 @@ void multiColor(Felix8A::Palette palette, bool isAnim, bool wasUdated) {
 
 ### Lights Off Function
 ```cpp
-void lightsOff(bool wasUdated) {
-  if (wasUdated) {
+void lightsOff(bool wasUpdated) {
+  if (wasUpdated) {
     lightString->clear();
     lightString->show();
   }
