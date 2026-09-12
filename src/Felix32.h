@@ -13,6 +13,13 @@ namespace Felix8A {
 
   namespace Sets {
 
+    static const uint32_t ChristmasTree4[] = {
+        Color::RED,
+        Color::ORANGE,
+        Color::GREEN,
+        Color::BLUE,
+    };
+
     static const uint32_t ChristmasTree5[] = {
         Color::RED,
         Color::ORANGE,
@@ -122,6 +129,10 @@ namespace Felix8A {
   } // namespace Sets
 
   static const Palette ChristmasTree(
+      Sets::ChristmasTree4, FELIX32_ARRAY_SIZE(Sets::ChristmasTree4)
+  );
+
+  static const Palette ChristmasLights(
       Sets::ChristmasTree5, FELIX32_ARRAY_SIZE(Sets::ChristmasTree5)
   );
 
