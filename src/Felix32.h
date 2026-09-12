@@ -13,14 +13,14 @@ namespace Felix8A {
 
   namespace Sets {
 
-    static const uint32_t ChristmasTree4[] = {
+    static const uint32_t ChristmasLights4[] = {
         Color::RED,
         Color::ORANGE,
         Color::GREEN,
         Color::BLUE,
     };
 
-    static const uint32_t ChristmasTree5[] = {
+    static const uint32_t ChristmasLights5[] = {
         Color::RED,
         Color::ORANGE,
         Color::GREEN,
@@ -129,11 +129,11 @@ namespace Felix8A {
   } // namespace Sets
 
   static const Palette ChristmasTree(
-      Sets::ChristmasTree4, FELIX32_ARRAY_SIZE(Sets::ChristmasTree4)
+      Sets::ChristmasLights4, FELIX32_ARRAY_SIZE(Sets::ChristmasLights4)
   );
 
   static const Palette ChristmasLights(
-      Sets::ChristmasTree5, FELIX32_ARRAY_SIZE(Sets::ChristmasTree5)
+      Sets::ChristmasLights5, FELIX32_ARRAY_SIZE(Sets::ChristmasLights5)
   );
 
   static const Palette Freedom(Sets::Independence3, FELIX32_ARRAY_SIZE(Sets::Independence3));
