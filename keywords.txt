@@ -29,7 +29,6 @@ red KEYWORD2
 green KEYWORD2
 blue  KEYWORD2
 scale KEYWORD2
-lerp8 KEYWORD2
 blend KEYWORD2
 hsv KEYWORD2
 heat  KEYWORD2
@@ -93,6 +92,10 @@ multiClickTime  KEYWORD2
 setDebounceTime KEYWORD2
 debounceTime  KEYWORD2
 
+#######################################
+# Functions (KEYWORD2)
+#######################################
+
 every KEYWORD2
 after KEYWORD2
 reset KEYWORD2
@@ -100,10 +103,6 @@ once  KEYWORD2
 arm KEYWORD2
 disarm  KEYWORD2
 isArmed KEYWORD2
-
-#######################################
-# Functions (KEYWORD2)
-#######################################
 
 clamp KEYWORD2
 inverseLerp KEYWORD2
