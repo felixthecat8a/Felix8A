@@ -1,7 +1,7 @@
 #ifndef FELIX8A_H
 #define FELIX8A_H
 
-#include "Felix32.h"
+#include "color/Felix32.h"
 
 #include "lib/FelixButton.h"
 #include "lib/FelixLED.h"

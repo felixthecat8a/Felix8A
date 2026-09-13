@@ -3,8 +3,8 @@
 
 #include <Arduino.h>
 
-#include "color/Color32.h"
-#include "color/Palette.h"
+#include "Color32.h"
+#include "Palette.h"
 
 #define FELIX32_ARRAY_SIZE(x) (sizeof(x) / sizeof(x[0]))
 

@@ -35,22 +35,22 @@ namespace Felix8A {
       uint32_t c1 = _colors[index];
       uint32_t c2 = _colors[(index + 1) % _size];
 
-      return blend(c1, c2, frac);
+      return paletteBlend(c1, c2, frac);
     }
 
   private:
     const uint32_t *_colors;
     uint8_t         _size;
 
-    static constexpr uint8_t lerp8(uint8_t a, uint8_t b, uint8_t t) {
+    static constexpr uint8_t paletteLerp(uint8_t a, uint8_t b, uint8_t t) {
       return a + ((uint16_t)(b - a) * t) / 255;
     }
 
-    static constexpr uint32_t blend(uint32_t c1, uint32_t c2, uint8_t t) {
+    static constexpr uint32_t paletteBlend(uint32_t c1, uint32_t c2, uint8_t t) {
       return (
-          (uint32_t(lerp8((c1 >> 16) & 0xFF, (c2 >> 16) & 0xFF, t)) << 16) |
-          (uint32_t(lerp8((c1 >> 8) & 0xFF, (c2 >> 8) & 0xFF, t)) << 8) |
-          (uint32_t(lerp8((c1 >> 0) & 0xFF, (c2 >> 0) & 0xFF, t)) << 0)
+          (uint32_t(paletteLerp((c1 >> 16) & 0xFF, (c2 >> 16) & 0xFF, t)) << 16) |
+          (uint32_t(paletteLerp((c1 >> 8) & 0xFF, (c2 >> 8) & 0xFF, t)) << 8) |
+          (uint32_t(paletteLerp((c1 >> 0) & 0xFF, (c2 >> 0) & 0xFF, t)) << 0)
       );
     }
   };

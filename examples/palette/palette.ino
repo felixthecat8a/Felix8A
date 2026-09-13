@@ -30,31 +30,29 @@
 
 #include <Felix8A.h>
 
-const uint32_t colorArray[] = {
-    Felix8A::Color::RED,
-    Felix8A::Color::ORANGE,
-    Felix8A::Color::GREEN,
-    Felix8A::Color::BLUE,
-    Felix8A::Color::WHITE
-};
+const uint32_t colorArray[] =
+    {Felix8A::Color::RED,
+     Felix8A::Color::ORANGE,
+     Felix8A::Color::GREEN,
+     Felix8A::Color::BLUE,
+     Felix8A::Color::WHITE};
 
-const Felix8A::Palette ColorPalette(colorArray);
-const int numColors = ColorPalette.size();
+const Felix8A::Palette colorPalette(colorArray);
 
-#define RED_PIN 9
+const int numColors = colorPalette.size();
+
+#define RED_PIN   9
 #define GREEN_PIN 10
-#define BLUE_PIN 11
+#define BLUE_PIN  11
 Felix8A::RGB rgb(RED_PIN, GREEN_PIN, BLUE_PIN);
 
 bool commonAnode = true;
 
-void setup() {
-  rgb.begin();
-}
+void setup() { rgb.begin(); }
 
 void loop() {
-  for (int i = 0; i < ColorPalette.size(); i++) {
-    rgb.setHex(ColorPalette[i]);
+  for (int i = 0; i < colorPalette.size(); i++) {
+    rgb.setHex(colorPalette[i]);
     delay(1000);
   }
 }

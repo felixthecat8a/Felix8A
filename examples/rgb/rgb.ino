@@ -28,16 +28,17 @@
 #include <Felix8A.h>
 
 /* RGB LED Setup: Use PWM pins denoted by a ~ symbol. */
-#define RED_PIN 9
+#define RED_PIN   9
 #define GREEN_PIN 10
-#define BLUE_PIN 11
+#define BLUE_PIN  11
 Felix8A::RGB rgb(RED_PIN, GREEN_PIN, BLUE_PIN);
 
 /* Pushbutton Setup */
 #define PUSHBUTTON_PIN 2
 Felix8A::Button bttn(PUSHBUTTON_PIN);
-const int maxIndex = 13;
-int currentIndex = 0;
+
+constexpr int maxMode     = 13;
+int currentMode = 0;
 
 void setup() {
   rgb.begin();
@@ -50,21 +51,25 @@ void setup() {
 void loop() {
   bttn.update();
 
-  if (bttn.wasClicked()) {
-    currentIndex++;
-    if (currentIndex > maxIndex) currentIndex = 0;
-  }
+  // if (bttn.wasClicked()) {
+  //   currentMode++;
+  //   if (currentMode > maxMode) currentMode = 0;
+  // }
+
+  // if (bttn.wasDoubleClicked()) {
+  //   currentMode--;
+  //   if (currentMode < 0) currentMode = maxMode;
+  // }
+
+  if (bttn.wasClicked()) { currentMode = Felix8A::wrapInclusive(currentMode + 1, 0, maxMode); }
 
   if (bttn.wasDoubleClicked()) {
-    currentIndex--;
-    if (currentIndex < 0) currentIndex = maxIndex;
+    currentMode = Felix8A::wrapInclusive(currentMode - 1, 0, maxMode);
   }
 
-  if (bttn.wasHeld()) {
-    currentIndex = 0;
-  }
+  if (bttn.wasHeld()) { currentMode = 0; }
 
-  switch (currentIndex) {
+  switch (currentMode) {
     case 0: rgb.off(); break;
     case 1: rgb.setRed(); break;
     case 2: rgb.setOrange(); break;
