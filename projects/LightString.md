@@ -29,20 +29,20 @@ const uint32_t colorArray[] = {
   Felix8A::Color::BLUE,
   Felix8A::Color::MAGENTA,
 };
-const Felix8A::Palette ColorPalette(colorArray);
+const Felix8A::Palette colorPalette(colorArray);
 ```
 
 ### Optional Preset Multi-color Palette
 ```cpp
-const Felix8A::Palette ColorPalette = Felix8A::Palette6;
+const Felix8A::Palette colorPalette = Felix8A::Palette6;
 ```
 
 ### Initial Variables for Main Solid Color Palette
 ```cpp
-const int numColors = ColorPalette.size();
-const int numModes = 8;
-int currentMode = 0;
-int currentColor = 0;
+const uint8_t numColors = colorPalette.size();
+constexpr int8_t numModes = 8;
+int8_t currentMode = 0;
+uint8_t currentColor = 0;
 bool isAnimated = false;
 bool chaseAnimation = false;
 bool buttonEventActivated = true;
@@ -50,20 +50,20 @@ bool buttonEventActivated = true;
 
 ### EEPROM Setup using `Felix8A::Math::wrap`
 ```cpp
-#define EEPROM_MODE_ADDR 0
-#define EEPROM_COLOR_ADDR 1
+constexpr uint8_t EEPROM_MODE_ADDR  = 0;
+constexpr uint8_t EEPROM_COLOR_ADDR = 1;
 
 void loadSettings() {
   EEPROM.get(EEPROM_MODE_ADDR, currentMode);
   EEPROM.get(EEPROM_COLOR_ADDR, currentColor);
 
-  if (currentMode < 0 || currentMode >= numModes) currentMode = 0;
-  if (currentColor < 0 || currentColor >= numColors) currentColor = 0;
+  if (currentMode < 0 || currentMode >= numModes) { currentMode = 0; }
+  if (currentColor >= numColors) { currentColor = 0; }
 }
 
 void saveSettings() {
-  currentMode = Felix8A::wrap(currentMode, 0, numModes);
-  currentColor = Felix8A::wrap(currentColor, 0, numColors);
+  currentMode = Felix8A::wrap(currentMode, static_cast<int8_t>(0), numModes);
+  currentColor = Felix8A::wrap(currentColor, static_cast<uint8_t>(0), numColors);
 
   EEPROM.update(EEPROM_MODE_ADDR, currentMode);
   EEPROM.update(EEPROM_COLOR_ADDR, currentColor);
@@ -113,9 +113,9 @@ void firefly(uint32_t color) {
 /***** Mode 0: Solid Color *****/
 void solidColor(int colorIndex, bool isAnim, bool wasUpdated) {
   if (isAnim) {
-    firefly(ColorPalette[colorIndex]);
+    firefly(colorPalette[colorIndex]);
   } else if (wasUpdated) {
-    lightString->fill(ColorPalette[colorIndex]);
+    lightString->fill(colorPalette[colorIndex]);
     lightString->show();
   }
 }
@@ -162,7 +162,7 @@ void colorGradientChase(int colorIndex, bool wasUpdated) {
   int numGradientPhases = 5;
 
   if (Time8A::every(150, lastUpdate)) {
-    setColorGradient(ColorPalette[colorIndex], animStep);
+    setColorGradient(colorPalette[colorIndex], animStep);
     animStep = (animStep + 1) % numGradientPhases;
   }
 }
@@ -171,7 +171,7 @@ void colorGradient(int colorIndex, bool isAnim, bool wasUpdated) {
   if (isAnim) {
     colorGradientChase(colorIndex, wasUpdated);
   } else if (wasUpdated) {
-    setColorGradient(ColorPalette[colorIndex], 0);
+    setColorGradient(colorPalette[colorIndex], 0);
   }
 }
 ```
@@ -285,7 +285,7 @@ void updateMode(int mode, int color, bool anim, bool stateChanged) {
   switch (mode) {
     case 0: solidColor(color, anim, stateChanged); break;
     case 1: colorGradient(color, anim, stateChanged); break;
-    case 2: multiColor(ColorPalette, anim, stateChanged); break;
+    case 2: multiColor(colorPalette, anim, stateChanged); break;
     case 3: multiColor(Felix8A::ChristmasTree, anim, stateChanged); break;
     case 4: multiColor(Felix8A::Sunset, anim, stateChanged); break;
     case 5: multiColor(Felix8A::Forest, anim, stateChanged); break;
