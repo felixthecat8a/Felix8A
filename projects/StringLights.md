@@ -1,19 +1,21 @@
-# `LightString.ino`
+# `StringLights.ino`
 
 An Arduino sketch for controlling colors and animations on a WS2812 LED string using the `Felix8A` library.
 
 ## Sketch & Hardware Setup using `Felix8A::Button`
 ```cpp
-#include <Adafruit_NeoPixel.h>
 #include <EEPROM.h>
 #include <Felix8A.h>
+#include <Adafruit_NeoPixel.h>
+
 /***** Felix8A::Button Setup *****/
 #define BUTTON_PIN 2
 Felix8A::Button button(BUTTON_PIN);
+
 /***** NeoPixel Setup *****/
-#define LED_PIN  A0
+#define LED_PIN A0
 #define NUM_LEDS 100
-Adafruit_NeoPixel *lightString = nullptr;
+Adafruit_NeoPixel* lightString = nullptr;
 ```
 
 ### Custom Color Array Setup using `Felix8A::Color` & `Felix8A::Palette`
@@ -38,7 +40,7 @@ const Felix8A::Palette colorPalette = Felix8A::Palette6;
 ### Initial Variables for Main Solid Color Palette
 ```cpp
 const uint8_t numColors = colorPalette.size();
-constexpr int8_t numModes = 7;
+constexpr int8_t numModes = 8;
 int8_t currentMode = 0;
 uint8_t currentColor = 0;
 bool isAnimated = false;
@@ -48,7 +50,7 @@ bool buttonEventActivated = true;
 
 ### EEPROM Setup using `Felix8A::Math::wrap`
 ```cpp
-constexpr uint8_t EEPROM_MODE_ADDR = 0;
+constexpr uint8_t EEPROM_MODE_ADDR  = 0;
 constexpr uint8_t EEPROM_COLOR_ADDR = 1;
 
 void loadSettings() {
@@ -70,40 +72,78 @@ void saveSettings() {
 
 ## Color Setting Functions
 
-### Solid Color Setting, Animated Firefly, Gradient & Gradient Chase Functions
+### Solid Color Setting & Animated Solid Color Firefly Functions
+```cpp
+void firefly(uint32_t color) {
+  static uint8_t brightness[NUM_LEDS] = {0};
+  static int8_t direction[NUM_LEDS] = {0}; // 1 = up, -1 = down, 0 = idle
+  static unsigned long lastFireflyUpdate = 0;
+
+  if (!Time8A::every(30, lastFireflyUpdate)) return;
+
+  for (int i = 0; i < NUM_LEDS; i++) {
+    if (direction[i] == 0) {
+      if (random(100) < 3) {
+        brightness[i] = 10;
+        direction[i] = 1;
+      }
+    }
+
+    if (direction[i] != 0) {
+      brightness[i] += direction[i] * 10;
+
+      if (brightness[i] >= 200) {
+        brightness[i] = 200;
+        direction[i] = -1;
+      }
+
+      if (brightness[i] <= 0) {
+        brightness[i] = 0;
+        direction[i] = 0;
+      }
+    }
+
+    uint32_t scaled = Felix8A::Color::scale(color, brightness[i]);
+    lightString->setPixelColor(i, scaled);
+  }
+
+  lightString->show();
+}
+
+void solidColor(uint32_t color, bool isAnim, bool wasUpdated) {
+  if (isAnim) {
+    firefly(color);
+  } else if (wasUpdated) {
+    lightString->fill(color);
+    lightString->show();
+  }
+}
+```
+
+### Solid Color to White Gradient Setting Functions using `Time8A`
 ```cpp
 void setColorGradient(uint32_t color, int step) {
   uint32_t white = Felix8A::Color::rgb(150, 150, 150);
-  uint32_t pixelColor;
+
   int count = lightString->numPixels();
   for (int i = 0; i < count; i++) {
+    uint8_t phase = (i + step) % 6;
 
-    // uint8_t phase = (i + step) % 6;
-    // if (phase == 0) {
-    //   pixelColor = color;
-    // } else if (phase == 1) {
-    //   pixelColor = Felix8A::Color::blend(color, white, 50);
-    // } else if (phase == 2) {
-    //   pixelColor = Felix8A::Color::blend(color, white, 100);
-    // } else if (phase == 3) {
-    //   pixelColor = Felix8A::Color::blend(color, white, 150);
-    // } else if (phase == 4) {
-    //   pixelColor = Felix8A::Color::blend(color, white, 200);
-    // } else {
-    //   pixelColor = Felix8A::Color::blend(color, white, 250);
-    // }
-
-    const uint8_t phase = Felix8A::wrap(i + step, 0, 5);
-    switch (phase) {
-      case 0: pixelColor = color; break;
-      case 1: pixelColor = Felix8A::Color::blend(color, white, 50); break;
-      case 2: pixelColor = Felix8A::Color::blend(color, white, 100); break;
-      case 3: pixelColor = Felix8A::Color::blend(color, white, 150); break;
-      default: pixelColor = Felix8A::Color::blend(color, white, 200); break;
+    if (phase == 0) {
+      lightString->setPixelColor(i, color);
+    } else if (phase == 1) {
+      lightString->setPixelColor(i, Felix8A::Color::blend(color, white, 50));
+    } else if (phase == 2) {
+      lightString->setPixelColor(i, Felix8A::Color::blend(color, white, 100));
+    } else if (phase == 3) {
+      lightString->setPixelColor(i, Felix8A::Color::blend(color, white, 150));
+    } else if (phase == 4) {
+      lightString->setPixelColor(i, Felix8A::Color::blend(color, white, 200));
+    } else {
+      lightString->setPixelColor(i, Felix8A::Color::blend(color, white, 250));
     }
-
-    lightString->setPixelColor(i, pixelColor);
   }
+
   lightString->show();
 }
 
@@ -118,57 +158,43 @@ void colorGradientChase(uint32_t color) {
   }
 }
 
-void firefly(uint32_t color) {
-  static uint8_t brightness[NUM_LEDS] = {0};
-  static int8_t direction[NUM_LEDS] = {0}; // 1 = up, -1 = down, 0 = idle
-  static unsigned long lastFireflyUpdate = 0;
-
-  if (!Time8A::every(30, lastFireflyUpdate)) return;
-
-  for (int i = 0; i < NUM_LEDS; i++) {
-    if (direction[i] == 0) {
-      if (random(100) < 3) {
-        brightness[i] = 10; direction[i] = 1;
-      }
-    }
-
-    if (direction[i] != 0) {
-      brightness[i] += direction[i] * 10;
-
-      if (brightness[i] >= 200) {
-        brightness[i] = 200; direction[i] = -1;
-      }
-
-      if (brightness[i] <= 0) {
-        brightness[i] = 0; direction[i] = 0;
-      }
-    }
-
-    uint32_t scaled = Felix8A::Color::scale(color, brightness[i]);
-    lightString->setPixelColor(i, scaled);
-  }
-  lightString->show();
-}
-
-void solidColor(uint32_t color, bool isAnim, bool isChase, bool wasUpdated) {
+void colorGradient(uint32_t color, bool isAnim, bool wasUpdated) {
   if (isAnim) {
-    if (isChase) {
-      colorGradientChase(color);
-    } else {
-      firefly(color);
-    }
+    colorGradientChase(color);
   } else if (wasUpdated) {
-    if (isChase) {
-      setColorGradient(color, 0);
-    } else {
-      lightString->fill(color);
-      lightString->show();
-    }
+    setColorGradient(color, 0);
   }
 }
 ```
 
-**Alternate White Gradient Setting Function using Felix8A::Palette**
+**Alternate White Gradient Setting Function**
+```cpp
+void setColorGradient(uint32_t color, int step) {
+  uint32_t white = Felix8A::Color::rgb(150, 150, 150);
+  uint32_t pixelColor;
+
+  int count = lightString->numPixels();
+
+  for (int i = 0; i < count; i++) {
+    const uint8_t phase = Felix8A::wrap(i + step, 0, 6);
+
+    switch (phase) {
+      case 0: pixelColor = color; break;
+      case 1: pixelColor = Felix8A::Color::blend(color, white, 50); break;
+      case 2: pixelColor = Felix8A::Color::blend(color, white, 100); break;
+      case 3: pixelColor = Felix8A::Color::blend(color, white, 150); break;
+      case 4: pixelColor = Felix8A::Color::blend(color, white, 200); break;
+      default: pixelColor = Felix8A::Color::blend(color, white, 250); break;
+    }
+
+    lightString->setPixelColor(i, pixelColor);
+  }
+
+  lightString->show();
+}
+```
+
+**Another Alternate White Gradient Setting Function using Felix8A::Palette**
 ```cpp
 void setColorGradient(uint32_t color, int step) {
 
@@ -273,13 +299,14 @@ void lightsOff(bool wasUpdated) {
 ```cpp
 void updateMode(int mode, int color, bool anim, bool chase, bool stateChanged) {
   switch (mode) {
-    case 0: solidColor(colorPalette[color], anim, chase, stateChanged); break;
-    case 1: multiColor(colorPalette, anim, chase, stateChanged); break;
-    case 2: multiColor(Felix8A::Sunset, anim, chase, stateChanged); break;
-    case 3: multiColor(Felix8A::Forest, anim, chase, stateChanged); break;
-    case 4: multiColor(Felix8A::Ocean, anim, chase, stateChanged); break;
-    case 5: multiColor(Felix8A::Blush, anim, chase, stateChanged); break;
-    case 6: multiColor(Felix8A::ChristmasLights, anim, chase, stateChanged); break;
+    case 0: solidColor(colorPalette[color], anim, stateChanged); break;
+    case 1: colorGradient(colorPalette[color], anim, stateChanged); break;
+    case 2: multiColor(colorPalette, anim, chase, stateChanged); break;
+    case 3: multiColor(Felix8A::Sunset, anim, chase, stateChanged); break;
+    case 4: multiColor(Felix8A::Forest, anim, chase, stateChanged); break;
+    case 5: multiColor(Felix8A::Ocean, anim, chase, stateChanged); break;
+    case 6: multiColor(Felix8A::Blush, anim, chase, stateChanged); break;
+    case 7: multiColor(Felix8A::ChristmasLights, anim, chase, stateChanged); break;
     default: lightsOff(stateChanged); break;
   }
 }
