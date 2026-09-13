@@ -31,12 +31,14 @@ namespace Felix8A {
     }
 
     // Color Blending
-    static inline uint8_t lerp(uint8_t a, uint8_t b, uint8_t t) {
+    static inline uint8_t lerp8(uint8_t a, uint8_t b, uint8_t t) {
       return a + ((int32_t(b) - int32_t(a)) * t) / 255;
     }
 
     static inline uint32_t blend(uint32_t a, uint32_t b, uint8_t t) {
-      return hex(lerp(red(a), red(b), t), lerp(green(a), green(b), t), lerp(blue(a), blue(b), t));
+      return hex(
+          lerp8(red(a), red(b), t), lerp8(green(a), green(b), t), lerp8(blue(a), blue(b), t)
+      );
     }
 
     // Shades of White
