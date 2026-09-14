@@ -123,30 +123,39 @@ void firefly(uint32_t color) {
   static int8_t direction[NUM_LEDS] = {0}; // 1 = up, -1 = down, 0 = idle
   static unsigned long lastFireflyUpdate = 0;
 
-  if (!Time8A::every(30, lastFireflyUpdate)) return;
+  if (!Time8A::every(50, lastFireflyUpdate)) return;
 
   for (int i = 0; i < NUM_LEDS; i++) {
     if (direction[i] == 0) {
-      if (random(100) < 3) {
+      if (random(100) < 1) {
         brightness[i] = 10; direction[i] = 1;
       }
     }
 
+    // if (direction[i] != 0) {
+    //   brightness[i] += direction[i] * 10;
+
+    //   if (brightness[i] >= 250) {
+    //     brightness[i] = 250; direction[i] = -1;
+    //   }
+
+    //   if (brightness[i] <= 0) {
+    //     brightness[i] = 0; direction[i] = 0;
+    //   }
+    // }
+
     if (direction[i] != 0) {
-      brightness[i] += direction[i] * 10;
-
-      if (brightness[i] >= 200) {
-        brightness[i] = 200; direction[i] = -1;
-      }
-
-      if (brightness[i] <= 0) {
-        brightness[i] = 0; direction[i] = 0;
-      }
+      int newBrightness = brightness[i] + direction[i] * 10;
+      brightness[i] = Felix8A::clamp(newBrightness, 0, 200);
+      if (brightness[i] >= 200) { direction[i] = -1; }
+      if (brightness[i] == 0) { direction[i] = 0; }
     }
 
-    uint32_t scaled = Felix8A::Color::scale(color, brightness[i]);
+    const uint32_t scaled = Felix8A::Color::scale(color, brightness[i]);
+
     lightString->setPixelColor(i, scaled);
   }
+
   lightString->show();
 }
 
