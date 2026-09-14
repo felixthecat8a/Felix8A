@@ -78,7 +78,7 @@ void setColorGradient(uint32_t color, int step) {
   int count = lightString->numPixels();
   for (int i = 0; i < count; i++) {
 
-    // uint8_t phase = (i + step) % 6;
+    // uint8_t phase = (i + step) % 5;
     // if (phase == 0) {
     //   pixelColor = color;
     // } else if (phase == 1) {
@@ -87,10 +87,8 @@ void setColorGradient(uint32_t color, int step) {
     //   pixelColor = Felix8A::Color::blend(color, white, 100);
     // } else if (phase == 3) {
     //   pixelColor = Felix8A::Color::blend(color, white, 150);
-    // } else if (phase == 4) {
-    //   pixelColor = Felix8A::Color::blend(color, white, 200);
     // } else {
-    //   pixelColor = Felix8A::Color::blend(color, white, 250);
+    //   pixelColor = Felix8A::Color::blend(color, white, 200);
     // }
 
     const uint8_t phase = Felix8A::wrap(i + step, 0, 5);
