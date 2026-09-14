@@ -249,7 +249,8 @@ void multiColorChase(Felix8A::Palette palette) {
 
   if (Time8A::every(150, lastAnimUpdate)) {
     setMultiColor(palette, colorStep);
-    colorStep = (colorStep + 1) % palette.count();
+    // colorStep = (colorStep + 1) % palette.count();
+    colorStep = Felix8A::wrap(colorStep + 1, 0, static_cast<int>(palette.count()));
   }
 }
 
