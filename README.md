@@ -104,19 +104,17 @@ void loop() {
 #include <Felix8A.h>
 
 Felix8A::LED led(6);
-Felix8A::Button bttn(2);
+Felix8A::Button button(2);
 
 void setup() {
-    // setup code
     led.begin();
-    bttn.begin();
+    button.begin();
 }
 
 void loop() {
-    // loop code
-    bttn.update();
-
-    if (bttn.wasClicked()) {
+    button.update();
+    
+    if (button.wasClicked()) {
         led.toggle();
     }
 }
