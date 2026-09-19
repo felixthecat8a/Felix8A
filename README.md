@@ -55,27 +55,23 @@ lib_deps =
 
 Felix8A::RGB rgbLED(9, 10, 11);
 
-const uint32_t colorArray[] = {
-    Felix8A::Color::RED,
-    Felix8A::Color::ORANGE,
-    Felix8A::Color::GREEN,
-    Felix8A::Color::BLUE,
-    Felix8A::Color::WHITE
+const uint32_t colors[] = {
+  Felix8A::Color::RED,
+  Felix8A::Color::ORANGE,
+  Felix8A::Color::GREEN,
+  Felix8A::Color::BLUE,
+  Felix8A::Color::WHITE
 };
 
-const Felix8A::Palette ColorPalette(colorArray);
+const Felix8A::Palette colorPalette(colors);
 
-void setup() {
-    // setup code
-    rgbLED.begin();
-}
+void setup() { rgbLED.begin(); }
 
 void loop() {
-    // loop code
-    for (int i = 0; i < ColorPalette.size(); i++) {
-        rgbLED.setRGB(ColorPalette[i]);
-        delay(1000);
-    }
+  for (size_t i = 0; i < colorPalette.size(); i++) {
+    rgbLED.setRGB(colorPalette[i]);
+    delay(1000);
+  }
 }
 ```
 
