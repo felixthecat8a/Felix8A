@@ -56,22 +56,24 @@ lib_deps =
 Felix8A::RGB rgbLED(9, 10, 11);
 
 const uint32_t colors[] = {
-  Felix8A::Color::RED,
-  Felix8A::Color::ORANGE,
-  Felix8A::Color::GREEN,
-  Felix8A::Color::BLUE,
-  Felix8A::Color::WHITE
+    Felix8A::Color::RED,
+    Felix8A::Color::ORANGE,
+    Felix8A::Color::GREEN,
+    Felix8A::Color::BLUE,
+    Felix8A::Color::WHITE
 };
 
 const Felix8A::Palette colorPalette(colors);
 
-void setup() { rgbLED.begin(); }
+void setup() {
+    rgbLED.begin();
+}
 
 void loop() {
-  for (size_t i = 0; i < colorPalette.size(); i++) {
-    rgbLED.setRGB(colorPalette[i]);
-    delay(1000);
-  }
+    for (size_t i = 0; i < colorPalette.size(); i++) {
+        rgbLED.setRGB(colorPalette[i]);
+        delay(1000);
+    }
 }
 ```
 
@@ -86,12 +88,10 @@ const unsigned long blinkInterval = 1000;
 unsigned long lastBlink = 0;
 
 void setup() {
-    // setup code
     led.begin();
 }
 
 void loop() {
-    // loop code
     if (Time8A::every(blinkInterval, lastBlink)) {
         led.toggle();
     }
