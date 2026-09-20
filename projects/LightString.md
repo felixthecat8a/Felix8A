@@ -8,45 +8,59 @@ An Arduino sketch for controlling colors and animations on a WS2812 LED string u
 #include <EEPROM.h>
 #include <Felix8A.h>
 /***** Felix8A::Button Setup *****/
-#define BUTTON_PIN 2
-Felix8A::Button button(BUTTON_PIN);
+constexpr uint8_t BUTTON_PIN = 2;
+constexpr uint16_t BUTTON_DEBOUNCE = 25;
+Felix8A::Button button(BUTTON_PIN, BUTTON_DEBOUNCE);
+constexpr unsigned long BUTTON_HOLD_TIME = 750;
+constexpr unsigned long BUTTON_MULTI_CLICK_TIME = 250;
 /***** NeoPixel Setup *****/
-#define LED_PIN  A0
-#define NUM_LEDS 100
+constexpr uint8_t LED_PIN = A0;
+constexpr uint16_t NUM_LEDS = 100;
 Adafruit_NeoPixel *lightString = nullptr;
+constexpr uint8_t LED_BRIGHTNESS = 51;
 ```
 
-### Custom Color Array Setup using `Felix8A::Color` & `Felix8A::Palette`
+### Custom Color Palette Setup
 ```cpp
 /***** Custom Multi-color Palette *****/
-const uint32_t colorArray[] = {
+constexpr uint32_t CUSTOM_COLORS[] = {
   Felix8A::Color::RED,
-  Felix8A::Color::YELLOW,
+  Felix8A::Color::ORANGE,
   Felix8A::Color::GREEN,
-  Felix8A::Color::CYAN,
-  Felix8A::Color::BLUE,
-  Felix8A::Color::MAGENTA,
+  Felix8A::Color::BLUE
 };
-const Felix8A::Palette colorPalette(colorArray);
-```
 
-### Optional Preset Multi-color Palette
-```cpp
-const Felix8A::Palette colorPalette = Felix8A::Palette6;
+const Felix8A::Palette customPalette(CUSTOM_COLORS);
 ```
 
 ### Initial Variables for Main Solid Color Palette
 ```cpp
+/***** Mode Setup with Default Colors *****/
+const Felix8A::Palette colorPalette = Felix8A::Palette6;
 const uint8_t numColors = colorPalette.size();
-constexpr int8_t numModes = 7;
+constexpr int8_t numModes = 9;
 int8_t currentMode = 0;
 uint8_t currentColor = 0;
 bool isAnimated = false;
 bool chaseAnimation = false;
-bool buttonEventActivated = true;
+bool eventActivated = true;
+/***** Gradient Animation Setup *****/
+constexpr unsigned long GRADIENT_INTERVAL = 150;
+unsigned long lastGradientUpdate = 0;
+uint8_t gradientStep = 0;
+/***** Multicolor Animation Setup *****/
+constexpr unsigned long TWINKLE_INTERVAL = 100;
+constexpr unsigned long CHASE_INTERVAL = 150;
+unsigned long lastChaseUpdate = 0;
+uint8_t chaseStep = 0;
+/***** Firefly Animation Setup *****/
+constexpr unsigned long FIREFLY_INTERVAL = 50;
+unsigned long lastFireflyUpdate = 0;
+uint8_t fireflyBrightness[NUM_LEDS] = {};
+int8_t fireflyDirection[NUM_LEDS] = {};
 ```
 
-### EEPROM Setup using `Felix8A::Math::wrap`
+### EEPROM Setup
 ```cpp
 constexpr uint8_t EEPROM_MODE_ADDR = 0;
 constexpr uint8_t EEPROM_COLOR_ADDR = 1;
@@ -66,19 +80,37 @@ void saveSettings() {
   EEPROM.update(EEPROM_MODE_ADDR, currentMode);
   EEPROM.update(EEPROM_COLOR_ADDR, currentColor);
 }
+
+void nextMode() {
+  currentMode++;
+  saveSettings();
+}
+
+void previousMode() {
+  currentMode--;
+  saveSettings();
+}
+
+void nextColor() {
+  currentColor++;
+  saveSettings();
+}
 ```
 
-## Color Setting Functions
+## Light Color Setting Functions
 
 ### Solid Color Setting, Animated Firefly, Gradient & Gradient Chase Functions
 ```cpp
 void setColorGradient(uint32_t color, int step) {
-  uint32_t white = Felix8A::Color::rgb(150, 150, 150);
-  uint32_t pixelColor;
-  int count = lightString->numPixels();
-  for (int i = 0; i < count; i++) {
-
+  constexpr uint8_t GRADIENT_PHASES = 5;
+  const uint32_t white = Felix8A::Color::rgb(150, 150, 150);
+  const int count = lightString->numPixels();
+  for (int i = 0; i < count; ++i) {
     // uint8_t phase = (i + step) % 5;
+    const uint8_t phase = Felix8A::wrap(i + step, 0, static_cast<int>(GRADIENT_PHASES));
+
+    uint32_t pixelColor;
+
     // if (phase == 0) {
     //   pixelColor = color;
     // } else if (phase == 1) {
@@ -91,7 +123,6 @@ void setColorGradient(uint32_t color, int step) {
     //   pixelColor = Felix8A::Color::blend(color, white, 200);
     // }
 
-    const uint8_t phase = Felix8A::wrap(i + step, 0, 5);
     switch (phase) {
       case 0: pixelColor = color; break;
       case 1: pixelColor = Felix8A::Color::blend(color, white, 50); break;
@@ -102,54 +133,37 @@ void setColorGradient(uint32_t color, int step) {
 
     lightString->setPixelColor(i, pixelColor);
   }
+
   lightString->show();
 }
 
 void colorGradientChase(uint32_t color) {
-  static unsigned long lastUpdate = 0;
-  static int animStep = 0;
-  int numGradientPhases = 5;
+  if (!Time8A::every(GRADIENT_INTERVAL, lastGradientUpdate)) { return; }
 
-  if (Time8A::every(150, lastUpdate)) {
-    setColorGradient(color, animStep);
-    animStep = (animStep + 1) % numGradientPhases;
-  }
+  setColorGradient(color, gradientStep);
+
+  gradientStep = Felix8A::wrap(gradientStep + 1, 0, 5);
 }
 
 void firefly(uint32_t color) {
-  static uint8_t brightness[NUM_LEDS] = {0};
-  static int8_t direction[NUM_LEDS] = {0}; // 1 = up, -1 = down, 0 = idle
-  static unsigned long lastFireflyUpdate = 0;
+  if (!Time8A::every(FIREFLY_INTERVAL, lastFireflyUpdate)) { return; }
 
-  if (!Time8A::every(50, lastFireflyUpdate)) return;
-
-  for (int i = 0; i < NUM_LEDS; i++) {
-    if (direction[i] == 0) {
+  for (uint16_t i = 0; i < NUM_LEDS; ++i) {
+    if (fireflyDirection[i] == 0) {
       if (random(100) < 1) {
-        brightness[i] = 10; direction[i] = 1;
+        fireflyBrightness[i] = 10;
+        fireflyDirection[i] = 1;
       }
     }
 
-    // if (direction[i] != 0) {
-    //   brightness[i] += direction[i] * 10;
-
-    //   if (brightness[i] >= 250) {
-    //     brightness[i] = 250; direction[i] = -1;
-    //   }
-
-    //   if (brightness[i] <= 0) {
-    //     brightness[i] = 0; direction[i] = 0;
-    //   }
-    // }
-
-    if (direction[i] != 0) {
-      int newBrightness = brightness[i] + direction[i] * 10;
-      brightness[i] = Felix8A::clamp(newBrightness, 0, 200);
-      if (brightness[i] >= 200) { direction[i] = -1; }
-      if (brightness[i] == 0) { direction[i] = 0; }
+    if (fireflyDirection[i] != 0) {
+      int newBrightness = fireflyBrightness[i] + fireflyDirection[i] * 10;
+      fireflyBrightness[i] = Felix8A::clamp(newBrightness, 0, 200);
+      if (fireflyBrightness[i] >= 200) { fireflyDirection[i] = -1; }
+      if (fireflyBrightness[i] == 0) { fireflyDirection[i] = 0; }
     }
 
-    const uint32_t scaled = Felix8A::Color::scale(color, brightness[i]);
+    const uint32_t scaled = Felix8A::Color::scale(color, fireflyBrightness[i]);
 
     lightString->setPixelColor(i, scaled);
   }
@@ -157,15 +171,15 @@ void firefly(uint32_t color) {
   lightString->show();
 }
 
-void solidColor(uint32_t color, bool isAnim, bool isChase, bool wasUpdated) {
-  if (isAnim) {
-    if (isChase) {
+void solidColor(uint32_t color, bool animated, bool chase, bool wasUpdated) {
+  if (animated) {
+    if (chase) {
       colorGradientChase(color);
     } else {
       firefly(color);
     }
   } else if (wasUpdated) {
-    if (isChase) {
+    if (chase) {
       setColorGradient(color, 0);
     } else {
       lightString->fill(color);
@@ -204,57 +218,49 @@ void setColorGradient(uint32_t color, int step) {
 }
 ```
 
-## Multi-color Functions
-
-### Multi-color Setting Functions using `Time8A`
+### Multi-color Setting Functions
 ```cpp
-void multicolorTwinkle(Felix8A::Palette palette) {
-  static unsigned long lastTwinkle = 0;
+void multicolorTwinkle(const Felix8A::Palette& palette) {
+  if (!Time8A::every(TWINKLE_INTERVAL, lastGradientUpdate)) { return; }
 
-  if (Time8A::every(100, lastTwinkle)) {
-    int count = lightString->numPixels();
+  const int count = lightString->numPixels();
 
-    for (int i = 0; i < count; i++) {
-      uint32_t color = lightString->getPixelColor(i);
-      lightString->setPixelColor(i, Felix8A::Color::scale(color, 220));
-    }
-
-    int newPixels = random(1, 4);
-
-    for (int i = 0; i < newPixels; i++) {
-      int pixel = random(count);
-      uint32_t randColor = palette[random(palette.count())];
-      lightString->setPixelColor(pixel, randColor);
-    }
-
-    lightString->show();
+  for (int i = 0; i < count; ++i) {
+    uint32_t color = lightString->getPixelColor(i);
+    lightString->setPixelColor(i, Felix8A::Color::scale(color, 220));
   }
+
+  const int newPixels = random(1, 4);
+
+  for (int i = 0; i < newPixels; ++i) {
+    const int pixel = random(count);
+    const uint32_t randomColor = palette[random(palette.size())];
+    lightString->setPixelColor(pixel, randomColor);
+  }
+
+  lightString->show();
 }
 
-void setMultiColor(Felix8A::Palette palette, int step) {
-  int count = lightString->numPixels();
+void setMultiColor(const Felix8A::Palette& palette, int step) {
+  const int count = lightString->numPixels();
 
-  for (int i = 0; i < count; i++) {
+  for (int i = 0; i < count; ++i) {
     lightString->setPixelColor(i, palette.reversed(i + step));
   }
 
   lightString->show();
 }
 
-void multiColorChase(Felix8A::Palette palette) {
-  static unsigned long lastAnimUpdate = 0;
-  static int colorStep = 0;
+void multiColorChase(const Felix8A::Palette& palette) {
+  if (!Time8A::every(CHASE_INTERVAL, lastChaseUpdate)) { return; }
 
-  if (Time8A::every(150, lastAnimUpdate)) {
-    setMultiColor(palette, colorStep);
-    // colorStep = (colorStep + 1) % palette.count();
-    colorStep = Felix8A::wrap(colorStep + 1, 0, static_cast<int>(palette.count()));
-  }
+  setMultiColor(palette, chaseStep);
+  chaseStep = Felix8A::wrap(chaseStep + 1, 0, static_cast<int>(palette.size()));
 }
 
-void multiColor(Felix8A::Palette palette, bool isAnim, bool isChase, bool wasUpdated) {
-  if (isAnim) {
-    if (isChase) {
+void multiColor(const Felix8A::Palette& palette, bool animated, bool chase, bool wasUpdated) {
+  if (animated) {
+    if (chase) {
       multiColorChase(palette);
     } else {
       multicolorTwinkle(palette);
@@ -270,25 +276,26 @@ void multiColor(Felix8A::Palette palette, bool isAnim, bool isChase, bool wasUpd
 ### Lights Off Function
 ```cpp
 void lightsOff(bool wasUpdated) {
-  if (wasUpdated) {
-    lightString->clear();
-    lightString->show();
-  }
+  if (!wasUpdated) { return; }
+
+  lightString->clear();
+  lightString->show();
 }
 ```
 
 ### Set & Update Function Switch
 ```cpp
-void updateMode(int mode, int color, bool anim, bool chase, bool stateChanged) {
+void updateMode(uint8_t mode, uint8_t color, bool animated, bool chase, bool wasUpdated) {
   switch (mode) {
-    case 0: solidColor(colorPalette[color], anim, chase, stateChanged); break;
-    case 1: multiColor(colorPalette, anim, chase, stateChanged); break;
-    case 2: multiColor(Felix8A::Sunset, anim, chase, stateChanged); break;
-    case 3: multiColor(Felix8A::Forest, anim, chase, stateChanged); break;
-    case 4: multiColor(Felix8A::Ocean, anim, chase, stateChanged); break;
-    case 5: multiColor(Felix8A::Blush, anim, chase, stateChanged); break;
-    case 6: multiColor(Felix8A::ChristmasLights, anim, chase, stateChanged); break;
-    default: lightsOff(stateChanged); break;
+    case 0: solidColor(colorPalette[color], animated, chase, wasUpdated); break;
+    case 1: multiColor(colorPalette, animated, chase, wasUpdated); break;
+    case 2: multiColor(Felix8A::Sunset, animated, chase, wasUpdated); break;
+    case 3: multiColor(Felix8A::Forest, animated, chase, wasUpdated); break;
+    case 4: multiColor(Felix8A::Ocean, animated, chase, wasUpdated); break;
+    case 5: multiColor(Felix8A::Blush, animated, chase, wasUpdated); break;
+    case 6: multiColor(Felix8A::ChristmasLights, animated, chase, wasUpdated); break;
+    case 7: multiColor(customPalette, animated, chase, wasUpdated); break;
+    default: lightsOff(wasUpdated); break;
   }
 }
 ```
@@ -299,20 +306,18 @@ void updateMode(int mode, int color, bool anim, bool chase, bool stateChanged) {
 /***** Arduino Setup *****/
 void setup() {
   loadSettings();
-
+  // Initiate Button
   button.begin();
-  button.setHoldTime(750);
-  button.setMultiClickTime(250);
-
-  if (button.isDown()) {
-    lightString = new Adafruit_NeoPixel(NUM_LEDS, LED_PIN, NEO_RGB + NEO_KHZ800);
-  } else {
-    lightString = new Adafruit_NeoPixel(NUM_LEDS, LED_PIN, NEO_GRB + NEO_KHZ800);
-  }
-
+  button.setHoldTime(BUTTON_HOLD_TIME);
+  button.setMultiClickTime(BUTTON_MULTI_CLICK_TIME);
+  // Hold button during startup to use RGB ordering.
+  const uint8_t pixelType = button.isDown() ? (NEO_RGB + NEO_KHZ800) : (NEO_GRB + NEO_KHZ800);
+  lightString = new Adafruit_NeoPixel(NUM_LEDS, LED_PIN, pixelType);
   lightString->begin();
-  lightString->setBrightness(51);
+  lightString->setBrightness(LED_BRIGHTNESS);
   lightString->show();
+  // Initialize random number generator.
+  randomSeed(analogRead(A1));
 }
 
 /***** Arduino Loop *****/
@@ -320,35 +325,32 @@ void loop() {
   button.update();
 
   if (button.wasClicked()) {
-    currentMode++;
-    buttonEventActivated = true;
-    saveSettings();
+    nextMode();
+    eventActivated = true;
   }
 
   if (button.wasDoubleClicked()) {
-    currentMode--;
-    buttonEventActivated = true;
-    saveSettings();
+    previousMode();
+    eventActivated = true;
   }
 
   if (button.wasTripleClicked()) {
     isAnimated = !isAnimated;
-    buttonEventActivated = true;
+    eventActivated = true;
   }
 
   if (button.wasQuadrupleClicked()) {
     chaseAnimation = !chaseAnimation;
-    buttonEventActivated = true;
+    eventActivated = true;
   }
 
   if (button.wasHeld()) {
-    currentColor++;
-    buttonEventActivated = true;
-    saveSettings();
+    nextColor();
+    eventActivated = true;
   }
 
-  updateMode(currentMode, currentColor, isAnimated, chaseAnimation, buttonEventActivated);
-  buttonEventActivated = false;
+  updateMode(currentMode, currentColor, isAnimated, chaseAnimation, eventActivated);
+  eventActivated = false;
 }
 ```
 
@@ -358,45 +360,43 @@ void loop() {
 void loop() {
   button.update();
 
-  Felix8A::Button::Event e;
+  Felix8A::Button::Event event;
 
-  while ((e = button.poll()) != Felix8A::Button::Event::None) {
-    switch (e) {
+  while ((event = button.poll()) != Felix8A::Button::Event::None) {
+    switch (event) {
       case Felix8A::Button::Event::Click:
-        currentMode++;
-        buttonEventActivated = true;
-        saveSettings();
+        nextMode();
+        eventActivated = true;
         break;
 
       case Felix8A::Button::Event::DoubleClick:
-        currentMode--;
-        buttonEventActivated = true;
-        saveSettings();
+        previousMode();
+        eventActivated = true;
         break;
 
       case Felix8A::Button::Event::TripleClick:
         isAnimated = !isAnimated;
-        buttonEventActivated = true;
+        eventActivated = true;
         break;
 
       case Felix8A::Button::Event::QuadrupleClick:
         chaseAnimation = !chaseAnimation;
-        buttonEventActivated = true;
+        eventActivated = true;
         break;
 
       case Felix8A::Button::Event::Hold:
-        currentColor++;
-        buttonEventActivated = true;
-        saveSettings();
+        nextColor();
+        eventActivated = true;
         break;
 
       default: break;
     }
   }
 
-  updateMode(currentMode, currentColor, isAnimated, chaseAnimation, buttonEventActivated);
-  buttonEventActivated = false;
+  updateMode(currentMode, currentColor, isAnimated, chaseAnimation, eventActivated);
+  eventActivated = false;
 }
+
 ```
 
 #### My 100 Column Helper
