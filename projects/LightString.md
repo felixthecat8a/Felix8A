@@ -364,33 +364,14 @@ void loop() {
 
   while ((event = button.poll()) != Felix8A::Button::Event::None) {
     switch (event) {
-      case Felix8A::Button::Event::Click:
-        nextMode();
-        eventActivated = true;
-        break;
-
-      case Felix8A::Button::Event::DoubleClick:
-        previousMode();
-        eventActivated = true;
-        break;
-
-      case Felix8A::Button::Event::TripleClick:
-        isAnimated = !isAnimated;
-        eventActivated = true;
-        break;
-
-      case Felix8A::Button::Event::QuadrupleClick:
-        chaseAnimation = !chaseAnimation;
-        eventActivated = true;
-        break;
-
-      case Felix8A::Button::Event::Hold:
-        nextColor();
-        eventActivated = true;
-        break;
-
+      case Felix8A::Button::Event::Click: nextMode(); break;
+      case Felix8A::Button::Event::DoubleClick: previousMode(); break;
+      case Felix8A::Button::Event::TripleClick: isAnimated = !isAnimated; break;
+      case Felix8A::Button::Event::QuadrupleClick: chaseAnimation = !chaseAnimation; break;
+      case Felix8A::Button::Event::Hold: nextColor(); break;
       default: break;
     }
+    eventActivated = true;
   }
 
   updateMode(currentMode, currentColor, isAnimated, chaseAnimation, eventActivated);
