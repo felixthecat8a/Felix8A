@@ -14,9 +14,11 @@ namespace Felix8A {
    * @param maxVal Maximum allowed value.
    * @return The clamped value.
    */
-  template <typename T> static inline T clamp(T value, T minVal, T maxVal) {
-    if (value < minVal) return minVal;
-    if (value > maxVal) return maxVal;
+  template <typename T> inline T clamp(T value, T minVal, T maxVal) {
+    if (value < minVal) { return minVal; }
+
+    if (value > maxVal) { return maxVal; }
+
     return value;
   }
 
@@ -32,7 +34,7 @@ namespace Felix8A {
    *
    * @note t is not clamped. Values outside [0, 1] are allowed.
    */
-  template <typename T, typename U> static inline T lerp(T a, T b, U t) {
+  template <typename T, typename U> inline T lerp(T a, T b, U t) {
     return static_cast<T>(a + (b - a) * t);
   }
 
@@ -48,8 +50,9 @@ namespace Felix8A {
    * @note The result is not clamped and may be outside [0, 1].
    *       Returns 0.0f if a and b are equal.
    */
-  template <typename T> static inline float inverseLerp(T a, T b, T value) {
-    if (a == b) return 0.0f;
+  template <typename T> inline float inverseLerp(T a, T b, T value) {
+    if (a == b) { return 0.0f; }
+
     return static_cast<float>(value - a) / static_cast<float>(b - a);
   }
 
@@ -68,10 +71,12 @@ namespace Felix8A {
    * @note If inMin and inMax are equal, outMin is returned.
    */
   template <typename T, typename U = float>
-  static inline U mapClamped(T value, T inMin, T inMax, U outMin, U outMax) {
-    if (inMin == inMax) return outMin;
+  inline U mapClamped(T value, T inMin, T inMax, U outMin, U outMax) {
+    if (inMin == inMax) { return outMin; }
+
     U t = static_cast<U>(inverseLerp(inMin, inMax, value));
-    t = clamp(t, static_cast<U>(0), static_cast<U>(1));
+    t   = clamp(t, static_cast<U>(0), static_cast<U>(1));
+
     return lerp(outMin, outMax, t);
   }
 
@@ -85,26 +90,33 @@ namespace Felix8A {
    * @return Wrapped value.
    *
    * @note This function is intended for integer types.
+   * @note If maxVal <= minVal, minVal is returned.
    */
-  template <typename T> static inline T wrap(T value, T minVal, T maxVal) {
-    T range = maxVal - minVal;
+  template <typename T> inline T wrap(T value, T minVal, T maxVal) {
+    const T range = maxVal - minVal;
 
-    if (range <= 0) return minVal;
+    if (range <= static_cast<T>(0)) { return minVal; }
 
-    // value = (value - minVal) % range;
-    // if (value < 0) value += range;
-    // return value + minVal;
+    value = static_cast<T>((value - minVal) % range);
 
-    while (value < minVal) {
-      value += range;
-    }
+    if (value < static_cast<T>(0)) { value += range; }
 
-    while (value >= maxVal) {
-      value -= range;
-    }
-
-    return value;
+    return value + minVal;
   }
+
+  // /**
+  //  * @brief Wraps an integer value into the range [minVal, maxVal].
+  //  *
+  //  * @tparam T Integer value type.
+  //  * @param value Value to wrap.
+  //  * @param minVal Minimum value, inclusive.
+  //  * @param maxVal Maximum value, inclusive.
+  //  * @return Wrapped value.
+  //  */
+  // template <typename T> static inline T wrapInclusive(T value, T minVal, T maxVal) {
+  //   if (maxVal < minVal) return minVal;
+  //   return wrap(value, minVal, maxVal + 1);
+  // }
 
   /**
    * @brief Wraps an integer value into the range [minVal, maxVal].
@@ -114,11 +126,27 @@ namespace Felix8A {
    * @param minVal Minimum value, inclusive.
    * @param maxVal Maximum value, inclusive.
    * @return Wrapped value.
+   *
+   * @note This function is intended for integer types.
+   * @note If maxVal < minVal, minVal is returned.
    */
-  template <typename T> static inline T wrapInclusive(T value, T minVal, T maxVal) {
-    if (maxVal < minVal) return minVal;
-    return wrap(value, minVal, maxVal + 1);
+  template <typename T> inline T wrapInclusive(T value, T minVal, T maxVal) {
+    if (maxVal < minVal) { return minVal; }
+
+    // Avoid maxVal + 1 overflowing T.
+    if (value >= minVal && value <= maxVal) { return value; }
+
+    const auto range = static_cast<long long>(maxVal) - static_cast<long long>(minVal) + 1LL;
+
+    if (range <= 0) { return minVal; }
+
+    long long wrapped = (static_cast<long long>(value) - static_cast<long long>(minVal)) % range;
+
+    if (wrapped < 0) { wrapped += range; }
+
+    return static_cast<T>(static_cast<long long>(minVal) + wrapped);
   }
+
 } // namespace Felix8A
 
 #endif // FELIX8A_HELPERS_H

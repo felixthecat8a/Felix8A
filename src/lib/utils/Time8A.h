@@ -6,7 +6,7 @@
 namespace Time8A {
 
   static inline bool every(unsigned long interval, unsigned long& last) {
-    unsigned long now  = millis();
+    unsigned long now = millis();
     unsigned long diff = now - last;
 
     if (diff >= interval) {

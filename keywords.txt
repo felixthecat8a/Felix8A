@@ -17,6 +17,8 @@ PWM	KEYWORD1
 RGB	KEYWORD1
 Button  KEYWORD1
 Time8A  KEYWORD1
+Relay KEYWORD1
+Buzzer  KEYWORD1
 
 #######################################
 # Methods (KEYWORD2)
@@ -48,6 +50,14 @@ setPin	KEYWORD2
 getPin	KEYWORD2
 setActiveLow	KEYWORD2
 isActiveLow	KEYWORD2
+
+enable  KEYWORD2
+disable KEYWORD2
+isEnabled KEYWORD2
+set KEYWORD2
+
+beep  KEYWORD2
+isBeeping KEYWORD2
 
 setBrightness	KEYWORD2
 getBrightness	KEYWORD2

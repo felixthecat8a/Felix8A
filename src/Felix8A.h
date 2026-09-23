@@ -6,8 +6,8 @@
 #include "lib/FelixButton.h"
 #include "lib/FelixLED.h"
 #include "lib/FelixPWM.h"
+#include "lib/utils/AnalogInput.h"
 
-#include "helpers/Time8A.h"
 #include "helpers/helpers.h"
 
 #endif // FELIX8A_H
