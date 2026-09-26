@@ -6,7 +6,6 @@
 #include "lib/FelixButton.h"
 #include "lib/FelixLED.h"
 #include "lib/FelixPWM.h"
-#include "lib/utils/AnalogInput.h"
 
 #include "helpers/helpers.h"
 
