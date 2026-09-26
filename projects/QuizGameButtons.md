@@ -5,25 +5,27 @@
 // Player Count
 constexpr uint8_t PLAYER_COUNT = 4;
 // Player Button Pins
-constexpr uint8_t BUTTON_PINS[PLAYER_COUNT] = {2, 3, 4, 5};
+constexpr uint8_t PLAYER_BUTTON_PINS[PLAYER_COUNT] = {2, 3, 4, 5};
 // Player Indicator LED Pins
-constexpr uint8_t LED_PINS[PLAYER_COUNT] = {8, 9, 10, 11};
+constexpr uint8_t PLAYER_LED_PINS[PLAYER_COUNT] = {8, 9, 10, 11};
 // Reset Button Pin
 constexpr uint8_t RESET_BUTTON_PIN = 6;
 // Reset Indicator LED Pin
 constexpr uint8_t RESET_LED_PIN = 7;
 // Player Button Array
-Felix8A::Button playerButtons[PLAYER_COUNT] =
-    {Felix8A::Button(BUTTON_PINS[0]),
-     Felix8A::Button(BUTTON_PINS[1]),
-     Felix8A::Button(BUTTON_PINS[2]),
-     Felix8A::Button(BUTTON_PINS[3])};
+Felix8A::Button playerButtons[PLAYER_COUNT] = {
+  Felix8A::Button(PLAYER_BUTTON_PINS[0]),
+  Felix8A::Button(PLAYER_BUTTON_PINS[1]),
+  Felix8A::Button(PLAYER_BUTTON_PINS[2]),
+  Felix8A::Button(PLAYER_BUTTON_PINS[3])
+};
 // Player Indicator LED Array
-Felix8A::LED playerLEDs[PLAYER_COUNT] =
-    {Felix8A::LED(LED_PINS[0]),
-     Felix8A::LED(LED_PINS[1]),
-     Felix8A::LED(LED_PINS[2]),
-     Felix8A::LED(LED_PINS[3])};
+Felix8A::LED playerLEDs[PLAYER_COUNT] = {
+  Felix8A::LED(PLAYER_LED_PINS[0]),
+  Felix8A::LED(PLAYER_LED_PINS[1]),
+  Felix8A::LED(PLAYER_LED_PINS[2]),
+  Felix8A::LED(PLAYER_LED_PINS[3])
+};
 // Reset Button Object
 Felix8A::Button resetButton(RESET_BUTTON_PIN);
 // Reset Indicator LED Object
