@@ -94,9 +94,18 @@ namespace Felix8A {
     uint8_t _clickCount = 0;
   };
 
+  /* Latching Switch */
+
+  class Switch : public DigitalInput {
+  public:
+    explicit Switch(uint8_t pin, bool activeLow = true) : DigitalInput(pin, activeLow) {}
+
+    bool isLatched() const { return state(); }
+  };
+
   /* Limit Switch */
 
-  enum class LimitSwitchContactType { NO, NC };
+  enum class LimitSwitchContactType : uint8_t { NO, NC };
 
   class LimitSwitch : public DigitalInput {
   public:
