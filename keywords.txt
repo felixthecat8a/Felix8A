@@ -21,6 +21,7 @@ Button  KEYWORD1
 Switch  KEYWORD1
 LimitSwitch KEYWORD1
 Time8A  KEYWORD1
+Potentiometer   KEYWORD1
 
 #######################################
 # Methods (KEYWORD2)
@@ -107,6 +108,12 @@ isLatched   KEYWORD2
 triggered   KEYWORD2
 contactType KEYWORD2
 setContactType  KEYWORD2
+
+voltage KEYWORD2
+percent KEYWORD2
+angle   KEYWORD2
+maxAngle    KEYWORD2
+setMaxAngle KEYWORD2
 
 #######################################
 # Functions (KEYWORD2)
