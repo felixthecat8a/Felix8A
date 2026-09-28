@@ -1,17 +1,17 @@
-# Quiz Game Buttons
+# Quiz Show Buttons
 
 ```cpp
 #include <Felix8A.h>
 // Player Count
 constexpr uint8_t PLAYER_COUNT = 4;
 // Player Button Pins
-constexpr uint8_t PLAYER_BUTTON_PINS[PLAYER_COUNT] = {2, 3, 4, 5};
+constexpr uint8_t PLAYER_BUTTON_PINS[PLAYER_COUNT] = {A0, A1, A2, A3};
 // Player Indicator LED Pins
-constexpr uint8_t PLAYER_LED_PINS[PLAYER_COUNT] = {8, 9, 10, 11};
+constexpr uint8_t PLAYER_LED_PINS[PLAYER_COUNT] = {2, 3, 4, 5};
 // Reset Button Pin
-constexpr uint8_t RESET_BUTTON_PIN = 6;
+constexpr uint8_t RESET_BUTTON_PIN = A4;
 // Reset Indicator LED Pin
-constexpr uint8_t RESET_LED_PIN = 7;
+constexpr uint8_t RESET_LED_PIN = 6;
 // Player Button Array
 Felix8A::Button playerButtons[PLAYER_COUNT] = {
   Felix8A::Button(PLAYER_BUTTON_PINS[0]),
@@ -82,19 +82,19 @@ void loop() {
 }
 ```
 
-## Quiz Show Game Without Library
+## Quiz Show Buttons Without Library
 
 ```cpp
 // Player Count
 const int playerCount = 4;
 // Player Button Pins
-const int buttonPins[playerCount] = {2, 3, 4, 5};
+const int buttonPins[playerCount] = {A0, A1, A2, A3};
 // Player Indicator LED Pins
-const int ledPins[playerCount] = {8, 9, 10, 11};
+const int ledPins[playerCount] = {2, 3, 4, 5};
 // Reset Button Pin
-const int resetPin = 6;
+const int resetPin = A4;
 // Reset Indicator LED Pin
-const int resetLED = 7;
+const int resetLED = 6;
 // Lockout State Variable
 bool lockedOut = false;
 // Reset Game Function
