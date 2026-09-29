@@ -4,7 +4,7 @@
 # Library (KEYWORD1)
 #######################################
 
-Felix8A KEYWORD1    Felix8A
+Felix8A KEYWORD1
 
 #######################################
 # Datatypes and Classes (KEYWORD1)
