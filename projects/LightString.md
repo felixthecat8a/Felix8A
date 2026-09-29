@@ -10,8 +10,9 @@ An Arduino sketch for controlling colors and animations on a WS2812 LED string u
 #include <Felix8A.h>
 /***** Felix8A::Button Setup *****/
 constexpr uint8_t BUTTON_PIN = 2;
+constexpr bool BUTTON_ACTIVE_LOW = true;
 constexpr uint16_t BUTTON_DEBOUNCE = 25;
-Felix8A::Button button(BUTTON_PIN, BUTTON_DEBOUNCE);
+Felix8A::Button button(BUTTON_PIN, BUTTON_ACTIVE_LOW, BUTTON_DEBOUNCE);
 constexpr unsigned long BUTTON_HOLD_TIME = 750;
 constexpr unsigned long BUTTON_MULTI_CLICK_TIME = 250;
 /***** NeoPixel Setup *****/
