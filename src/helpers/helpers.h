@@ -4,7 +4,6 @@
 #include <Arduino.h>
 
 namespace Felix8A {
-
   /**
    * @brief Clamps a value to a specified range.
    *
@@ -103,20 +102,6 @@ namespace Felix8A {
 
     return value + minVal;
   }
-
-  // /**
-  //  * @brief Wraps an integer value into the range [minVal, maxVal].
-  //  *
-  //  * @tparam T Integer value type.
-  //  * @param value Value to wrap.
-  //  * @param minVal Minimum value, inclusive.
-  //  * @param maxVal Maximum value, inclusive.
-  //  * @return Wrapped value.
-  //  */
-  // template <typename T> static inline T wrapInclusive(T value, T minVal, T maxVal) {
-  //   if (maxVal < minVal) return minVal;
-  //   return wrap(value, minVal, maxVal + 1);
-  // }
 
   /**
    * @brief Wraps an integer value into the range [minVal, maxVal].

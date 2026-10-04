@@ -58,62 +58,58 @@ namespace Felix8A {
 
   class RGB {
   public:
-    RGB(uint8_t rPin,
-        uint8_t gPin,
-        uint8_t bPin,
-        bool    commonAnode = true,
-        LED_t   type        = BASIC_LED,
-        int8_t  rCh         = -1,
-        int8_t  gCh         = -1,
-        int8_t  bCh         = -1);
-
+    // clang-format off
+    RGB(uint8_t rPin, uint8_t gPin, uint8_t bPin, bool commonAnode = true,
+      LED_t type = BASIC_LED, int8_t rCh = -1, int8_t gCh = -1, int8_t bCh = -1);
+    // clang-format on
     void begin();
-
-    void setRGB(const RGB_Color& c);
-    void setRGB(uint8_t red, uint8_t green, uint8_t blue);
+    // Color
+    void setRGB(const ColorRGB& c);
     void setRGB(const uint8_t rgb[3]);
-    void setRGB(uint32_t hex);
+    void setRGB(uint8_t red, uint8_t green, uint8_t blue);
+    void setRGB(uint32_t color);
     void setHex(uint32_t hex);
+    // Brightness
     void setBrightness(uint8_t brightness);
     void setGlow(uint8_t glow) { setBrightness(glow); }
-
+    // Color accessors
     uint8_t  getRed() const { return _color.r; }
     uint8_t  getGreen() const { return _color.g; }
     uint8_t  getBlue() const { return _color.b; }
     uint32_t getHex() const { return _color.hex(); }
     uint8_t  getBrightness() const { return _brightness; }
-
-    String getHexString() const;
-
-    void off() { setRGB(ColorRGB::BLACK); }
-    void setWhite() { setRGB(ColorRGB::WHITE); }
-    void setRed() { setRGB(ColorRGB::RED); }
-    void setOrange() { setRGB(ColorRGB::ORANGE); }
-    void setYellow() { setRGB(ColorRGB::YELLOW); }
-    void setLime() { setRGB(ColorRGB::LIME); }
-    void setGreen() { setRGB(ColorRGB::GREEN); }
-    void setSpring() { setRGB(ColorRGB::SPRING); }
-    void setCyan() { setRGB(ColorRGB::CYAN); }
-    void setAzure() { setRGB(ColorRGB::AZURE); }
-    void setBlue() { setRGB(ColorRGB::BLUE); }
-    void setViolet() { setRGB(ColorRGB::VIOLET); }
-    void setMagenta() { setRGB(ColorRGB::MAGENTA); }
-    void setRose() { setRGB(ColorRGB::ROSE); }
-
+    String   getHexString() const;
+    // Preset colors
+    void off() { setRGB(RGB_Color::BLACK); }
+    void setWhite() { setRGB(RGB_Color::WHITE); }
+    void setRed() { setRGB(RGB_Color::RED); }
+    void setOrange() { setRGB(RGB_Color::ORANGE); }
+    void setYellow() { setRGB(RGB_Color::YELLOW); }
+    void setLime() { setRGB(RGB_Color::LIME); }
+    void setGreen() { setRGB(RGB_Color::GREEN); }
+    void setSpring() { setRGB(RGB_Color::SPRING); }
+    void setCyan() { setRGB(RGB_Color::CYAN); }
+    void setAzure() { setRGB(RGB_Color::AZURE); }
+    void setBlue() { setRGB(RGB_Color::BLUE); }
+    void setViolet() { setRGB(RGB_Color::VIOLET); }
+    void setMagenta() { setRGB(RGB_Color::MAGENTA); }
+    void setRose() { setRGB(RGB_Color::ROSE); }
+    // Color models
     void setHSV(int hue, float sat = 1.0f, float val = 1.0f);
     void setHue(int hue) { setHSV(hue, _sat, _val); }
     void setCMYK(float cyan, float magenta, float yellow, float key);
+    // Gamma correction
     void setGammaCorrection(bool enabled);
 
   private:
-    PWM       _rPWM, _gPWM, _bPWM;
-    bool      _isCommonAnode;
-    RGB_Color _color;
+    PWM      _rPWM, _gPWM, _bPWM;
+    bool     _isCommonAnode;
+    ColorRGB _color;
 
     uint8_t _brightness   = 255;
     bool    _gammaEnabled = false;
 
-    int   _hue;
+    int   _hue = 0;
     float _sat = 1.0f;
     float _val = 1.0f;
 
@@ -131,7 +127,6 @@ namespace Felix8A {
 
     inline void _showRGB(uint8_t r, uint8_t g, uint8_t b) {
       _color = {r, g, b};
-
       _rPWM.setPWM(_process(r));
       _gPWM.setPWM(_process(g));
       _bPWM.setPWM(_process(b));

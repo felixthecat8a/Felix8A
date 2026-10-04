@@ -68,18 +68,12 @@ namespace Felix8A {
 
   /* RGB LED */
 
-  RGB::RGB(
-      uint8_t rPin,
-      uint8_t gPin,
-      uint8_t bPin,
-      bool    commonAnode,
-      LED_t   type,
-      int8_t  rCh,
-      int8_t  gCh,
-      int8_t  bCh
-  )
+  // clang-format off
+  RGB::RGB(uint8_t rPin, uint8_t gPin, uint8_t bPin, bool commonAnode,
+    LED_t type, int8_t rCh, int8_t gCh, int8_t bCh)
       : _rPWM(rPin, commonAnode, type, rCh), _gPWM(gPin, commonAnode, type, gCh),
         _bPWM(bPin, commonAnode, type, bCh), _color(0, 0, 0) {}
+  // clang-format on
 
   void RGB::begin() {
     _rPWM.begin();
@@ -89,14 +83,14 @@ namespace Felix8A {
     setRGB(_color);
   }
 
-  void RGB::setRGB(const RGB_Color& c) { _showRGB(c.r, c.g, c.b); }
-  void RGB::setRGB(uint8_t r, uint8_t g, uint8_t b) { setRGB(RGB_Color(r, g, b)); }
-  void RGB::setRGB(const uint8_t rgb[3]) { setRGB(RGB_Color(rgb[0], rgb[1], rgb[2])); }
-  void RGB::setRGB(uint32_t hex) { setRGB(RGB_Color::fromHex(hex)); }
-  void RGB::setHex(uint32_t hex) { setRGB(RGB_Color::fromHex(hex)); }
+  void RGB::setRGB(const ColorRGB& c) { _showRGB(c.r, c.g, c.b); }
+  void RGB::setRGB(const uint8_t rgb[3]) { setRGB(ColorRGB(rgb[0], rgb[1], rgb[2])); }
+  void RGB::setRGB(uint8_t r, uint8_t g, uint8_t b) { setRGB(ColorRGB(r, g, b)); }
+  void RGB::setRGB(uint32_t color) { setRGB(ColorRGB::fromHex(color)); }
+  void RGB::setHex(uint32_t hex) { setRGB(hex); }
 
   void RGB::setBrightness(uint8_t brightness) {
-    _brightness = constrain(brightness, 0, 255);
+    _brightness = brightness;
     _showRGB(_color.r, _color.g, _color.b);
   }
 
@@ -110,48 +104,11 @@ namespace Felix8A {
     _hue = constrain(hue, 0, 359);
     _sat = constrain(sat, 0.0f, 1.0f);
     _val = constrain(val, 0.0f, 1.0f);
-
-    float h      = _hue / 60.0f;
-    int   sector = (int)h;
-    float f      = h - sector;
-
-    float p = _val * (1.0f - _sat);
-    float q = _val * (1.0f - _sat * f);
-    float t = _val * (1.0f - _sat * (1.0f - f));
-
-    float r, g, b;
-
-    // clang-format off
-    switch (sector) {
-      case 0: r = _val; g = t; b = p; break;
-      case 1: r = q; g = _val; b = p; break;
-      case 2: r = p; g = _val; b = t; break;
-      case 3: r = p; g = q; b = _val; break;
-      case 4: r = t; g = p; b = _val; break;
-      default: r = _val; g = p; b = q; break;
-    }
-    // clang-format on
-
-    uint8_t red   = constrain(roundf(r * PWM_MAX), 0, PWM_MAX);
-    uint8_t green = constrain(roundf(g * PWM_MAX), 0, PWM_MAX);
-    uint8_t blue  = constrain(roundf(b * PWM_MAX), 0, PWM_MAX);
-
-    _showRGB(red, green, blue);
+    setRGB(ColorRGB::fromHSV(hue, sat, val));
   }
 
   void RGB::setCMYK(float cyan, float magenta, float yellow, float key) {
-    cyan    = constrain(cyan, 0.0f, 1.0f);
-    magenta = constrain(magenta, 0.0f, 1.0f);
-    yellow  = constrain(yellow, 0.0f, 1.0f);
-    key     = constrain(key, 0.0f, 1.0f);
-
-    float invK = 1.0f - key;
-
-    uint8_t r = constrain(roundf(PWM_MAX * (1.0f - cyan) * invK), 0, PWM_MAX);
-    uint8_t g = constrain(roundf(PWM_MAX * (1.0f - magenta) * invK), 0, PWM_MAX);
-    uint8_t b = constrain(roundf(PWM_MAX * (1.0f - yellow) * invK), 0, PWM_MAX);
-
-    _showRGB(r, g, b);
+    setRGB(ColorRGB::fromCMYK(cyan, magenta, yellow, key));
   }
 
   void RGB::setGammaCorrection(bool enabled) {

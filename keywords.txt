@@ -4,7 +4,7 @@
 # Library (KEYWORD1)
 #######################################
 
-Felix8A KEYWORD1
+Felix8A KEYWORD1    Felix8A
 
 #######################################
 # Datatypes and Classes (KEYWORD1)
@@ -29,7 +29,7 @@ Potentiometer   KEYWORD1
 
 hex KEYWORD2
 rgb KEYWORD2
-fromHex KEYWORD2
+normalize   KEYWORD2
 red KEYWORD2
 green   KEYWORD2
 blue    KEYWORD2
@@ -37,6 +37,7 @@ scale   KEYWORD2
 blend   KEYWORD2
 hsv KEYWORD2
 heat    KEYWORD2
+cmyk    KEYWORD2
 
 size    KEYWORD2
 count   KEYWORD2
@@ -53,6 +54,8 @@ setPin  KEYWORD2
 getPin  KEYWORD2
 setActiveLow    KEYWORD2
 isActiveLow KEYWORD2
+flash   KEYWORD2
+isFlashing  KEYWORD2
 
 enable  KEYWORD2
 disable KEYWORD2

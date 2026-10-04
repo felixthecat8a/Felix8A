@@ -14,7 +14,7 @@ namespace Felix8A {
 
     static constexpr uint32_t rgb(uint8_t r, uint8_t g, uint8_t b) { return hex(r, g, b); }
 
-    static constexpr uint32_t fromHex(uint32_t c) { return c & 0xFFFFFF; }
+    static constexpr uint32_t normalize(uint32_t c) { return c & 0xFFFFFF; }
 
     // Channel extraction
     static constexpr uint8_t red(uint32_t c) { return (c >> 16) & 0xFF; }
@@ -117,22 +117,22 @@ namespace Felix8A {
 
     // Standard Heat Map
     template <typename T>
-    static inline uint32_t heat(T value, T min, T max, bool inverted = false) {
-      if (min >= max) { return BLUE; }
+    static inline uint32_t heat(T value, T min, T max, bool reversed = false) {
+      if (min >= max) { return OFF; }
 
       value = constrain(value, min, max);
 
       uint16_t hue = 240 - ((value - min) * 240 / (max - min));
 
-      if (inverted) { hue = 240 - hue; }
+      if (reversed) { hue = 240 - hue; }
 
       return hsv(hue, 255, 255);
     }
 
     // Centered Heat Map
     template <typename T>
-    static inline uint32_t heat(T value, T min, T center, T max, bool inverted = false) {
-      if (min >= center || center >= max) { return BLUE; }
+    static inline uint32_t heat(T value, T min, T center, T max, bool reversed = false) {
+      if (min >= center || center >= max) { return OFF; }
 
       value = constrain(value, min, max);
 
@@ -144,9 +144,17 @@ namespace Felix8A {
         hue = 120 - ((value - center) * 120L / (max - center));
       }
 
-      if (inverted) { hue = 240 - hue; }
+      if (reversed) { hue = 240 - hue; }
 
       return hsv(hue, 255, 255);
+    }
+
+    static inline uint32_t cmyk(uint8_t c, uint8_t m, uint8_t y, uint8_t k) {
+      uint8_t r = 255 - min(255, uint16_t(c) + k);
+      uint8_t g = 255 - min(255, uint16_t(m) + k);
+      uint8_t b = 255 - min(255, uint16_t(y) + k);
+
+      return hex(r, g, b);
     }
 
   private:
