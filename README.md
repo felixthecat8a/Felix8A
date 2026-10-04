@@ -46,6 +46,41 @@ lib_deps =
 
 ---
 
+## Available Classes
+
+### LED & Output Control
+
+* `Felix8A::LED` – Individual LED control with on, off, and toggle functionality.
+* `Felix8A::PWM` – PWM output control for adjustable brightness and output levels.
+* `Felix8A::RGB` – Control of RGB LEDs with configurable channels and brightness.
+* `Felix8A::Relay` – Digital relay control.
+* `Felix8A::Buzzer` – Buzzer control for audible feedback.
+
+### Color Management
+* `Felix8A::Color32` – A collection of lightweight, static utilities for 24-bit RGB color creation, manipulation, conversion, and interpolation.
+* `Felix8A::Palette` – Provides a lightweight interface for managing and accessing arrays of 32-bit colors.
+
+### Input & Interaction
+* `Felix8A::Button` – Push-button handling with debouncing and press, release, click, multi-click, and hold events.
+* `Felix8A::Switch` – Digital switch input handling.
+* `Felix8A::LimitSwitch` – Normally open and normally closed limit switch support.
+
+### Timing Utility Functions
+Time8A provides convenient, non-blocking timing functions based on millis():
+* `Time8A::every()` - Checks whether a recurring time interval has elapsed. |
+* `Time8A::after()` - Checks whether a specified duration has passed since a starting timestamp. |
+* `Time8A::reset()` - Resets a timestamp to the current millis() value. |
+* `Time8A::once()` - Triggers once after a specified interval, then automatically disarms the timer. |
+* `Time8A::arm()` - Arms a one-shot timer by recording the current timestamp. |
+* `Time8A::disarm()` - Disarms a one-shot timer. |
+* `Time8A::isArmed()` - Checks whether a one-shot timer is armed.
+
+### Other Utility Functions
+* `Felix8A::wrap()` – Wraps a value within a specified range.
+* `Felix8A::clamp()` – Restricts a value to a specified minimum and maximum.
+
+---
+
 ## Implementation
 
 ### RGB LEDs & Colors
@@ -113,7 +148,7 @@ void setup() {
 
 void loop() {
     button.update();
-    
+
     if (button.wasClicked()) {
         led.toggle();
     }
