@@ -57,7 +57,7 @@ lib_deps =
 * `Felix8A::Buzzer` – Buzzer control for audible feedback.
 
 ### Color Management
-* `Felix8A::Color32` – A collection of lightweight, static utilities for 24-bit RGB color creation, manipulation, conversion, and interpolation.
+* `Felix8A::Color32` – A collection of lightweight, static utilities for 32-bit RGB color creation, manipulation, conversion, and interpolation.
 * `Felix8A::Palette` – Provides a lightweight interface for managing and accessing arrays of 32-bit colors.
 
 ### Input & Interaction
@@ -67,12 +67,12 @@ lib_deps =
 
 ### Timing Utility Functions
 Time8A provides convenient, non-blocking timing functions based on millis():
-* `Time8A::every()` - Checks whether a recurring time interval has elapsed. |
-* `Time8A::after()` - Checks whether a specified duration has passed since a starting timestamp. |
-* `Time8A::reset()` - Resets a timestamp to the current millis() value. |
-* `Time8A::once()` - Triggers once after a specified interval, then automatically disarms the timer. |
-* `Time8A::arm()` - Arms a one-shot timer by recording the current timestamp. |
-* `Time8A::disarm()` - Disarms a one-shot timer. |
+* `Time8A::every()` - Checks whether a recurring time interval has elapsed.
+* `Time8A::after()` - Checks whether a specified duration has passed since a starting timestamp.
+* `Time8A::reset()` - Resets a timestamp to the current millis() value.
+* `Time8A::once()` - Triggers once after a specified interval, then automatically disarms the timer.
+* `Time8A::arm()` - Arms a one-shot timer by recording the current timestamp.
+* `Time8A::disarm()` - Disarms a one-shot timer.
 * `Time8A::isArmed()` - Checks whether a one-shot timer is armed.
 
 ### Other Utility Functions
