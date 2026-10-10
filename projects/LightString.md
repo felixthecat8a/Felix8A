@@ -16,10 +16,10 @@ Felix8A::Button button(BUTTON_PIN, BUTTON_ACTIVE_LOW, BUTTON_DEBOUNCE);
 constexpr unsigned long BUTTON_HOLD_TIME = 750;
 constexpr unsigned long BUTTON_MULTI_CLICK_TIME = 250;
 /***** NeoPixel Setup *****/
-constexpr uint8_t LED_PIN = A0;
-constexpr uint16_t NUM_LEDS = 100;
+constexpr uint8_t PIXEL_PIN = A0;
+constexpr uint16_t NUM_PIXELS = 100;
 Adafruit_NeoPixel *lightString = nullptr;
-constexpr uint8_t LED_BRIGHTNESS = 51;
+constexpr uint8_t PIXEL_BRIGHTNESS = 51;
 /***** Mode Setup with Default Colors *****/
 const Felix8A::Palette colorPalette = Felix8A::Palette6;
 const uint8_t numColors = colorPalette.size();
@@ -41,8 +41,8 @@ uint8_t chaseStep = 0;
 /***** Firefly Animation Setup *****/
 constexpr unsigned long FIREFLY_INTERVAL = 50;
 unsigned long lastFireflyUpdate = 0;
-uint8_t fireflyBrightness[NUM_LEDS] = {};
-int8_t fireflyDirection[NUM_LEDS] = {};
+uint8_t fireflyBrightness[NUM_PIXELS] = {};
+int8_t fireflyDirection[NUM_PIXELS] = {};
 ```
 
 ### Custom Color Palette Setup
@@ -149,7 +149,7 @@ void colorGradientChase(uint32_t color) {
 void firefly(uint32_t color) {
   if (!Time8A::every(FIREFLY_INTERVAL, lastFireflyUpdate)) { return; }
 
-  for (uint16_t i = 0; i < NUM_LEDS; ++i) {
+  for (uint16_t i = 0; i < NUM_PIXELS; ++i) {
     if (fireflyDirection[i] == 0) {
       if (random(100) < 1) {
         fireflyBrightness[i] = 10;
@@ -286,9 +286,9 @@ void setup() {
   button.setMultiClickTime(BUTTON_MULTI_CLICK_TIME);
   // Hold button during startup to use RGB ordering.
   const uint8_t pixelType = button.isDown() ? (NEO_RGB + NEO_KHZ800) : (NEO_GRB + NEO_KHZ800);
-  lightString = new Adafruit_NeoPixel(NUM_LEDS, LED_PIN, pixelType);
+  lightString = new Adafruit_NeoPixel(NUM_PIXELS, PIXEL_PIN, pixelType);
   lightString->begin();
-  lightString->setBrightness(LED_BRIGHTNESS);
+  lightString->setBrightness(PIXEL_BRIGHTNESS);
   lightString->show();
   // Initialize random number generator.
   randomSeed(analogRead(A1));
