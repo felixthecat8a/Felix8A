@@ -27,7 +27,7 @@ constexpr int8_t numModes = 9;
 int8_t currentMode = 0;
 uint8_t currentColor = 0;
 bool isAnimated = false;
-bool chaseAnimation = false;
+bool chaseActive = false;
 bool eventActivated = true;
 /***** Gradient Animation Setup *****/
 constexpr unsigned long GRADIENT_INTERVAL = 150;
@@ -103,7 +103,9 @@ void nextColor() {
 ```cpp
 void setColorGradient(uint32_t color, int step) {
   const int count = lightString->numPixels();
-  constexpr uint8_t GRADIENT_PHASES = 5;
+
+  constexpr uint8_t GRADIENT_PHASES = 6;
+
   const uint32_t white = Felix8A::Color::rgb(150, 150, 150);
 
   for (int i = 0; i < count; ++i) {
@@ -115,21 +117,24 @@ void setColorGradient(uint32_t color, int step) {
     // if (phase == 0) {
     //   pixelColor = color;
     // } else if (phase == 1) {
-    //   pixelColor = Felix8A::Color::blend(color, white, 50);
+    //   pixelColor = Felix8A::Color::blend(color, white, 51);
     // } else if (phase == 2) {
-    //   pixelColor = Felix8A::Color::blend(color, white, 100);
+    //   pixelColor = Felix8A::Color::blend(color, white, 153);
     // } else if (phase == 3) {
-    //   pixelColor = Felix8A::Color::blend(color, white, 150);
+    //   pixelColor = Felix8A::Color::blend(color, white, 204);
+    // } else if (phase == 4) {
+    //   pixelColor = Felix8A::Color::blend(color, white, 153);
     // } else {
-    //   pixelColor = Felix8A::Color::blend(color, white, 200);
+    //   pixelColor = Felix8A::Color::blend(color, white, 51);
     // }
 
     switch (phase) {
       case 0: pixelColor = color; break;
-      case 1: pixelColor = Felix8A::Color::blend(color, white, 50); break;
-      case 2: pixelColor = Felix8A::Color::blend(color, white, 100); break;
-      case 3: pixelColor = Felix8A::Color::blend(color, white, 150); break;
-      default: pixelColor = Felix8A::Color::blend(color, white, 200); break;
+      case 1: pixelColor = Felix8A::Color::blend(color, white, 51); break;
+      case 2: pixelColor = Felix8A::Color::blend(color, white, 153); break;
+      case 3: pixelColor = Felix8A::Color::blend(color, white, 204); break;
+      case 4: pixelColor = Felix8A::Color::blend(color, white, 153); break;
+      default: pixelColor = Felix8A::Color::blend(color, white, 51); break;
     }
 
     lightString->setPixelColor(i, pixelColor);
@@ -259,16 +264,16 @@ void lightsOff(bool wasUpdated) {
 
 ### Set & Update Function Switch
 ```cpp
-void updateMode(uint8_t mode, uint8_t color, bool animated, bool chase, bool wasUpdated) {
-  switch (mode) {
-    case 0: solidColor(colorPalette[color], animated, chase, wasUpdated); break;
-    case 1: multiColor(colorPalette, animated, chase, wasUpdated); break;
-    case 2: multiColor(Felix8A::ChristmasLights, animated, chase, wasUpdated); break;
-    case 3: multiColor(Felix8A::Sunset, animated, chase, wasUpdated); break;
-    case 4: multiColor(Felix8A::Forest, animated, chase, wasUpdated); break;
-    case 5: multiColor(Felix8A::Ocean, animated, chase, wasUpdated); break;
-    case 6: multiColor(Felix8A::Blush, animated, chase, wasUpdated); break;
-    case 7: multiColor(customPalette, animated, chase, wasUpdated); break;
+void updateMode(bool wasUpdated) {
+  switch (currentMode) {
+    case 0: solidColor(colorPalette[currentColor], isAnimated, chaseActive, wasUpdated); break;
+    case 1: multiColor(colorPalette, isAnimated, chaseActive, wasUpdated); break;
+    case 2: multiColor(Felix8A::ChristmasLights, isAnimated, chaseActive, wasUpdated); break;
+    case 3: multiColor(Felix8A::Sunset, isAnimated, chaseActive, wasUpdated); break;
+    case 4: multiColor(Felix8A::Forest, isAnimated, chaseActive, wasUpdated); break;
+    case 5: multiColor(Felix8A::Ocean, isAnimated, chaseActive, wasUpdated); break;
+    case 6: multiColor(Felix8A::Blush, isAnimated, chaseActive, wasUpdated); break;
+    case 7: multiColor(customPalette, isAnimated, chaseActive, wasUpdated); break;
     default: lightsOff(wasUpdated); break;
   }
 }
@@ -314,7 +319,7 @@ void loop() {
   }
 
   if (button.wasQuadrupleClicked()) {
-    chaseAnimation = !chaseAnimation;
+    chaseActive = !chaseActive;
     eventActivated = true;
   }
 
@@ -323,7 +328,7 @@ void loop() {
     eventActivated = true;
   }
 
-  updateMode(currentMode, currentColor, isAnimated, chaseAnimation, eventActivated);
+  updateMode(eventActivated);
   eventActivated = false;
 }
 ```
@@ -341,7 +346,7 @@ void loop() {
       case Felix8A::Button::Event::Click: nextMode(); break;
       case Felix8A::Button::Event::DoubleClick: previousMode(); break;
       case Felix8A::Button::Event::TripleClick: isAnimated = !isAnimated; break;
-      case Felix8A::Button::Event::QuadrupleClick: chaseAnimation = !chaseAnimation; break;
+      case Felix8A::Button::Event::QuadrupleClick: chaseActive = !chaseActive; break;
       case Felix8A::Button::Event::Hold: nextColor(); break;
       default: break;
     }
@@ -349,7 +354,7 @@ void loop() {
     eventActivated = true;
   }
 
-  updateMode(currentMode, currentColor, isAnimated, chaseAnimation, eventActivated);
+  updateMode(eventActivated);
 
   eventActivated = false;
 }
