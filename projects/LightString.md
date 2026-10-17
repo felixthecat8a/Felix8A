@@ -5,9 +5,22 @@ An Arduino sketch for controlling colors and animations on a WS2812 LED string u
 ## Sketch & Hardware Setup
 
 ```cpp
-#include <Adafruit_NeoPixel.h>
 #include <EEPROM.h>
+// #include <Adafruit_NeoPixel.h>
+#include <FastLED.h>
 #include <Felix8A.h>
+/***** LightString Setup *****/
+constexpr uint8_t PIXEL_PIN = A0;
+constexpr uint16_t NUM_PIXELS = 100;
+constexpr uint8_t PIXEL_BRIGHTNESS = 51;
+/***** NeoPixel Setup *****/
+// Adafruit_NeoPixel *lightString = nullptr;
+/***** FastLED Setup *****/
+CRGB lightString[NUM_PIXELS];
+/***** FastLED Color Conversion *****/
+CRGB toCRGB(uint32_t c) {
+  return CRGB(Felix8A::Color::red(c), Felix8A::Color::green(c), Felix8A::Color::blue(c));
+}
 /***** Felix8A::Button Setup *****/
 constexpr uint8_t BUTTON_PIN = 2;
 constexpr bool BUTTON_ACTIVE_LOW = true;
@@ -15,19 +28,14 @@ constexpr uint16_t BUTTON_DEBOUNCE = 25;
 Felix8A::Button button(BUTTON_PIN, BUTTON_ACTIVE_LOW, BUTTON_DEBOUNCE);
 constexpr unsigned long BUTTON_HOLD_TIME = 750;
 constexpr unsigned long BUTTON_MULTI_CLICK_TIME = 250;
-/***** NeoPixel Setup *****/
-constexpr uint8_t PIXEL_PIN = A0;
-constexpr uint16_t NUM_PIXELS = 100;
-Adafruit_NeoPixel *lightString = nullptr;
-constexpr uint8_t PIXEL_BRIGHTNESS = 51;
 /***** Mode Setup with Default Colors *****/
 const Felix8A::Palette colorPalette = Felix8A::Palette6;
 const uint8_t numColors = colorPalette.size();
 constexpr int8_t numModes = 9;
 int8_t currentMode = 0;
 uint8_t currentColor = 0;
-bool isAnimated = false;
 bool chaseActive = false;
+bool isAnimated = false;
 bool eventActivated = true;
 /***** Gradient Animation Setup *****/
 constexpr unsigned long GRADIENT_INTERVAL = 150;
@@ -60,14 +68,19 @@ const Felix8A::Palette customPalette(CUSTOM_COLORS);
 ```
 
 ### EEPROM Setup & Setting Update Functions
+
 ```cpp
+/***** EEPROM Setup & Setting Update Functions *****/
 constexpr uint8_t EEPROM_MODE_ADDR = 0;
 constexpr uint8_t EEPROM_COLOR_ADDR = 1;
+constexpr uint8_t EEPROM_CHASE_ADDR = 2;
+constexpr uint8_t EEPROM_ANIM_ADDR = 3;
 
 void loadSettings() {
   EEPROM.get(EEPROM_MODE_ADDR, currentMode);
   EEPROM.get(EEPROM_COLOR_ADDR, currentColor);
-
+  EEPROM.get(EEPROM_CHASE_ADDR, chaseActive);
+  EEPROM.get(EEPROM_ANIM_ADDR, isAnimated);
   if (currentMode < 0 || currentMode >= numModes) { currentMode = 0; }
   if (currentColor >= numColors) { currentColor = 0; }
 }
@@ -78,6 +91,8 @@ void saveSettings() {
 
   EEPROM.update(EEPROM_MODE_ADDR, currentMode);
   EEPROM.update(EEPROM_COLOR_ADDR, currentColor);
+  EEPROM.update(EEPROM_CHASE_ADDR, chaseActive);
+  EEPROM.update(EEPROM_ANIM_ADDR, isAnimated);
 }
 
 void nextMode() {
@@ -94,6 +109,16 @@ void nextColor() {
   currentColor++;
   saveSettings();
 }
+
+void toggleChase() {
+  chaseActive = !chaseActive;
+  saveSettings();
+}
+
+void toggleAnimation() {
+  isAnimated = !isAnimated;
+  saveSettings();
+}
 ```
 
 ## Light Color Setting Functions
@@ -102,13 +127,11 @@ void nextColor() {
 
 ```cpp
 void setColorGradient(uint32_t color, int step) {
-  const int count = lightString->numPixels();
-
-  constexpr uint8_t GRADIENT_PHASES = 6;
+  constexpr uint8_t GRADIENT_PHASES = 4;
 
   const uint32_t white = Felix8A::Color::rgb(150, 150, 150);
 
-  for (int i = 0; i < count; ++i) {
+  for (int i = 0; i < NUM_PIXELS; ++i) {
     // uint8_t phase = (i + step) % GRADIENT_PHASES;
     const uint8_t phase = Felix8A::wrap(i + step, 0, static_cast<int>(GRADIENT_PHASES));
 
@@ -119,11 +142,7 @@ void setColorGradient(uint32_t color, int step) {
     // } else if (phase == 1) {
     //   pixelColor = Felix8A::Color::blend(color, white, 51);
     // } else if (phase == 2) {
-    //   pixelColor = Felix8A::Color::blend(color, white, 153);
-    // } else if (phase == 3) {
     //   pixelColor = Felix8A::Color::blend(color, white, 204);
-    // } else if (phase == 4) {
-    //   pixelColor = Felix8A::Color::blend(color, white, 153);
     // } else {
     //   pixelColor = Felix8A::Color::blend(color, white, 51);
     // }
@@ -131,16 +150,14 @@ void setColorGradient(uint32_t color, int step) {
     switch (phase) {
       case 0: pixelColor = color; break;
       case 1: pixelColor = Felix8A::Color::blend(color, white, 51); break;
-      case 2: pixelColor = Felix8A::Color::blend(color, white, 153); break;
-      case 3: pixelColor = Felix8A::Color::blend(color, white, 204); break;
-      case 4: pixelColor = Felix8A::Color::blend(color, white, 153); break;
+      case 2: pixelColor = Felix8A::Color::blend(color, white, 204); break;
       default: pixelColor = Felix8A::Color::blend(color, white, 51); break;
     }
-
-    lightString->setPixelColor(i, pixelColor);
+    // lightString->setPixelColor(i, pixelColor);
+    lightString[i] = toCRGB(pixelColor);
   }
-
-  lightString->show();
+  // lightString->show();
+  FastLED.show();
 }
 
 void colorGradientChase(uint32_t color) {
@@ -148,7 +165,7 @@ void colorGradientChase(uint32_t color) {
 
   setColorGradient(color, gradientStep);
 
-  gradientStep = Felix8A::wrap(gradientStep + 1, 0, 5);
+  gradientStep = Felix8A::wrap(gradientStep + 1, 0, 4);
 }
 
 void firefly(uint32_t color) {
@@ -170,11 +187,11 @@ void firefly(uint32_t color) {
     }
 
     const uint32_t scaled = Felix8A::Color::scale(color, fireflyBrightness[i]);
-
-    lightString->setPixelColor(i, scaled);
+    // lightString->setPixelColor(i, scaled);
+    lightString[i] = toCRGB(scaled);
   }
-
-  lightString->show();
+  // lightString->show();
+  FastLED.show();
 }
 
 void solidColor(uint32_t color, bool animated, bool chase, bool wasUpdated) {
@@ -188,8 +205,10 @@ void solidColor(uint32_t color, bool animated, bool chase, bool wasUpdated) {
     if (chase) {
       setColorGradient(color, 0);
     } else {
-      lightString->fill(color);
-      lightString->show();
+      // lightString->fill(color);
+      // lightString->show();
+      fill_solid(lightString, NUM_PIXELS, toCRGB(color));
+      FastLED.show();
     }
   }
 }
@@ -201,32 +220,31 @@ void multicolorTwinkle(const Felix8A::Palette& palette) {
 
   if (!Time8A::every(TWINKLE_INTERVAL, lastGradientUpdate)) { return; }
 
-  const int count = lightString->numPixels();
-
-  for (int i = 0; i < count; ++i) {
-    uint32_t color = lightString->getPixelColor(i);
-    lightString->setPixelColor(i, Felix8A::Color::scale(color, 220));
+  for (int i = 0; i < NUM_PIXELS; ++i) {
+    // uint32_t color = lightString->getPixelColor(i);
+    // lightString->setPixelColor(i, Felix8A::Color::scale(color, 220));
+    lightString[i].fadeToBlackBy(35);
   }
 
   const int newPixels = random(1, 4);
 
   for (int i = 0; i < newPixels; ++i) {
-    const int pixel = random(count);
+    const int pixel = random(NUM_PIXELS);
     const uint32_t randomColor = palette[random(palette.size())];
-    lightString->setPixelColor(pixel, randomColor);
+    // lightString->setPixelColor(pixel, randomColor);
+    lightString[pixel] = toCRGB(randomColor);
   }
-
-  lightString->show();
+  // lightString->show();
+  FastLED.show();
 }
 
 void setMultiColor(const Felix8A::Palette& palette, int step) {
-  const int count = lightString->numPixels();
-
-  for (int i = 0; i < count; ++i) {
-    lightString->setPixelColor(i, palette.reversed(i + step));
+  for (int i = 0; i < NUM_PIXELS; ++i) {
+    // lightString->setPixelColor(i, palette.reversed(i + step));
+    lightString[i] = toCRGB(palette.reversed(i + step));
   }
-
-  lightString->show();
+  // lightString->show();
+  FastLED.show();
 }
 
 void multiColorChase(const Felix8A::Palette& palette) {
@@ -256,9 +274,10 @@ void multiColor(const Felix8A::Palette& palette, bool animated, bool chase, bool
 ```cpp
 void lightsOff(bool wasUpdated) {
   if (!wasUpdated) { return; }
-
-  lightString->clear();
-  lightString->show();
+  // lightString->clear();
+  // lightString->show();
+  FastLED.clear();
+  FastLED.show();
 }
 ```
 
@@ -289,12 +308,23 @@ void setup() {
   button.begin();
   button.setHoldTime(BUTTON_HOLD_TIME);
   button.setMultiClickTime(BUTTON_MULTI_CLICK_TIME);
-  // Hold button during startup to use RGB ordering.
-  const uint8_t pixelType = button.isDown() ? (NEO_RGB + NEO_KHZ800) : (NEO_GRB + NEO_KHZ800);
-  lightString = new Adafruit_NeoPixel(NUM_PIXELS, PIXEL_PIN, pixelType);
-  lightString->begin();
-  lightString->setBrightness(PIXEL_BRIGHTNESS);
-  lightString->show();
+
+  // Hold the button during startup to select RGB ordering.
+  // const uint8_t pixelType = button.isDown() ? (NEO_RGB + NEO_KHZ800) : (NEO_GRB + NEO_KHZ800);
+  // lightString = new Adafruit_NeoPixel(NUM_PIXELS, PIXEL_PIN, pixelType);
+  // lightString->begin();
+  // lightString->setBrightness(PIXEL_BRIGHTNESS);
+  // lightString->show();
+
+  // Hold the button during startup to select RGB ordering.
+  if (button.isDown()) {
+    FastLED.addLeds<WS2812B, PIXEL_PIN, RGB>(lightString, NUM_PIXELS);
+  } else {
+    FastLED.addLeds<WS2812B, PIXEL_PIN, GRB>(lightString, NUM_PIXELS);
+  }
+  FastLED.setBrightness(PIXEL_BRIGHTNESS);
+  FastLED.clear(true);
+
   // Initialize random number generator.
   randomSeed(analogRead(A1));
 }
@@ -314,12 +344,12 @@ void loop() {
   }
 
   if (button.wasTripleClicked()) {
-    isAnimated = !isAnimated;
+    toggleAnimation();
     eventActivated = true;
   }
 
   if (button.wasQuadrupleClicked()) {
-    chaseActive = !chaseActive;
+    toggleChase();
     eventActivated = true;
   }
 
@@ -331,6 +361,7 @@ void loop() {
   updateMode(eventActivated);
   eventActivated = false;
 }
+
 ```
 
 ### Alternate Loop Code (Using Event Polling)
@@ -345,8 +376,8 @@ void loop() {
     switch (event) {
       case Felix8A::Button::Event::Click: nextMode(); break;
       case Felix8A::Button::Event::DoubleClick: previousMode(); break;
-      case Felix8A::Button::Event::TripleClick: isAnimated = !isAnimated; break;
-      case Felix8A::Button::Event::QuadrupleClick: chaseActive = !chaseActive; break;
+      case Felix8A::Button::Event::TripleClick: toggleAnimation(); break;
+      case Felix8A::Button::Event::QuadrupleClick: toggleChase(); break;
       case Felix8A::Button::Event::Hold: nextColor(); break;
       default: break;
     }
@@ -358,7 +389,6 @@ void loop() {
 
   eventActivated = false;
 }
-
 ```
 
 #### My 100 Column Helper
@@ -366,3 +396,7 @@ void loop() {
 ```
 /********1*********2*********3*********4*********5*********6*********7*********8*********9*********/
 ```
+
+## Note
+
+The project shows the implementation of `Adafruit_NeoPixel` and `FastLED` libraries with one commented out.
