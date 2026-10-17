@@ -73,14 +73,11 @@ const Felix8A::Palette customPalette(CUSTOM_COLORS);
 /***** EEPROM Setup & Setting Update Functions *****/
 constexpr uint8_t EEPROM_MODE_ADDR = 0;
 constexpr uint8_t EEPROM_COLOR_ADDR = 1;
-constexpr uint8_t EEPROM_CHASE_ADDR = 2;
-constexpr uint8_t EEPROM_ANIM_ADDR = 3;
 
 void loadSettings() {
   EEPROM.get(EEPROM_MODE_ADDR, currentMode);
   EEPROM.get(EEPROM_COLOR_ADDR, currentColor);
-  EEPROM.get(EEPROM_CHASE_ADDR, chaseActive);
-  EEPROM.get(EEPROM_ANIM_ADDR, isAnimated);
+
   if (currentMode < 0 || currentMode >= numModes) { currentMode = 0; }
   if (currentColor >= numColors) { currentColor = 0; }
 }
@@ -91,8 +88,6 @@ void saveSettings() {
 
   EEPROM.update(EEPROM_MODE_ADDR, currentMode);
   EEPROM.update(EEPROM_COLOR_ADDR, currentColor);
-  EEPROM.update(EEPROM_CHASE_ADDR, chaseActive);
-  EEPROM.update(EEPROM_ANIM_ADDR, isAnimated);
 }
 
 void nextMode() {
@@ -112,12 +107,10 @@ void nextColor() {
 
 void toggleChase() {
   chaseActive = !chaseActive;
-  saveSettings();
 }
 
 void toggleAnimation() {
   isAnimated = !isAnimated;
-  saveSettings();
 }
 ```
 
