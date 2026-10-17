@@ -1,5 +1,5 @@
-#ifndef FELIX_PWM_H
-#define FELIX_PWM_H
+#ifndef FELIX_RGB_H
+#define FELIX_RGB_H
 
 #include <Arduino.h>
 
@@ -66,8 +66,8 @@ namespace Felix8A {
     // Color
     void setRGB(const ColorRGB& c);
     void setRGB(const uint8_t rgb[3]);
-    void setRGB(uint8_t red, uint8_t green, uint8_t blue);
-    void setRGB(uint32_t color);
+    void setRGB(uint8_t r, uint8_t g, uint8_t b);
+    void setRGB(uint32_t h);
     void setHex(uint32_t hex);
     // Brightness
     void setBrightness(uint8_t brightness);
@@ -137,4 +137,4 @@ namespace Felix8A {
 
 } // namespace Felix8A
 
-#endif // FELIX_PWM_H
+#endif // FELIX_RGB_H

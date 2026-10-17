@@ -115,14 +115,29 @@ namespace Felix8A {
 
     static inline uint32_t hsv(uint16_t h) { return hsv(h, 255, 255); }
 
+    // Cyan, Magenta, Yellow, Key (Black) to RGB
+    // c, m, y, k: 0–255
+    static inline uint32_t cmyk(uint8_t c, uint8_t m, uint8_t y, uint8_t k) {
+      uint8_t r = (uint16_t(255 - c) * (255 - k)) / 255;
+      uint8_t g = (uint16_t(255 - m) * (255 - k)) / 255;
+      uint8_t b = (uint16_t(255 - y) * (255 - k)) / 255;
+
+      return hex(r, g, b);
+    }
+
     // Standard Heat Map
+    // Maps min -> blue, midpoint -> green, max -> red.
     template <typename T>
     static inline uint32_t heat(T value, T min, T max, bool reversed = false) {
       if (min >= max) { return OFF; }
 
-      value = constrain(value, min, max);
+      if (value < min) value = min;
+      if (value > max) value = max;
 
-      uint16_t hue = 240 - ((value - min) * 240 / (max - min));
+      const int64_t range  = int64_t(max) - int64_t(min);
+      const int64_t offset = int64_t(value) - int64_t(min);
+
+      uint16_t hue = 240 - static_cast<uint16_t>((offset * 240) / range);
 
       if (reversed) { hue = 240 - hue; }
 
@@ -130,31 +145,31 @@ namespace Felix8A {
     }
 
     // Centered Heat Map
+    // Maps min -> blue, center -> green, max -> red.
     template <typename T>
     static inline uint32_t heat(T value, T min, T center, T max, bool reversed = false) {
       if (min >= center || center >= max) { return OFF; }
 
-      value = constrain(value, min, max);
+      if (value < min) value = min;
+      if (value > max) value = max;
 
       uint16_t hue;
 
       if (value <= center) {
-        hue = 240 - ((value - min) * 120L / (center - min));
+        const int64_t range  = int64_t(center) - int64_t(min);
+        const int64_t offset = int64_t(value) - int64_t(min);
+
+        hue = 240 - static_cast<uint16_t>((offset * 120) / range);
       } else {
-        hue = 120 - ((value - center) * 120L / (max - center));
+        const int64_t range  = int64_t(max) - int64_t(center);
+        const int64_t offset = int64_t(value) - int64_t(center);
+
+        hue = 120 - static_cast<uint16_t>((offset * 120) / range);
       }
 
       if (reversed) { hue = 240 - hue; }
 
       return hsv(hue, 255, 255);
-    }
-
-    static inline uint32_t cmyk(uint8_t c, uint8_t m, uint8_t y, uint8_t k) {
-      uint8_t r = 255 - min(255, uint16_t(c) + k);
-      uint8_t g = 255 - min(255, uint16_t(m) + k);
-      uint8_t b = 255 - min(255, uint16_t(y) + k);
-
-      return hex(r, g, b);
     }
 
   private:

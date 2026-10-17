@@ -1,4 +1,4 @@
-#include "FelixPWM.h"
+#include "FelixRGB.h"
 
 namespace Felix8A {
 
@@ -86,7 +86,7 @@ namespace Felix8A {
   void RGB::setRGB(const ColorRGB& c) { _showRGB(c.r, c.g, c.b); }
   void RGB::setRGB(const uint8_t rgb[3]) { setRGB(ColorRGB(rgb[0], rgb[1], rgb[2])); }
   void RGB::setRGB(uint8_t r, uint8_t g, uint8_t b) { setRGB(ColorRGB(r, g, b)); }
-  void RGB::setRGB(uint32_t color) { setRGB(ColorRGB::fromHex(color)); }
+  void RGB::setRGB(uint32_t h) { setRGB(ColorRGB::fromHex(h)); }
   void RGB::setHex(uint32_t hex) { setRGB(hex); }
 
   void RGB::setBrightness(uint8_t brightness) {

@@ -1,12 +1,13 @@
 #ifndef FELIX8A_H
 #define FELIX8A_H
 
-#include "lib/FelixButton.h"
-#include "lib/FelixLED.h"
-#include "lib/FelixPWM.h"
-#include "lib/FelixPotentiometer.h"
+#include "components/FelixButton.h"
+#include "components/FelixLED.h"
+#include "components/FelixRGB.h"
 
-#include "lib/color/Felix32.h"
+#include "components/FelixPotentiometer.h"
+
+#include "components/color/Felix32.h"
 
 #include "helpers/helpers.h"
 
